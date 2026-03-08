@@ -44,6 +44,8 @@ type TranslationKeys = {
   workPaperDress: string;
   workRedBridge: string;
   workCloseUp: string;
+  workRunwayRed: string;
+  workRunwayFloral: string;
   aboutLabel: string;
   aboutTitle: string;
   aboutLocation: string;
@@ -114,6 +116,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Based in Mallorca. Available for projects across Spain and Europe.",
     workClassic: "Classic Portrait",
     workNight: "Night Elegance",
+    workRunwayRed: "Runway Red",
+    workRunwayFloral: "Floral Couture",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -166,6 +170,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Con base en Mallorca. Disponible para proyectos en toda España y Europa.",
     workClassic: "Retrato Clásico",
     workNight: "Elegancia Nocturna",
+    workRunwayRed: "Pasarela Rojo",
+    workRunwayFloral: "Costura Floral",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -218,6 +224,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
     workClassic: "Klassisches Porträt",
     workNight: "Nächtliche Eleganz",
+    workRunwayRed: "Laufsteg Rot",
+    workRunwayFloral: "Blumen-Couture",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -270,6 +278,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Basée à Majorque. Disponible pour des projets en Espagne et en Europe.",
     workClassic: "Portrait Classique",
     workNight: "Élégance Nocturne",
+    workRunwayRed: "Défilé Rouge",
+    workRunwayFloral: "Couture Florale",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -322,6 +332,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Базируюсь на Майорке. Доступна для проектов по всей Испании и Европе.",
     workClassic: "Классический портрет",
     workNight: "Ночная элегантность",
+    workRunwayRed: "Подиум в красном",
+    workRunwayFloral: "Цветочная кутюр",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -374,5 +386,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "常驻马略卡岛。可接受西班牙和欧洲各地的项目。",
     workClassic: "经典肖像",
     workNight: "夜之优雅",
+    workRunwayRed: "红色走秀",
+    workRunwayFloral: "花卉高定",
   },
 };
