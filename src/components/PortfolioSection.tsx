@@ -163,16 +163,36 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const handleTap = useCallback((index: number) => {
-    const work = works[index % works.length];
-    if (work) setLightbox(work);
-  }, [works]);
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index % works.length);
+  }, [works.length]);
 
-  const row1Controls = useAutoScroll('left', handleTap);
+  const row1Controls = useAutoScroll('left', openLightbox);
   const row2Controls = useAutoScroll('right', (index: number) => {
-    const work = works[(index % works.length)];
-    if (work) setLightbox(work);
+    setLightboxIndex(index % works.length);
   });
+
+  const lightbox = lightboxIndex !== null ? works[lightboxIndex] : null;
+
+  const goNext = useCallback(() => {
+    setLightboxIndex(prev => prev !== null ? (prev + 1) % works.length : null);
+  }, [works.length]);
+
+  const goPrev = useCallback(() => {
+    setLightboxIndex(prev => prev !== null ? (prev - 1 + works.length) % works.length : null);
+  }, [works.length]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext();
+      else if (e.key === 'ArrowLeft') goPrev();
+      else if (e.key === 'Escape') setLightboxIndex(null);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightboxIndex, goNext, goPrev]);
 
   const renderCard = (work: (typeof works)[0], i: number, workIndex: number) => (
     <div
