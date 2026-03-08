@@ -48,9 +48,6 @@ const AboutSection = () => {
             <p className="font-body text-sm leading-relaxed text-secondary-foreground">
               {t("aboutBio")}
             </p>
-            <p className="font-body text-sm leading-relaxed text-secondary-foreground">
-              Professional fashion model based in Mallorca, Spain. Available for runway shows, editorial shoots, commercial campaigns and wedding photoshoots across Spain and Europe.
-            </p>
             <div>
               <p className="mb-4 font-body text-xs uppercase tracking-[0.3em] text-primary">
                 {t("aboutAvailable")}
