@@ -52,6 +52,9 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
   const hasDragged = useRef(false);
+  const pointerTarget = useRef<EventTarget | null>(null);
+  const pointerStartTime = useRef(0);
+  const isTouch = useRef(false);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -86,30 +89,35 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
   const onMouseEnter = useCallback(() => { isPaused.current = true; }, []);
   const onMouseLeave = useCallback(() => { isPaused.current = false; isDragging.current = false; }, []);
 
-  const pointerTarget = useRef<EventTarget | null>(null);
-
   const onPointerDown = useCallback((e: React.PointerEvent) => {
+    isTouch.current = e.pointerType === 'touch';
     isDragging.current = true;
     hasDragged.current = false;
     isPaused.current = true;
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
     pointerTarget.current = e.target;
-    // Don't call preventDefault — let browser handle vertical scroll
+    pointerStartTime.current = Date.now();
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging.current || !scrollRef.current) return;
     const dx = e.clientX - dragStartX.current;
-    if (Math.abs(dx) > DRAG_THRESHOLD) {
+    // Higher threshold for touch to distinguish tap from swipe
+    const threshold = isTouch.current ? 15 : DRAG_THRESHOLD;
+    if (Math.abs(dx) > threshold) {
       hasDragged.current = true;
     }
-    scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
+    // Only manually scroll on non-touch (touch uses native scroll)
+    if (!isTouch.current) {
+      scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
+    }
   }, []);
 
   const onPointerUp = useCallback(() => {
-    if (!hasDragged.current && onTap && pointerTarget.current) {
-      // Find the card index from the clicked element
+    const duration = Date.now() - pointerStartTime.current;
+    // Only treat as tap if: didn't drag AND (mouse click OR short touch tap < 300ms)
+    if (!hasDragged.current && onTap && pointerTarget.current && (!isTouch.current || duration < 300)) {
       const card = (pointerTarget.current as HTMLElement).closest('[data-card-index]');
       if (card) {
         const idx = parseInt(card.getAttribute('data-card-index') || '-1', 10);
