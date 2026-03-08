@@ -110,9 +110,17 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
   }, []);
 
   const onPointerUp = useCallback(() => {
+    if (!hasDragged.current && onTap && pointerTarget.current) {
+      // Find the card index from the clicked element
+      const card = (pointerTarget.current as HTMLElement).closest('[data-card-index]');
+      if (card) {
+        const idx = parseInt(card.getAttribute('data-card-index') || '-1', 10);
+        if (idx >= 0) onTap(idx);
+      }
+    }
     isDragging.current = false;
     isPaused.current = false;
-  }, []);
+  }, [onTap]);
 
   return {
     scrollRef,
