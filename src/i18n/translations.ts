@@ -273,6 +273,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService5: "Свадебные и love story съёмки",
     aboutTravel: "Базируюсь на Майорке. Доступна для проектов по всей Испании и Европе.",
     workClassic: "Классический портрет",
+    workNight: "Ночная элегантность",
   },
   zh: {
     heroSubtitle: "时尚模特",
