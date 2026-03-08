@@ -147,6 +147,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "End time",
     bookingContact: "Your contact",
     bookingContactPlaceholder: "Instagram, email, or phone",
+    bookingContactError: "Please enter a valid email, phone, or @handle",
     bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
     bookingMessage: "Shoot details",
     bookingMessagePlaceholder: "Describe the type of shoot, location preferences, and any other details…",
