@@ -135,7 +135,7 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const [lightbox, setLightbox] = useState<{ src: string; title: string; category: string } | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
