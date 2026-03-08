@@ -181,6 +181,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Markenkampagnen und Social-Media-Inhalte",
     aboutService5: "Hochzeits- und Liebesgeschichten-Shootings",
     aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
+    workClassic: "Klassisches Porträt",
   },
   fr: {
     heroSubtitle: "Mannequin",
