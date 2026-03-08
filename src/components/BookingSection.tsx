@@ -271,6 +271,49 @@ const BookingSection = () => {
           {isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
         </Button>
       </div>
+
+      {/* Copy & Open Dialog */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">
+              {t("bookingCopiedTitle")}
+            </DialogTitle>
+            <DialogDescription className="font-body text-sm text-muted-foreground">
+              {t("bookingDialogInstruction")}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-4 rounded-md border border-border bg-muted/50 p-4 font-body text-sm whitespace-pre-line text-foreground">
+            {pendingMessage}
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              onClick={handleCopyAndOpen}
+              className="flex-1 gap-2"
+              variant={copied ? "secondary" : "default"}
+            >
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              {copied ? t("bookingCopiedDone") : t("bookingCopyBtn")}
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => {
+                window.open(
+                  `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
+            >
+              <Instagram size={14} />
+              {t("bookingOpenIG")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
