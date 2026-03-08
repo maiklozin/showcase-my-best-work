@@ -19,15 +19,53 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
+
+const useDragScroll = (setPaused: (v: boolean) => void) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStart = useRef(0);
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    dragging.current = true;
+    startX.current = e.clientX;
+    const el = ref.current;
+    if (el) {
+      const transform = getComputedStyle(el).transform;
+      const matrix = new DOMMatrixReadOnly(transform);
+      scrollStart.current = matrix.m41;
+    }
+    setPaused(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, [setPaused]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current || !ref.current) return;
+    const dx = e.clientX - startX.current;
+    ref.current.style.transform = `translateX(${scrollStart.current + dx}px)`;
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    dragging.current = false;
+    setPaused(false);
+    if (ref.current) {
+      ref.current.style.transform = '';
+    }
+  }, [setPaused]);
+
+  return { ref, onPointerDown, onPointerMove, onPointerUp };
+};
 
 const PortfolioSection = () => {
   const { t } = useI18n();
   const [row1Paused, setRow1Paused] = useState(false);
   const [row2Paused, setRow2Paused] = useState(false);
+  const drag1 = useDragScroll(setRow1Paused);
+  const drag2 = useDragScroll(setRow2Paused);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
