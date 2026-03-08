@@ -48,6 +48,7 @@ const BookingSection = () => {
   const [timeFromEnd, setTimeFromEnd] = useState("");
   const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
+  const [userMessage, setUserMessage] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [copied, setCopied] = useState(false);
   const [pendingMessage, setPendingMessage] = useState("");
