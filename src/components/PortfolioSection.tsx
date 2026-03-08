@@ -95,8 +95,7 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
     pointerTarget.current = e.target;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    e.preventDefault();
+    // Don't call preventDefault — let browser handle vertical scroll
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
