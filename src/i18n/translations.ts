@@ -371,6 +371,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Message copié !",
     bookingCopiedDesc: "Collez-le dans le DM Instagram qui va s'ouvrir",
     bookingCopyFallback: "Copiez ce message et collez-le dans le DM Instagram :",
+    bookingDialogInstruction: "Copiez le message et collez-le dans le DM Instagram après ouverture",
+    bookingCopiedDone: "Copié !",
+    bookingCopyBtn: "Copier et ouvrir Instagram",
+    bookingOpenIG: "Ouvrir DM",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
