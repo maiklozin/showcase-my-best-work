@@ -94,6 +94,21 @@ const BookingSection = () => {
 
   const handleRequest = async () => {
     if (!isValid || sending) return;
+
+    // Honeypot check — bots fill hidden fields
+    if (honeypot) return;
+
+    // Rate limit check
+    const now = Date.now();
+    if (now - lastSubmitRef.current < RATE_LIMIT_MS) {
+      toast({
+        title: "⏳",
+        description: "Please wait before submitting again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    lastSubmitRef.current = now;
     const message = buildMessage();
     setPendingMessage(message);
     setCopied(false);
