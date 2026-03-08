@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Clock, Instagram, Send } from "lucide-react";
+import { CalendarIcon, Clock, Instagram, Send, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
 
 const BookingSection = () => {
   const { t } = useI18n();
+  const { toast } = useToast();
   const [calFromOpen, setCalFromOpen] = useState(false);
   const [calToOpen, setCalToOpen] = useState(false);
   const [dateFrom, setDateFrom] = useState<Date>();
@@ -58,9 +60,8 @@ const BookingSection = () => {
     setCalToOpen(false);
   };
 
-  const handleRequest = () => {
-    if (!isValid || !dateFrom || !dateTo) return;
-
+  const buildMessage = () => {
+    if (!dateFrom || !dateTo) return "";
     const fromDate = format(dateFrom, "dd.MM.yyyy");
     const toDate = format(dateTo, "dd.MM.yyyy");
     const fromTime = `${timeFrom}–${timeTo}`;
@@ -69,17 +70,35 @@ const BookingSection = () => {
     let message: string;
     if (fromDate === toDate) {
       message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
-      if (toTime) message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
     } else {
       message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
     }
     message += `\n\nMy contact: ${contact.trim()}`;
+    return message;
+  };
 
-    window.open(
-      `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
+  const handleRequest = async () => {
+    if (!isValid) return;
+    const message = buildMessage();
+    
+    try {
+      await navigator.clipboard.writeText(message);
+      toast({
+        title: t("bookingCopiedTitle"),
+        description: t("bookingCopiedDesc"),
+      });
+    } catch {
+      // fallback: prompt
+      window.prompt(t("bookingCopyFallback"), message);
+    }
+
+    setTimeout(() => {
+      window.open(
+        `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }, 600);
   };
 
   return (

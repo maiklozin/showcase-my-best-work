@@ -74,6 +74,9 @@ type TranslationKeys = {
   bookingFollowReminder: string;
   bookingRequestDates: string;
   bookingSelectDates: string;
+  bookingCopiedTitle: string;
+  bookingCopiedDesc: string;
+  bookingCopyFallback: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -142,6 +145,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
     bookingRequestDates: "Request via Instagram DM",
     bookingSelectDates: "Please select dates first",
+    bookingCopiedTitle: "Message copied!",
+    bookingCopiedDesc: "Paste it in the Instagram DM that will open now",
+    bookingCopyFallback: "Copy this message and paste it in Instagram DM:",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -208,6 +214,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Por favor, sigue a @dara__es_ en Instagram para recibir respuesta",
     bookingRequestDates: "Solicitar por Instagram DM",
     bookingSelectDates: "Por favor, selecciona las fechas primero",
+    bookingCopiedTitle: "¡Mensaje copiado!",
+    bookingCopiedDesc: "Pégalo en el DM de Instagram que se abrirá ahora",
+    bookingCopyFallback: "Copia este mensaje y pégalo en el DM de Instagram:",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -274,6 +283,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Bitte folge @dara__es_ auf Instagram, um eine Antwort zu erhalten",
     bookingRequestDates: "Per Instagram DM anfragen",
     bookingSelectDates: "Bitte wähle zuerst Termine aus",
+    bookingCopiedTitle: "Nachricht kopiert!",
+    bookingCopiedDesc: "Füge sie in die Instagram-DM ein, die sich jetzt öffnet",
+    bookingCopyFallback: "Kopiere diese Nachricht und füge sie in die Instagram-DM ein:",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -340,6 +352,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
     bookingRequestDates: "Demander par Instagram DM",
     bookingSelectDates: "Veuillez d'abord sélectionner des dates",
+    bookingCopiedTitle: "Message copié !",
+    bookingCopiedDesc: "Collez-le dans le DM Instagram qui va s'ouvrir",
+    bookingCopyFallback: "Copiez ce message et collez-le dans le DM Instagram :",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -406,6 +421,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Подпишитесь на @dara__es_ в Instagram, чтобы получить ответ",
     bookingRequestDates: "Запросить через Instagram DM",
     bookingSelectDates: "Сначала выберите даты",
+    bookingCopiedTitle: "Сообщение скопировано!",
+    bookingCopiedDesc: "Вставьте его в DM Instagram, который сейчас откроется",
+    bookingCopyFallback: "Скопируйте это сообщение и вставьте в DM Instagram:",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -472,5 +490,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
     bookingRequestDates: "通过 Instagram DM 请求",
     bookingSelectDates: "请先选择日期",
+    bookingCopiedTitle: "消息已复制！",
+    bookingCopiedDesc: "将其粘贴到即将打开的 Instagram DM 中",
+    bookingCopyFallback: "复制此消息并粘贴到 Instagram DM：",
   },
 };
