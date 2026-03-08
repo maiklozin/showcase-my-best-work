@@ -304,9 +304,9 @@ const BookingSection = () => {
           href="https://instagram.com/dara__es_"
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-instagram/70 transition-colors hover:text-instagram"
+          className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-muted-foreground transition-colors hover:text-primary"
         >
-          <Instagram size={14} />
+          <Instagram size={14} className="text-instagram" />
           {t("bookingFollowReminder")}
         </a>
 
@@ -316,7 +316,7 @@ const BookingSection = () => {
           disabled={!isValid || sending}
           className={cn(
             "inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-all duration-500 hover:bg-primary hover:text-primary-foreground disabled:opacity-40",
-            isValid && !sending && "border-instagram ring-2 ring-instagram/60 bg-instagram/10 text-instagram hover:bg-instagram hover:text-instagram-foreground scale-[1.02]"
+            isValid && !sending && "ring-2 ring-primary/60 bg-primary/10 scale-[1.02]"
           )}
           variant="outline"
         >
@@ -343,10 +343,7 @@ const BookingSection = () => {
 
           <Button
               onClick={handleCopyAndOpen}
-              className={cn(
-                "w-full gap-2",
-                !copied && "bg-instagram text-instagram-foreground hover:bg-instagram/90"
-              )}
+              className="w-full gap-2"
               variant={copied ? "secondary" : "default"}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
