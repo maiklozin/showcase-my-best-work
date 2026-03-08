@@ -65,8 +65,7 @@ type TranslationKeys = {
   bookingLabel: string;
   bookingTitle: string;
   bookingDescription: string;
-  bookingDateFrom: string;
-  bookingDateTo: string;
+  bookingDate: string;
   bookingTimeFrom: string;
   bookingTimeTo: string;
   bookingContact: string;
@@ -142,8 +141,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "Booking",
     bookingTitle: "Request Dates",
     bookingDescription: "Select your preferred dates and leave your contact info. I'll get back to you via Instagram DM.",
-    bookingDateFrom: "From",
-    bookingDateTo: "To",
+    bookingDate: "Date",
     bookingTimeFrom: "Start time",
     bookingTimeTo: "End time",
     bookingContact: "Your contact",
@@ -217,8 +215,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "Reserva",
     bookingTitle: "Solicitar Fechas",
     bookingDescription: "Selecciona tus fechas preferidas y deja tu información de contacto. Te responderé por Instagram DM.",
-    bookingDateFrom: "Desde",
-    bookingDateTo: "Hasta",
+    bookingDate: "Fecha",
     bookingTimeFrom: "Hora inicio",
     bookingTimeTo: "Hora fin",
     bookingContact: "Tu contacto",
@@ -292,8 +289,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "Buchung",
     bookingTitle: "Termine anfragen",
     bookingDescription: "Wähle deine bevorzugten Termine und hinterlasse deine Kontaktdaten. Ich melde mich per Instagram DM.",
-    bookingDateFrom: "Von",
-    bookingDateTo: "Bis",
+    bookingDate: "Datum",
     bookingTimeFrom: "Startzeit",
     bookingTimeTo: "Endzeit",
     bookingContact: "Dein Kontakt",
@@ -367,8 +363,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "Réservation",
     bookingTitle: "Demander des Dates",
     bookingDescription: "Sélectionnez vos dates préférées et laissez vos coordonnées. Je vous répondrai par Instagram DM.",
-    bookingDateFrom: "Du",
-    bookingDateTo: "Au",
+    bookingDate: "Date",
     bookingTimeFrom: "Heure début",
     bookingTimeTo: "Heure fin",
     bookingContact: "Votre contact",
@@ -442,8 +437,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "Бронирование",
     bookingTitle: "Запросить даты",
     bookingDescription: "Выберите нужные даты и оставьте контакт. Я отвечу вам в Instagram DM.",
-    bookingDateFrom: "С",
-    bookingDateTo: "По",
+    bookingDate: "Дата",
     bookingTimeFrom: "Время начала",
     bookingTimeTo: "Время окончания",
     bookingContact: "Ваш контакт",
@@ -517,8 +511,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingLabel: "预约",
     bookingTitle: "请求档期",
     bookingDescription: "选择您偏好的日期并留下联系方式。我会通过 Instagram DM 回复您。",
-    bookingDateFrom: "从",
-    bookingDateTo: "到",
+    bookingDate: "日期",
     bookingTimeFrom: "开始时间",
     bookingTimeTo: "结束时间",
     bookingContact: "您的联系方式",

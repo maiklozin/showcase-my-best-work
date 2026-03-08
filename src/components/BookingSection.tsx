@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, Clock, Instagram, Send, Copy, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -39,14 +39,10 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
 const BookingSection = () => {
   const { t } = useI18n();
   const { toast } = useToast();
-  const [calFromOpen, setCalFromOpen] = useState(false);
-  const [calToOpen, setCalToOpen] = useState(false);
-  const [dateFrom, setDateFrom] = useState<Date>();
-  const [dateTo, setDateTo] = useState<Date>();
+  const [calOpen, setCalOpen] = useState(false);
+  const [date, setDate] = useState<Date>();
   const [timeFrom, setTimeFrom] = useState("");
   const [timeTo, setTimeTo] = useState("");
-  const [timeFromEnd, setTimeFromEnd] = useState("");
-  const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
   const [userMessage, setUserMessage] = useState("");
   const [showDialog, setShowDialog] = useState(false);
@@ -54,39 +50,39 @@ const BookingSection = () => {
   const [pendingMessage, setPendingMessage] = useState("");
   const [sending, setSending] = useState(false);
 
-  const isValid = useMemo(() => {
-    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim() && userMessage.trim());
-  }, [dateFrom, dateTo, timeFrom, timeTo, contact, userMessage]);
+  const contactRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  // Progressive step tracking
+  const step = useMemo(() => {
+    if (!date) return 0;
+    if (!timeFrom || !timeTo) return 1;
+    if (!contact.trim()) return 2;
+    if (!userMessage.trim()) return 3;
+    return 4; // all filled
+  }, [date, timeFrom, timeTo, contact, userMessage]);
+
+  const isValid = step === 4;
 
   const availableTimeTo = useMemo(() => HOURS.filter((h) => h > timeFrom), [timeFrom]);
-  const availableTimeToEnd = useMemo(() => HOURS.filter((h) => h > timeFromEnd), [timeFromEnd]);
 
-  const handleFromSelect = (date: Date | undefined) => {
-    setDateFrom(date);
-    setCalFromOpen(false);
-    if (date && (!dateTo || dateTo < date)) {
-      setDateTo(date);
+  // Auto-focus next field when time is selected
+  useEffect(() => {
+    if (timeFrom && timeTo && !contact.trim()) {
+      setTimeout(() => contactRef.current?.focus(), 300);
     }
-  };
+  }, [timeFrom, timeTo]);
 
-  const handleToSelect = (date: Date | undefined) => {
-    setDateTo(date);
-    setCalToOpen(false);
+  const handleDateSelect = (d: Date | undefined) => {
+    setDate(d);
+    setCalOpen(false);
   };
 
   const buildMessage = () => {
-    if (!dateFrom || !dateTo) return "";
-    const fromDate = format(dateFrom, "dd.MM.yyyy");
-    const toDate = format(dateTo, "dd.MM.yyyy");
-    const fromTime = `${timeFrom}–${timeTo}`;
-    const toTime = timeFromEnd && timeToEnd ? `${timeFromEnd}–${timeToEnd}` : "";
-
-    let message: string;
-    if (fromDate === toDate) {
-      message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
-    } else {
-      message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
-    }
+    if (!date) return "";
+    const dateStr = format(date, "dd.MM.yyyy");
+    const timeStr = `${timeFrom}–${timeTo}`;
+    let message = `Hi! I'd like to book: ${dateStr}, ${timeStr}.`;
     message += `\n\nMy contact: ${contact.trim()}`;
     message += `\n\n${userMessage.trim()}`;
     return message;
@@ -100,16 +96,17 @@ const BookingSection = () => {
     setSending(true);
 
     try {
+      const dateStr = date ? format(date, "dd.MM.yyyy") : "";
       const { data, error } = await supabase.functions.invoke("send-booking-email", {
         body: {
-          dateFrom: dateFrom ? format(dateFrom, "dd.MM.yyyy") : "",
-          dateTo: dateTo ? format(dateTo, "dd.MM.yyyy") : "",
+          dateFrom: dateStr,
+          dateTo: dateStr,
           timeFrom,
           timeTo,
-          timeFromEnd: timeFromEnd || "",
-          timeToEnd: timeToEnd || "",
+          timeFromEnd: "",
+          timeToEnd: "",
           contact: contact.trim(),
-          message: message + (userMessage.trim() ? `\n\n${userMessage.trim()}` : ""),
+          message: message,
         },
       });
 
@@ -117,9 +114,7 @@ const BookingSection = () => {
 
       toast({
         title: t("bookingCopiedTitle"),
-        description: data?.emailSent
-          ? "Booking saved & email sent!"
-          : "Booking saved!",
+        description: data?.emailSent ? "Booking saved & email sent!" : "Booking saved!",
       });
     } catch (err) {
       console.error("Booking error:", err);
@@ -140,16 +135,14 @@ const BookingSection = () => {
       await navigator.clipboard.writeText(pendingMessage);
       setCopied(true);
       setTimeout(() => {
-        window.open(
-          `https://ig.me/m/${INSTAGRAM_USERNAME}`,
-          "_blank",
-          "noopener,noreferrer"
-        );
+        window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, "_blank", "noopener,noreferrer");
       }, 500);
     } catch {
       window.prompt(t("bookingCopyFallback"), pendingMessage);
     }
   };
+
+  const glowClass = "ring-2 ring-primary/60 border-primary";
 
   return (
     <section id="booking" className="border-t border-border px-6 py-24">
@@ -164,31 +157,32 @@ const BookingSection = () => {
           {t("bookingDescription")}
         </p>
 
-        {/* FROM: date + time */}
+        {/* Date + Time — single row */}
         <div className="mb-6">
           <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {t("bookingDateFrom")}
+            {t("bookingDate")}
           </label>
           <div className="flex gap-3">
-            <Popover open={calFromOpen} onOpenChange={setCalFromOpen}>
+            <Popover open={calOpen} onOpenChange={setCalOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "flex-1 justify-start text-left font-body font-normal",
-                    !dateFrom && "text-muted-foreground"
+                    "flex-1 justify-start text-left font-body font-normal transition-all duration-300",
+                    !date && "text-muted-foreground",
+                    step === 0 && glowClass
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dateFrom ? format(dateFrom, "dd.MM.yyyy") : "—"}
+                  {date ? format(date, "dd.MM.yyyy") : "—"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  selected={dateFrom}
-                  onSelect={handleFromSelect}
-                  disabled={(date) => date < new Date()}
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  disabled={(d) => d < new Date()}
                   initialFocus
                   className="p-3 pointer-events-auto"
                 />
@@ -196,7 +190,7 @@ const BookingSection = () => {
             </Popover>
 
             <Select value={timeFrom} onValueChange={(v) => { setTimeFrom(v); if (timeTo && v >= timeTo) setTimeTo(""); }}>
-              <SelectTrigger className="w-[110px] font-body">
+              <SelectTrigger className={cn("w-[110px] font-body transition-all duration-300", step === 1 && glowClass)}>
                 <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
                 <SelectValue placeholder="—" />
               </SelectTrigger>
@@ -208,71 +202,12 @@ const BookingSection = () => {
             </Select>
 
             <Select value={timeTo} onValueChange={setTimeTo} disabled={!timeFrom}>
-              <SelectTrigger className="w-[110px] font-body">
+              <SelectTrigger className={cn("w-[110px] font-body transition-all duration-300", step === 1 && timeFrom && glowClass)}>
                 <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
                 <SelectValue placeholder="—" />
               </SelectTrigger>
               <SelectContent>
                 {availableTimeTo.map((h) => (
-                  <SelectItem key={h} value={h}>{h}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* TO: date + time */}
-        <div className="mb-6">
-          <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {t("bookingDateTo")}
-          </label>
-          <div className="flex gap-3">
-            <Popover open={calToOpen} onOpenChange={setCalToOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "flex-1 justify-start text-left font-body font-normal",
-                    !dateTo && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dateTo ? format(dateTo, "dd.MM.yyyy") : "—"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dateTo}
-                  onSelect={handleToSelect}
-                  disabled={(date) =>
-                    date < new Date() || (dateFrom ? date < dateFrom : false)
-                  }
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-
-            <Select value={timeFromEnd} onValueChange={(v) => { setTimeFromEnd(v); if (timeToEnd && v >= timeToEnd) setTimeToEnd(""); }}>
-              <SelectTrigger className="w-[110px] font-body">
-                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
-                <SelectValue placeholder="—" />
-              </SelectTrigger>
-              <SelectContent>
-                {HOURS.map((h) => (
-                  <SelectItem key={h} value={h}>{h}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={timeToEnd} onValueChange={setTimeToEnd} disabled={!timeFromEnd}>
-              <SelectTrigger className="w-[110px] font-body">
-                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
-                <SelectValue placeholder="—" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableTimeToEnd.map((h) => (
                   <SelectItem key={h} value={h}>{h}</SelectItem>
                 ))}
               </SelectContent>
@@ -286,11 +221,12 @@ const BookingSection = () => {
             {t("bookingContact")}
           </label>
           <Input
+            ref={contactRef}
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder={t("bookingContactPlaceholder")}
             maxLength={100}
-            className="font-body"
+            className={cn("font-body transition-all duration-300", step === 2 && glowClass)}
           />
         </div>
 
@@ -300,12 +236,13 @@ const BookingSection = () => {
             {t("bookingMessage")}
           </label>
           <Textarea
+            ref={messageRef}
             value={userMessage}
             onChange={(e) => setUserMessage(e.target.value.slice(0, 500))}
             placeholder={t("bookingMessagePlaceholder")}
             maxLength={500}
             rows={3}
-            className="font-body resize-none"
+            className={cn("font-body resize-none transition-all duration-300", step === 3 && glowClass)}
           />
           <p className="mt-1 text-right font-body text-xs text-muted-foreground">
             {userMessage.length}/500
@@ -321,7 +258,10 @@ const BookingSection = () => {
         <Button
           onClick={handleRequest}
           disabled={!isValid || sending}
-          className="inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
+          className={cn(
+            "inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-all duration-500 hover:bg-primary hover:text-primary-foreground disabled:opacity-40",
+            isValid && !sending && "ring-2 ring-primary/60 bg-primary/10 scale-[1.02]"
+          )}
           variant="outline"
         >
           {sending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
@@ -358,11 +298,7 @@ const BookingSection = () => {
               variant="outline"
               className="gap-2"
               onClick={() => {
-                window.open(
-                  `https://ig.me/m/${INSTAGRAM_USERNAME}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, "_blank", "noopener,noreferrer");
               }}
             >
               <Instagram size={14} />
