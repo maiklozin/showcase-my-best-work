@@ -4,6 +4,13 @@ import { CalendarIcon, Clock, Instagram, Send, Copy, Check } from "lucide-react"
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -39,6 +46,9 @@ const BookingSection = () => {
   const [timeFromEnd, setTimeFromEnd] = useState("");
   const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState("");
 
   const isValid = useMemo(() => {
     return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
@@ -77,28 +87,28 @@ const BookingSection = () => {
     return message;
   };
 
-  const handleRequest = async () => {
+  const handleRequest = () => {
     if (!isValid) return;
     const message = buildMessage();
-    
-    try {
-      await navigator.clipboard.writeText(message);
-      toast({
-        title: t("bookingCopiedTitle"),
-        description: t("bookingCopiedDesc"),
-      });
-    } catch {
-      // fallback: prompt
-      window.prompt(t("bookingCopyFallback"), message);
-    }
+    setPendingMessage(message);
+    setCopied(false);
+    setShowDialog(true);
+  };
 
-    setTimeout(() => {
-      window.open(
-        `https://ig.me/m/${INSTAGRAM_USERNAME}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }, 600);
+  const handleCopyAndOpen = async () => {
+    try {
+      await navigator.clipboard.writeText(pendingMessage);
+      setCopied(true);
+      setTimeout(() => {
+        window.open(
+          `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }, 500);
+    } catch {
+      window.prompt(t("bookingCopyFallback"), pendingMessage);
+    }
   };
 
   return (
@@ -261,6 +271,49 @@ const BookingSection = () => {
           {isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
         </Button>
       </div>
+
+      {/* Copy & Open Dialog */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">
+              {t("bookingCopiedTitle")}
+            </DialogTitle>
+            <DialogDescription className="font-body text-sm text-muted-foreground">
+              {t("bookingDialogInstruction")}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-4 rounded-md border border-border bg-muted/50 p-4 font-body text-sm whitespace-pre-line text-foreground">
+            {pendingMessage}
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              onClick={handleCopyAndOpen}
+              className="flex-1 gap-2"
+              variant={copied ? "secondary" : "default"}
+            >
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+              {copied ? t("bookingCopiedDone") : t("bookingCopyBtn")}
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => {
+                window.open(
+                  `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
+            >
+              <Instagram size={14} />
+              {t("bookingOpenIG")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

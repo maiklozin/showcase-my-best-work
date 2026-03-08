@@ -77,6 +77,10 @@ type TranslationKeys = {
   bookingCopiedTitle: string;
   bookingCopiedDesc: string;
   bookingCopyFallback: string;
+  bookingDialogInstruction: string;
+  bookingCopiedDone: string;
+  bookingCopyBtn: string;
+  bookingOpenIG: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -148,6 +152,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Message copied!",
     bookingCopiedDesc: "Paste it in the Instagram DM that will open now",
     bookingCopyFallback: "Copy this message and paste it in Instagram DM:",
+    bookingDialogInstruction: "Copy the message below and paste it into Instagram DM after it opens",
+    bookingCopiedDone: "Copied!",
+    bookingCopyBtn: "Copy & Open Instagram",
+    bookingOpenIG: "Open DM",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -217,6 +225,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "¡Mensaje copiado!",
     bookingCopiedDesc: "Pégalo en el DM de Instagram que se abrirá ahora",
     bookingCopyFallback: "Copia este mensaje y pégalo en el DM de Instagram:",
+    bookingDialogInstruction: "Copia el mensaje y pégalo en el DM de Instagram después de que se abra",
+    bookingCopiedDone: "¡Copiado!",
+    bookingCopyBtn: "Copiar y abrir Instagram",
+    bookingOpenIG: "Abrir DM",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -286,6 +298,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Nachricht kopiert!",
     bookingCopiedDesc: "Füge sie in die Instagram-DM ein, die sich jetzt öffnet",
     bookingCopyFallback: "Kopiere diese Nachricht und füge sie in die Instagram-DM ein:",
+    bookingDialogInstruction: "Kopiere die Nachricht und füge sie in die Instagram-DM ein",
+    bookingCopiedDone: "Kopiert!",
+    bookingCopyBtn: "Kopieren & Instagram öffnen",
+    bookingOpenIG: "DM öffnen",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -355,6 +371,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Message copié !",
     bookingCopiedDesc: "Collez-le dans le DM Instagram qui va s'ouvrir",
     bookingCopyFallback: "Copiez ce message et collez-le dans le DM Instagram :",
+    bookingDialogInstruction: "Copiez le message et collez-le dans le DM Instagram après ouverture",
+    bookingCopiedDone: "Copié !",
+    bookingCopyBtn: "Copier et ouvrir Instagram",
+    bookingOpenIG: "Ouvrir DM",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -424,6 +444,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Сообщение скопировано!",
     bookingCopiedDesc: "Вставьте его в DM Instagram, который сейчас откроется",
     bookingCopyFallback: "Скопируйте это сообщение и вставьте в DM Instagram:",
+    bookingDialogInstruction: "Скопируйте сообщение ниже и вставьте его в DM Instagram после открытия",
+    bookingCopiedDone: "Скопировано!",
+    bookingCopyBtn: "Скопировать и открыть Instagram",
+    bookingOpenIG: "Открыть DM",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -493,5 +517,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "消息已复制！",
     bookingCopiedDesc: "将其粘贴到即将打开的 Instagram DM 中",
     bookingCopyFallback: "复制此消息并粘贴到 Instagram DM：",
+    bookingDialogInstruction: "复制以下消息，打开后粘贴到 Instagram DM 中",
+    bookingCopiedDone: "已复制！",
+    bookingCopyBtn: "复制并打开 Instagram",
+    bookingOpenIG: "打开 DM",
   },
 };
