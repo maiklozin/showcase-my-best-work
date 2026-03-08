@@ -145,10 +145,18 @@ const BookingSection = () => {
 
       if (error) throw error;
 
-      toast({
-        title: t("bookingCopiedTitle"),
-        description: data?.emailSent ? "Booking saved & email sent!" : "Booking saved!",
-      });
+      setShowDialog(true);
+
+      // Auto-close dialog after 5 seconds
+      setTimeout(() => {
+        setShowDialog(false);
+        // Reset form
+        setDate(undefined);
+        setTimeFrom("");
+        setTimeTo("");
+        setContact("");
+        setUserMessage("");
+      }, 5000);
     } catch (err) {
       console.error("Booking error:", err);
       toast({
@@ -159,8 +167,6 @@ const BookingSection = () => {
     } finally {
       setSending(false);
     }
-
-    setShowDialog(true);
   };
 
   const handleCopyAndOpen = async () => {
