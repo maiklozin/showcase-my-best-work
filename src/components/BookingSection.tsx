@@ -300,12 +300,12 @@ const BookingSection = () => {
         {/* Submit */}
         <Button
           onClick={handleRequest}
-          disabled={!isValid}
+          disabled={!isValid || sending}
           className="inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
           variant="outline"
         >
-          <Send size={14} />
-          {isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
+          {sending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+          {sending ? "Sending..." : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
         </Button>
       </div>
 
