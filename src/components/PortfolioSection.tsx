@@ -45,7 +45,7 @@ const FilmPerforations = ({ side }: { side: 'top' | 'bottom' }) => (
   </div>
 );
 
-const useAutoScroll = (direction: 'left' | 'right') => {
+const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => void) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isPaused = useRef(false);
   const isDragging = useRef(false);
@@ -86,12 +86,15 @@ const useAutoScroll = (direction: 'left' | 'right') => {
   const onMouseEnter = useCallback(() => { isPaused.current = true; }, []);
   const onMouseLeave = useCallback(() => { isPaused.current = false; isDragging.current = false; }, []);
 
+  const pointerTarget = useRef<EventTarget | null>(null);
+
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
     hasDragged.current = false;
     isPaused.current = true;
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    pointerTarget.current = e.target;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     e.preventDefault();
   }, []);
@@ -107,9 +110,17 @@ const useAutoScroll = (direction: 'left' | 'right') => {
   }, []);
 
   const onPointerUp = useCallback(() => {
+    if (!hasDragged.current && onTap && pointerTarget.current) {
+      // Find the card index from the clicked element
+      const card = (pointerTarget.current as HTMLElement).closest('[data-card-index]');
+      if (card) {
+        const idx = parseInt(card.getAttribute('data-card-index') || '-1', 10);
+        if (idx >= 0) onTap(idx);
+      }
+    }
     isDragging.current = false;
     isPaused.current = false;
-  }, []);
+  }, [onTap]);
 
   return {
     scrollRef,
@@ -124,8 +135,6 @@ const useAutoScroll = (direction: 'left' | 'right') => {
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const row1Controls = useAutoScroll('left');
-  const row2Controls = useAutoScroll('right');
   const [lightbox, setLightbox] = useState<{ src: string; title: string; category: string } | null>(null);
 
   const works = [
@@ -154,18 +163,23 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const handleCardClick = (work: typeof works[0], hasDragged: React.MutableRefObject<boolean>) => {
-    if (!hasDragged.current) {
-      setLightbox(work);
-    }
-  };
+  const handleTap = useCallback((index: number) => {
+    const work = works[index % works.length];
+    if (work) setLightbox(work);
+  }, [works]);
 
-  const renderCard = (work: (typeof works)[0], i: number, hasDragged: React.MutableRefObject<boolean>) => (
+  const row1Controls = useAutoScroll('left', handleTap);
+  const row2Controls = useAutoScroll('right', (index: number) => {
+    const work = works[(index % works.length)];
+    if (work) setLightbox(work);
+  });
+
+  const renderCard = (work: (typeof works)[0], i: number, workIndex: number) => (
     <div
       key={i}
+      data-card-index={workIndex}
       className="group relative flex-shrink-0 cursor-pointer overflow-hidden select-none bg-secondary"
       style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
-      onClick={() => handleCardClick(work, hasDragged)}
     >
       <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
@@ -215,7 +229,7 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
-        {[...row1, ...row1].map((work, i) => renderCard(work, i, row1Controls.hasDragged))}
+        {[...row1, ...row1].map((work, i) => renderCard(work, i, i % row1.length))}
       </div>
 
       {/* Row 2 */}
@@ -224,7 +238,7 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
-        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100, row2Controls.hasDragged))}
+        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100, 10 + (i % row2.length)))}
       </div>
 
       {/* Lightbox */}
