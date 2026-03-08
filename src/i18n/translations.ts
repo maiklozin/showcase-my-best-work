@@ -65,8 +65,7 @@ type TranslationKeys = {
   bookingLabel: string;
   bookingTitle: string;
   bookingDescription: string;
-  bookingDateFrom: string;
-  bookingDateTo: string;
+  bookingDate: string;
   bookingTimeFrom: string;
   bookingTimeTo: string;
   bookingContact: string;
