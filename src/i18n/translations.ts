@@ -62,6 +62,16 @@ type TranslationKeys = {
   aboutService4: string;
   aboutService5: string;
   aboutTravel: string;
+  bookingLabel: string;
+  bookingTitle: string;
+  bookingDescription: string;
+  bookingDateFrom: string;
+  bookingDateTo: string;
+  bookingContact: string;
+  bookingContactPlaceholder: string;
+  bookingFollowReminder: string;
+  bookingRequestDates: string;
+  bookingSelectDates: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
