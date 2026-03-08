@@ -19,14 +19,15 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+
+const CARD_WIDTH = 280;
+const GAP = 16;
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const animRef = useRef<number>(0);
-  const speedRef = useRef(0.6); // px per frame
+  const [row1Paused, setRow1Paused] = useState(false);
+  const [row2Paused, setRow2Paused] = useState(false);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -51,35 +52,17 @@ const PortfolioSection = () => {
     { src: portfolio21, title: t("workRunwayFloral"), category: t("catHauteCouture") },
   ];
 
-  // Split into two rows
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const animate = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el || isPaused) {
-      animRef.current = requestAnimationFrame(animate);
-      return;
-    }
-    el.scrollLeft += speedRef.current;
-    // Seamless loop: when we've scrolled past the first set, jump back
-    const halfWidth = el.scrollWidth / 2;
-    if (el.scrollLeft >= halfWidth) {
-      el.scrollLeft -= halfWidth;
-    }
-    animRef.current = requestAnimationFrame(animate);
-  }, [isPaused]);
-
-  useEffect(() => {
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
-  }, [animate]);
+  const row1Width = row1.length * (CARD_WIDTH + GAP);
+  const row2Width = row2.length * (CARD_WIDTH + GAP);
 
   const renderCard = (work: (typeof works)[0], i: number) => (
     <div
       key={i}
       className="group relative flex-shrink-0 cursor-pointer overflow-hidden"
-      style={{ width: "280px" }}
+      style={{ width: `${CARD_WIDTH}px` }}
     >
       <div className="aspect-[3/4] overflow-hidden">
         <img
@@ -101,7 +84,7 @@ const PortfolioSection = () => {
   );
 
   return (
-    <section id="portfolio" className="px-0 py-24">
+    <section id="portfolio" className="px-0 py-24 overflow-hidden">
       <div className="mb-16 text-center px-6">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("portfolioLabel")}
@@ -111,35 +94,54 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      {/* Auto-scrolling row 1 */}
+      {/* Row 1 — scrolls left */}
       <div
-        ref={scrollRef}
-        className="mb-4 flex gap-4 overflow-hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setIsPaused(false)}
+        className="mb-4 overflow-hidden"
+        onMouseEnter={() => setRow1Paused(true)}
+        onMouseLeave={() => setRow1Paused(false)}
+        onTouchStart={() => setRow1Paused(true)}
+        onTouchEnd={() => setRow1Paused(false)}
       >
-        {/* Duplicate items for seamless loop */}
-        {[...row1, ...row1].map((work, i) => renderCard(work, i))}
+        <div
+          className="flex gap-4"
+          style={{
+            width: `${row1Width * 2}px`,
+            animation: `marquee-left ${row1.length * 4}s linear infinite`,
+            animationPlayState: row1Paused ? "paused" : "running",
+          }}
+        >
+          {[...row1, ...row1].map((work, i) => renderCard(work, i))}
+        </div>
       </div>
 
-      {/* Static row 2 — scrolls opposite via CSS */}
+      {/* Row 2 — scrolls right */}
       <div
-        className="flex gap-4 overflow-hidden"
-        style={{
-          animation: "scroll-reverse 60s linear infinite",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = "paused")}
-        onMouseLeave={(e) => (e.currentTarget.style.animationPlayState = "running")}
+        className="overflow-hidden"
+        onMouseEnter={() => setRow2Paused(true)}
+        onMouseLeave={() => setRow2Paused(false)}
+        onTouchStart={() => setRow2Paused(true)}
+        onTouchEnd={() => setRow2Paused(false)}
       >
-        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
+        <div
+          className="flex gap-4"
+          style={{
+            width: `${row2Width * 2}px`,
+            animation: `marquee-right ${row2.length * 4}s linear infinite`,
+            animationPlayState: row2Paused ? "paused" : "running",
+          }}
+        >
+          {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
+        </div>
       </div>
 
       <style>{`
-        @keyframes scroll-reverse {
-          from { transform: translateX(-50%); }
-          to { transform: translateX(0%); }
+        @keyframes marquee-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-${row1Width}px); }
+        }
+        @keyframes marquee-right {
+          0% { transform: translateX(-${row2Width}px); }
+          100% { transform: translateX(0); }
         }
       `}</style>
     </section>
