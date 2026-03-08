@@ -224,6 +224,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
     workClassic: "Klassisches Porträt",
     workNight: "Nächtliche Eleganz",
+    workRunwayRed: "Laufsteg Rot",
+    workRunwayFloral: "Blumen-Couture",
   },
   fr: {
     heroSubtitle: "Mannequin",
