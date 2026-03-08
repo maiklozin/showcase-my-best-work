@@ -1,17 +1,19 @@
 import { Instagram } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const ContactSection = () => {
+  const { t } = useI18n();
+
   return (
     <section className="border-t border-border px-6 py-24 text-center">
       <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
-        Контакты
+        {t("contactLabel")}
       </p>
       <h2 className="mb-8 font-display text-4xl font-medium italic text-foreground md:text-5xl">
-        Связаться со мной
+        {t("contactTitle")}
       </h2>
       <p className="mx-auto mb-10 max-w-md font-body text-sm font-light leading-relaxed text-muted-foreground">
-        Открыта для сотрудничества с брендами, фотографами и агентствами.
-        Свяжитесь через Instagram.
+        {t("contactDescription")}
       </p>
       <a
         href="https://instagram.com/"
@@ -24,7 +26,7 @@ const ContactSection = () => {
       </a>
       <div className="mt-24 pb-6">
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          © 2026 Alexandra · All rights reserved
+          {t("copyright")}
         </p>
       </div>
     </section>
