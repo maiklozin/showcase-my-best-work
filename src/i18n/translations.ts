@@ -333,6 +333,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Sélectionnez vos dates préférées et laissez vos coordonnées. Je vous répondrai par Instagram DM.",
     bookingDateFrom: "Du",
     bookingDateTo: "Au",
+    bookingTimeFrom: "Heure début",
+    bookingTimeTo: "Heure fin",
     bookingContact: "Votre contact",
     bookingContactPlaceholder: "Instagram, email ou téléphone",
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
