@@ -180,7 +180,6 @@ const PortfolioSection = () => {
       data-card-index={workIndex}
       className="group relative flex-shrink-0 cursor-pointer overflow-hidden select-none bg-secondary"
       style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
-      onClick={() => handleCardClick(work, hasDragged)}
     >
       <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
