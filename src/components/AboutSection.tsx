@@ -77,7 +77,7 @@ const AboutSection = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 font-body text-sm text-foreground transition-colors hover:text-primary"
               >
-                <Instagram size={16} />
+                <InstagramIcon size={16} />
                 @dara__es_
               </a>
             </div>
