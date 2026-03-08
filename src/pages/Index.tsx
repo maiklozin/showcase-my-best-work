@@ -1,6 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import PortfolioSection from "@/components/PortfolioSection";
+import BookingSection from "@/components/BookingSection";
 import ContactSection from "@/components/ContactSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -11,6 +12,7 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <PortfolioSection />
+      <BookingSection />
       <ContactSection />
     </main>
   );
