@@ -517,5 +517,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "消息已复制！",
     bookingCopiedDesc: "将其粘贴到即将打开的 Instagram DM 中",
     bookingCopyFallback: "复制此消息并粘贴到 Instagram DM：",
+    bookingDialogInstruction: "复制以下消息，打开后粘贴到 Instagram DM 中",
+    bookingCopiedDone: "已复制！",
+    bookingCopyBtn: "复制并打开 Instagram",
+    bookingOpenIG: "打开 DM",
   },
 };
