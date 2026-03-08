@@ -34,6 +34,7 @@ type TranslationKeys = {
   workOcean: string;
   workPortrait: string;
   workDesert: string;
+  workClassic: string;
   aboutLabel: string;
   aboutTitle: string;
   aboutLocation: string;
@@ -94,6 +95,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Brand campaigns and social media content",
     aboutService5: "Wedding and love story shoots",
     aboutTravel: "Based in Mallorca. Available for projects across Spain and Europe.",
+    workClassic: "Classic Portrait",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -136,6 +138,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Campañas de marca y contenido para redes sociales",
     aboutService5: "Sesiones de boda y love story",
     aboutTravel: "Con base en Mallorca. Disponible para proyectos en toda España y Europa.",
+    workClassic: "Retrato Clásico",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -178,6 +181,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Markenkampagnen und Social-Media-Inhalte",
     aboutService5: "Hochzeits- und Liebesgeschichten-Shootings",
     aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
+    workClassic: "Klassisches Porträt",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -220,6 +224,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Campagnes de marque et contenu réseaux sociaux",
     aboutService5: "Shootings mariage et love story",
     aboutTravel: "Basée à Majorque. Disponible pour des projets en Espagne et en Europe.",
+    workClassic: "Portrait Classique",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -262,6 +267,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Кампании брендов и контент для соцсетей",
     aboutService5: "Свадебные и love story съёмки",
     aboutTravel: "Базируюсь на Майорке. Доступна для проектов по всей Испании и Европе.",
+    workClassic: "Классический портрет",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -304,5 +310,6 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "品牌活动和社交媒体内容",
     aboutService5: "婚礼和爱情故事拍摄",
     aboutTravel: "常驻马略卡岛。可接受西班牙和欧洲各地的项目。",
+    workClassic: "经典肖像",
   },
 };
