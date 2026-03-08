@@ -238,7 +238,7 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
-        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100, row2Controls.hasDragged))}
+        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100, 10 + (i % row2.length)))}
       </div>
 
       {/* Lightbox */}
