@@ -4,6 +4,9 @@ import portfolio3 from "@/assets/portfolio-3.jpg";
 import portfolio4 from "@/assets/portfolio-4.jpg";
 import portfolio5 from "@/assets/portfolio-5.jpg";
 import portfolio6 from "@/assets/portfolio-6.jpg";
+import portfolio7 from "@/assets/portfolio-7.jpg";
+import portfolio8 from "@/assets/portfolio-8.jpg";
+import portfolio9 from "@/assets/portfolio-9.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const PortfolioSection = () => {
@@ -11,11 +14,14 @@ const PortfolioSection = () => {
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
-    { src: portfolio2, title: t("workBeauty"), category: t("catBeauty") },
-    { src: portfolio3, title: t("workMilan"), category: t("catRunway") },
-    { src: portfolio4, title: t("workStreet"), category: t("catEditorial") },
+    { src: portfolio2, title: t("workBeauty"), category: t("catHauteCouture") },
+    { src: portfolio3, title: t("workMilan"), category: t("catBeauty") },
+    { src: portfolio4, title: t("workStreet"), category: t("catCommercial") },
     { src: portfolio5, title: t("workNoir"), category: t("catHauteCouture") },
-    { src: portfolio6, title: t("workSummer"), category: t("catCommercial") },
+    { src: portfolio6, title: t("workSummer"), category: t("catLifestyle") },
+    { src: portfolio7, title: t("workOcean"), category: t("catCommercial") },
+    { src: portfolio8, title: t("workPortrait"), category: t("catBeauty") },
+    { src: portfolio9, title: t("workDesert"), category: t("catEditorial") },
   ];
 
   return (
