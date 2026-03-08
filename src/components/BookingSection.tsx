@@ -260,6 +260,11 @@ const BookingSection = () => {
             maxLength={100}
             className={cn("font-body transition-all duration-300", step === 2 && glowClass)}
           />
+          {contact.trim().length > 0 && !isContactValid && (
+            <p className="mt-1 text-left font-body text-xs text-destructive">
+              {t("bookingContactError")}
+            </p>
+          )}
         </div>
 
         {/* Message textarea */}
