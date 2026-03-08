@@ -278,6 +278,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Basée à Majorque. Disponible pour des projets en Espagne et en Europe.",
     workClassic: "Portrait Classique",
     workNight: "Élégance Nocturne",
+    workRunwayRed: "Défilé Rouge",
+    workRunwayFloral: "Couture Florale",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
