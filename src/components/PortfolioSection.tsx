@@ -207,7 +207,7 @@ const PortfolioSection = () => {
 
       {/* Row 2 — auto scrolls right, manual drag */}
       <div
-        className="flex gap-4 overflow-hidden cursor-grab touch-pan-y"
+        className="flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
         {...rowProps(row2Controls)}
       >
