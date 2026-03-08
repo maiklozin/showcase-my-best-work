@@ -79,14 +79,37 @@ Deno.serve(async (req) => {
     if (!emailRes.ok) {
       console.error("Resend error:", emailData);
       // Still return success since booking was saved
-      return new Response(
-        JSON.stringify({ success: true, emailSent: false, booking: true }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      // Continue to send Telegram even if email fails
+    }
+
+    // Send Telegram notification
+    let telegramSent = false;
+    const telegramToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
+    const telegramChatId = Deno.env.get("TELEGRAM_CHAT_ID");
+
+    if (telegramToken && telegramChatId) {
+      const telegramText = `📸 *New Booking Request*\n\n📅 Date: ${dateFrom} — ${dateTo}\n🕐 Time: ${timeFrom} – ${timeTo}${timeFromEnd ? `\n🕐 Time (day 2): ${timeFromEnd} – ${timeToEnd || ""}` : ""}\n📞 Contact: ${contact}\n\n💬 Message:\n${message}`;
+
+      try {
+        const tgRes = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: telegramChatId,
+            text: telegramText,
+            parse_mode: "Markdown",
+          }),
+        });
+        const tgData = await tgRes.json();
+        telegramSent = tgData.ok === true;
+        if (!telegramSent) console.error("Telegram error:", tgData);
+      } catch (tgErr) {
+        console.error("Telegram fetch error:", tgErr);
+      }
     }
 
     return new Response(
-      JSON.stringify({ success: true, emailSent: true, booking: true }),
+      JSON.stringify({ success: true, emailSent: emailRes.ok, telegramSent, booking: true }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
