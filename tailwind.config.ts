@@ -51,6 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        instagram: {
+          DEFAULT: "hsl(var(--instagram))",
+          foreground: "hsl(var(--instagram-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
