@@ -23,7 +23,25 @@ import { useRef, useEffect, useCallback } from "react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
-const AUTO_SPEED = 1; // pixels per frame
+const AUTO_SPEED = 1;
+const PERF_COUNT = 8; // number of perforations per side
+
+const FilmPerforations = ({ side }: { side: 'top' | 'bottom' }) => (
+  <div
+    className={`absolute left-0 right-0 flex justify-between px-3 z-10 pointer-events-none ${
+      side === 'top' ? 'top-0' : 'bottom-0'
+    }`}
+    style={{ height: '12px', [side === 'top' ? 'top' : 'bottom']: '2px' }}
+  >
+    {Array.from({ length: PERF_COUNT }).map((_, i) => (
+      <div
+        key={i}
+        className="rounded-[1px] bg-background/80"
+        style={{ width: '16px', height: '8px' }}
+      />
+    ))}
+  </div>
+);
 
 const useAutoScroll = (direction: 'left' | 'right') => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -36,7 +54,6 @@ const useAutoScroll = (direction: 'left' | 'right') => {
     const el = scrollRef.current;
     if (!el) return;
 
-    // Set initial scroll position for right-scrolling row
     const halfScroll = el.scrollWidth / 2;
     if (direction === 'right') {
       el.scrollLeft = halfScroll;
@@ -47,7 +64,6 @@ const useAutoScroll = (direction: 'left' | 'right') => {
       if (!isPaused.current && !isDragging.current && el) {
         if (direction === 'left') {
           el.scrollLeft += AUTO_SPEED;
-          // Loop: when we've scrolled past the first set, jump back
           if (el.scrollLeft >= halfScroll) {
             el.scrollLeft -= halfScroll;
           }
@@ -69,36 +85,21 @@ const useAutoScroll = (direction: 'left' | 'right') => {
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
+    isPaused.current = true;
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    e.preventDefault();
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging.current || !scrollRef.current) return;
     const dx = e.clientX - dragStartX.current;
     scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
+    e.preventDefault();
   }, []);
 
   const onPointerUp = useCallback(() => {
-    isDragging.current = false;
-  }, []);
-
-  // Touch events for mobile
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    isPaused.current = true;
-    isDragging.current = true;
-    dragStartX.current = e.touches[0].clientX;
-    dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-  }, []);
-
-  const onTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const dx = e.touches[0].clientX - dragStartX.current;
-    scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-  }, []);
-
-  const onTouchEnd = useCallback(() => {
     isDragging.current = false;
     isPaused.current = false;
   }, []);
@@ -110,9 +111,6 @@ const useAutoScroll = (direction: 'left' | 'right') => {
     onPointerDown,
     onPointerMove,
     onPointerUp,
-    onTouchStart,
-    onTouchMove,
-    onTouchEnd,
   };
 };
 
@@ -150,9 +148,10 @@ const PortfolioSection = () => {
   const renderCard = (work: (typeof works)[0], i: number) => (
     <div
       key={i}
-      className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none"
-      style={{ width: `${CARD_WIDTH}px` }}
+      className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none bg-secondary"
+      style={{ width: `${CARD_WIDTH}px`, padding: '14px 4px' }}
     >
+      <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
         <img
           src={work.src}
@@ -162,6 +161,7 @@ const PortfolioSection = () => {
           draggable={false}
         />
       </div>
+      <FilmPerforations side="bottom" />
       <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-background/80 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary">
           {work.category}
@@ -180,9 +180,6 @@ const PortfolioSection = () => {
     onPointerDown: controls.onPointerDown,
     onPointerMove: controls.onPointerMove,
     onPointerUp: controls.onPointerUp,
-    onTouchStart: controls.onTouchStart,
-    onTouchMove: controls.onTouchMove,
-    onTouchEnd: controls.onTouchEnd,
   });
 
   return (
@@ -196,19 +193,19 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      {/* Row 1 — auto scrolls left, manual drag */}
+      {/* Row 1 */}
       <div
-        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-none [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
         {[...row1, ...row1].map((work, i) => renderCard(work, i))}
       </div>
 
-      {/* Row 2 — auto scrolls right, manual drag */}
+      {/* Row 2 */}
       <div
-        className="flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        className="flex gap-4 overflow-x-auto cursor-grab touch-none [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
         {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
