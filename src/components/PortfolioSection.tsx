@@ -179,6 +179,7 @@ const PortfolioSection = () => {
   });
 
   const lightbox = lightboxIndex !== null ? works[lightboxIndex] : null;
+  const lightboxTouchX = useRef(0);
 
   const goNext = useCallback(() => {
     setLightboxIndex(prev => prev !== null ? (prev + 1) % works.length : null);
