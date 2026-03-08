@@ -170,6 +170,8 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "Con base en Mallorca. Disponible para proyectos en toda España y Europa.",
     workClassic: "Retrato Clásico",
     workNight: "Elegancia Nocturna",
+    workRunwayRed: "Pasarela Rojo",
+    workRunwayFloral: "Costura Floral",
   },
   de: {
     heroSubtitle: "Fashion Model",
