@@ -36,6 +36,8 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
   return `${h.toString().padStart(2, "0")}:00`;
 });
 
+const RATE_LIMIT_MS = 30_000; // 30 seconds between submissions
+
 const BookingSection = () => {
   const { t } = useI18n();
   const { toast } = useToast();
@@ -49,6 +51,8 @@ const BookingSection = () => {
   const [copied, setCopied] = useState(false);
   const [pendingMessage, setPendingMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const lastSubmitRef = useRef<number>(0);
 
   const contactRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
@@ -90,6 +94,21 @@ const BookingSection = () => {
 
   const handleRequest = async () => {
     if (!isValid || sending) return;
+
+    // Honeypot check — bots fill hidden fields
+    if (honeypot) return;
+
+    // Rate limit check
+    const now = Date.now();
+    if (now - lastSubmitRef.current < RATE_LIMIT_MS) {
+      toast({
+        title: "⏳",
+        description: "Please wait before submitting again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    lastSubmitRef.current = now;
     const message = buildMessage();
     setPendingMessage(message);
     setCopied(false);
@@ -146,7 +165,7 @@ const BookingSection = () => {
 
   return (
     <section id="booking" className="border-t border-border px-6 py-24">
-      <div className="mx-auto max-w-lg text-center">
+      <div className="relative mx-auto max-w-lg text-center">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("bookingLabel")}
         </p>
@@ -247,6 +266,20 @@ const BookingSection = () => {
           <p className="mt-1 text-right font-body text-xs text-muted-foreground">
             {userMessage.length}/500
           </p>
+        </div>
+
+        {/* Honeypot — invisible to users, bots will fill it */}
+        <div className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
         </div>
 
         <p className="mb-8 flex items-center justify-center gap-2 font-body text-xs text-muted-foreground">
