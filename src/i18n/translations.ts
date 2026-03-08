@@ -559,5 +559,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "已复制！",
     bookingCopyBtn: "复制并打开 Instagram",
     bookingOpenIG: "打开 DM",
+    bookingSentTitle: "请求已发送！✅",
+    bookingSentDesc: "您的预约请求已发送。还想通过 Instagram 联系吗？",
+    bookingAlsoIG: "也通过 Instagram 发送",
+    bookingClose: "关闭",
   },
 };

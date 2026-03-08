@@ -332,30 +332,51 @@ const BookingSection = () => {
         </Button>
       </div>
 
-      {/* Copy & Open Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      {/* Success Dialog */}
+      <Dialog open={showDialog} onOpenChange={(open) => {
+        setShowDialog(open);
+        if (!open) {
+          setDate(undefined);
+          setTimeFrom("");
+          setTimeTo("");
+          setContact("");
+          setUserMessage("");
+        }
+      }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="font-display text-xl">
-              {t("bookingCopiedTitle")}
+              {t("bookingSentTitle")}
             </DialogTitle>
             <DialogDescription className="font-body text-sm text-muted-foreground">
-              {t("bookingDialogInstruction")}
+              {t("bookingSentDesc")}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="my-4 rounded-md border border-border bg-muted/50 p-4 font-body text-sm whitespace-pre-line text-foreground">
-            {pendingMessage}
-          </div>
-
-          <Button
+          <div className="flex flex-col gap-3 mt-2">
+            <Button
               onClick={handleCopyAndOpen}
+              variant="outline"
               className="w-full gap-2"
-              variant={copied ? "secondary" : "default"}
             >
-              {copied ? <Check size={14} /> : <Copy size={14} />}
-              {copied ? t("bookingCopiedDone") : t("bookingCopyBtn")}
+              <InstagramIcon size={14} />
+              {copied ? t("bookingCopiedDone") : t("bookingAlsoIG")}
             </Button>
+            <Button
+              onClick={() => {
+                setShowDialog(false);
+                setDate(undefined);
+                setTimeFrom("");
+                setTimeTo("");
+                setContact("");
+                setUserMessage("");
+              }}
+              variant="secondary"
+              className="w-full"
+            >
+              {t("bookingClose")}
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </section>
