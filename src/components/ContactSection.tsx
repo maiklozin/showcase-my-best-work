@@ -16,13 +16,13 @@ const ContactSection = () => {
         {t("contactDescription")}
       </p>
       <a
-        href="https://instagram.com/"
+        href="https://instagram.com/dara__es_"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-3 border border-primary px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground"
       >
         <Instagram size={16} />
-        Instagram
+        @dara__es_
       </a>
       <div className="mt-24 pb-6">
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
