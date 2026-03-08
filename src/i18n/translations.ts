@@ -185,6 +185,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService5: "Hochzeits- und Liebesgeschichten-Shootings",
     aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
     workClassic: "Klassisches Porträt",
+    workNight: "Nächtliche Eleganz",
   },
   fr: {
     heroSubtitle: "Mannequin",
