@@ -5,7 +5,7 @@ const ContactSection = () => {
   const { t } = useI18n();
 
   return (
-    <section className="border-t border-border px-6 py-24 text-center">
+    <section className="border-t border-border px-6 py-12 md:py-24 text-center">
       <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
         {t("contactLabel")}
       </p>

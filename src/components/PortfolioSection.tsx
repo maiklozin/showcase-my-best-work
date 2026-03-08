@@ -156,13 +156,15 @@ const PortfolioSection = () => {
 
       {/* Row 2 — scrolls right */}
       <div
-        className="overflow-hidden"
+        className="overflow-hidden touch-pan-y"
+        onPointerDown={drag2.onPointerDown}
+        onPointerMove={drag2.onPointerMove}
+        onPointerUp={drag2.onPointerUp}
         onMouseEnter={() => setRow2Paused(true)}
-        onMouseLeave={() => setRow2Paused(false)}
-        onTouchStart={() => setRow2Paused(true)}
-        onTouchEnd={() => setRow2Paused(false)}
+        onMouseLeave={() => { setRow2Paused(false); }}
       >
         <div
+          ref={drag2.ref}
           className="flex gap-4"
           style={{
             width: `${row2Width * 2}px`,
