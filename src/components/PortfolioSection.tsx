@@ -44,6 +44,8 @@ const PortfolioSection = () => {
     { src: portfolio17, title: t("workPaperDress"), category: t("catHauteCouture") },
     { src: portfolio18, title: t("workRedBridge"), category: t("catLifestyle") },
     { src: portfolio19, title: t("workCloseUp"), category: t("catBeauty") },
+    { src: portfolio20, title: t("workRunwayRed"), category: t("catRunway") },
+    { src: portfolio21, title: t("workRunwayFloral"), category: t("catHauteCouture") },
   ];
 
   return (
