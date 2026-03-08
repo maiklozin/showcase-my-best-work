@@ -89,11 +89,46 @@ const BookingSection = () => {
     return message;
   };
 
-  const handleRequest = () => {
-    if (!isValid) return;
+  const handleRequest = async () => {
+    if (!isValid || sending) return;
     const message = buildMessage();
     setPendingMessage(message);
     setCopied(false);
+    setSending(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-booking-email", {
+        body: {
+          dateFrom: dateFrom ? format(dateFrom, "dd.MM.yyyy") : "",
+          dateTo: dateTo ? format(dateTo, "dd.MM.yyyy") : "",
+          timeFrom,
+          timeTo,
+          timeFromEnd: timeFromEnd || "",
+          timeToEnd: timeToEnd || "",
+          contact: contact.trim(),
+          message,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: t("bookingCopiedTitle"),
+        description: data?.emailSent
+          ? "Booking saved & email sent!"
+          : "Booking saved!",
+      });
+    } catch (err) {
+      console.error("Booking error:", err);
+      toast({
+        title: "Error",
+        description: "Could not save booking. Please try via Instagram.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
+    }
+
     setShowDialog(true);
   };
 
