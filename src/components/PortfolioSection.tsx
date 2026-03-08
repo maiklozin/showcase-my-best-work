@@ -122,8 +122,8 @@ const PortfolioSection = () => {
   );
 
   return (
-    <section id="portfolio" className="px-0 py-24 overflow-hidden">
-      <div className="mb-16 text-center px-6">
+    <section id="portfolio" className="px-0 py-12 md:py-24 overflow-hidden">
+      <div className="mb-8 md:mb-16 text-center px-6">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("portfolioLabel")}
         </p>
@@ -134,13 +134,15 @@ const PortfolioSection = () => {
 
       {/* Row 1 — scrolls left */}
       <div
-        className="mb-4 overflow-hidden"
+        className="mb-4 overflow-hidden touch-pan-y"
+        onPointerDown={drag1.onPointerDown}
+        onPointerMove={drag1.onPointerMove}
+        onPointerUp={drag1.onPointerUp}
         onMouseEnter={() => setRow1Paused(true)}
-        onMouseLeave={() => setRow1Paused(false)}
-        onTouchStart={() => setRow1Paused(true)}
-        onTouchEnd={() => setRow1Paused(false)}
+        onMouseLeave={() => { setRow1Paused(false); }}
       >
         <div
+          ref={drag1.ref}
           className="flex gap-4"
           style={{
             width: `${row1Width * 2}px`,
