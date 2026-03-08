@@ -229,7 +229,7 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
-        {[...row1, ...row1].map((work, i) => renderCard(work, i, row1Controls.hasDragged))}
+        {[...row1, ...row1].map((work, i) => renderCard(work, i, i % row1.length))}
       </div>
 
       {/* Row 2 */}
