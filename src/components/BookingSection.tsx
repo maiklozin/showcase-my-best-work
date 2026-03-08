@@ -109,7 +109,7 @@ const BookingSection = () => {
           timeFromEnd: timeFromEnd || "",
           timeToEnd: timeToEnd || "",
           contact: contact.trim(),
-          message,
+          message: message + (userMessage.trim() ? `\n\n${userMessage.trim()}` : ""),
         },
       });
 

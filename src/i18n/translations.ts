@@ -71,6 +71,8 @@ type TranslationKeys = {
   bookingTimeTo: string;
   bookingContact: string;
   bookingContactPlaceholder: string;
+  bookingMessage: string;
+  bookingMessagePlaceholder: string;
   bookingFollowReminder: string;
   bookingRequestDates: string;
   bookingSelectDates: string;
