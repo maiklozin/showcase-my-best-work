@@ -310,5 +310,6 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "品牌活动和社交媒体内容",
     aboutService5: "婚礼和爱情故事拍摄",
     aboutTravel: "常驻马略卡岛。可接受西班牙和欧洲各地的项目。",
+    workClassic: "经典肖像",
   },
 };
