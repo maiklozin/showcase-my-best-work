@@ -444,6 +444,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "Сообщение скопировано!",
     bookingCopiedDesc: "Вставьте его в DM Instagram, который сейчас откроется",
     bookingCopyFallback: "Скопируйте это сообщение и вставьте в DM Instagram:",
+    bookingDialogInstruction: "Скопируйте сообщение ниже и вставьте его в DM Instagram после открытия",
+    bookingCopiedDone: "Скопировано!",
+    bookingCopyBtn: "Скопировать и открыть Instagram",
+    bookingOpenIG: "Открыть DM",
   },
   zh: {
     heroSubtitle: "时尚模特",
