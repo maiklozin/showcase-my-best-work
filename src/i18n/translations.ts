@@ -96,6 +96,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workPaperDress: "Avant-Garde",
     workRedBridge: "Urban Architecture",
     workCloseUp: "Beauty Portrait",
+    aboutLabel: "About",
     aboutTitle: "About Me",
     aboutLocation: "Location",
     aboutHeight: "Height",
