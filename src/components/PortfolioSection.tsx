@@ -20,7 +20,7 @@ import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useRef, useEffect, useCallback, useState } from "react";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
