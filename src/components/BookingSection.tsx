@@ -29,6 +29,7 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
 
 const BookingSection = () => {
   const { t } = useI18n();
+  const { toast } = useToast();
   const [calFromOpen, setCalFromOpen] = useState(false);
   const [calToOpen, setCalToOpen] = useState(false);
   const [dateFrom, setDateFrom] = useState<Date>();
