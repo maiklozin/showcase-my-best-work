@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Clock, Instagram, Send, Copy, Check, Loader2 } from "lucide-react";
+import { CalendarIcon, Clock, Send, Copy, Check, Loader2 } from "lucide-react";
+import InstagramIcon from "@/components/InstagramIcon";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useToast } from "@/hooks/use-toast";
