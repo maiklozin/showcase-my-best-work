@@ -83,6 +83,10 @@ type TranslationKeys = {
   bookingCopiedDone: string;
   bookingCopyBtn: string;
   bookingOpenIG: string;
+  bookingSentTitle: string;
+  bookingSentDesc: string;
+  bookingAlsoIG: string;
+  bookingClose: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -160,6 +164,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "Copied!",
     bookingCopyBtn: "Copy & Open Instagram",
     bookingOpenIG: "Open DM",
+    bookingSentTitle: "Request sent! ✅",
+    bookingSentDesc: "Your booking request has been sent. Want to also message via Instagram?",
+    bookingAlsoIG: "Also send via Instagram",
+    bookingClose: "Close",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -235,6 +243,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "¡Copiado!",
     bookingCopyBtn: "Copiar y abrir Instagram",
     bookingOpenIG: "Abrir DM",
+    bookingSentTitle: "¡Solicitud enviada! ✅",
+    bookingSentDesc: "Tu solicitud ha sido enviada. ¿Quieres también escribir por Instagram?",
+    bookingAlsoIG: "También enviar por Instagram",
+    bookingClose: "Cerrar",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -310,6 +322,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "Kopiert!",
     bookingCopyBtn: "Kopieren & Instagram öffnen",
     bookingOpenIG: "DM öffnen",
+    bookingSentTitle: "Anfrage gesendet! ✅",
+    bookingSentDesc: "Ihre Buchungsanfrage wurde gesendet. Möchten Sie auch über Instagram schreiben?",
+    bookingAlsoIG: "Auch über Instagram senden",
+    bookingClose: "Schließen",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -385,6 +401,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "Copié !",
     bookingCopyBtn: "Copier et ouvrir Instagram",
     bookingOpenIG: "Ouvrir DM",
+    bookingSentTitle: "Demande envoyée ! ✅",
+    bookingSentDesc: "Votre demande a été envoyée. Voulez-vous aussi écrire via Instagram ?",
+    bookingAlsoIG: "Envoyer aussi via Instagram",
+    bookingClose: "Fermer",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -460,6 +480,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "Скопировано!",
     bookingCopyBtn: "Скопировать и открыть Instagram",
     bookingOpenIG: "Открыть DM",
+    bookingSentTitle: "Запрос отправлен! ✅",
+    bookingSentDesc: "Ваш запрос отправлен. Хотите также написать в Instagram?",
+    bookingAlsoIG: "Также отправить в Instagram",
+    bookingClose: "Закрыть",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -535,5 +559,9 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "已复制！",
     bookingCopyBtn: "复制并打开 Instagram",
     bookingOpenIG: "打开 DM",
+    bookingSentTitle: "请求已发送！✅",
+    bookingSentDesc: "您的预约请求已发送。还想通过 Instagram 联系吗？",
+    bookingAlsoIG: "也通过 Instagram 发送",
+    bookingClose: "关闭",
   },
 };
