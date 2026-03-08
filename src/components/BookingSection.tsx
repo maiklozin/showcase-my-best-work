@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { format, isSameDay } from "date-fns";
+import { format } from "date-fns";
 import { CalendarIcon, Clock, Instagram, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -22,62 +22,58 @@ import {
 const INSTAGRAM_USERNAME = "dara__es_";
 
 const HOURS = Array.from({ length: 13 }, (_, i) => {
-  const h = i + 8; // 08:00 – 20:00
+  const h = i + 8;
   return `${h.toString().padStart(2, "0")}:00`;
 });
 
 const BookingSection = () => {
   const { t } = useI18n();
+  const [calFromOpen, setCalFromOpen] = useState(false);
+  const [calToOpen, setCalToOpen] = useState(false);
   const [dateFrom, setDateFrom] = useState<Date>();
   const [dateTo, setDateTo] = useState<Date>();
-  const [timeFrom, setTimeFrom] = useState<string>("");
-  const [timeTo, setTimeTo] = useState<string>("");
+  const [timeFrom, setTimeFrom] = useState("");
+  const [timeTo, setTimeTo] = useState("");
+  const [timeFromEnd, setTimeFromEnd] = useState("");
+  const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
 
-  const sameDay = dateFrom && dateTo && isSameDay(dateFrom, dateTo);
-
-  // When same day, require times; otherwise just dates + contact
   const isValid = useMemo(() => {
-    if (!dateFrom || !dateTo || !contact.trim()) return false;
-    if (sameDay && (!timeFrom || !timeTo)) return false;
-    return true;
-  }, [dateFrom, dateTo, contact, sameDay, timeFrom, timeTo]);
+    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
+  }, [dateFrom, dateTo, timeFrom, timeTo, contact]);
 
-  // Filter "to" hours so they're after "from"
-  const availableToHours = useMemo(() => {
-    if (!timeFrom) return HOURS;
-    return HOURS.filter((h) => h > timeFrom);
-  }, [timeFrom]);
+  const availableTimeTo = useMemo(() => HOURS.filter((h) => h > timeFrom), [timeFrom]);
+  const availableTimeToEnd = useMemo(() => HOURS.filter((h) => h > timeFromEnd), [timeFromEnd]);
 
-  // Auto-select dateTo = dateFrom when dateFrom changes
   const handleFromSelect = (date: Date | undefined) => {
     setDateFrom(date);
+    setCalFromOpen(false);
     if (date && (!dateTo || dateTo < date)) {
       setDateTo(date);
     }
-    // Reset times when date changes
-    setTimeFrom("");
-    setTimeTo("");
   };
 
   const handleToSelect = (date: Date | undefined) => {
     setDateTo(date);
-    setTimeFrom("");
-    setTimeTo("");
+    setCalToOpen(false);
   };
 
   const handleRequest = () => {
     if (!isValid || !dateFrom || !dateTo) return;
 
-    const fromStr = format(dateFrom, "dd.MM.yyyy");
-    const toStr = format(dateTo, "dd.MM.yyyy");
+    const fromDate = format(dateFrom, "dd.MM.yyyy");
+    const toDate = format(dateTo, "dd.MM.yyyy");
+    const fromTime = `${timeFrom}–${timeTo}`;
+    const toTime = timeFromEnd && timeToEnd ? `${timeFromEnd}–${timeToEnd}` : "";
 
     let message: string;
-    if (sameDay) {
-      message = `Hi! I'd like to request: ${fromStr}, ${timeFrom} – ${timeTo}. My contact: ${contact.trim()}`;
+    if (fromDate === toDate) {
+      message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
+      if (toTime) message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
     } else {
-      message = `Hi! I'd like to request dates: ${fromStr} – ${toStr}. My contact: ${contact.trim()}`;
+      message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
     }
+    message += `\n\nMy contact: ${contact.trim()}`;
 
     window.open(
       `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(message)}`,
@@ -99,19 +95,18 @@ const BookingSection = () => {
           {t("bookingDescription")}
         </p>
 
-        {/* Date pickers */}
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:gap-6">
-          {/* From */}
-          <div className="flex-1">
-            <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {t("bookingDateFrom")}
-            </label>
-            <Popover>
+        {/* FROM: date + time */}
+        <div className="mb-6">
+          <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {t("bookingDateFrom")}
+          </label>
+          <div className="flex gap-3">
+            <Popover open={calFromOpen} onOpenChange={setCalFromOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-body font-normal",
+                    "flex-1 justify-start text-left font-body font-normal",
                     !dateFrom && "text-muted-foreground"
                   )}
                 >
@@ -130,19 +125,45 @@ const BookingSection = () => {
                 />
               </PopoverContent>
             </Popover>
-          </div>
 
-          {/* To */}
-          <div className="flex-1">
-            <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {t("bookingDateTo")}
-            </label>
-            <Popover>
+            <Select value={timeFrom} onValueChange={(v) => { setTimeFrom(v); if (timeTo && v >= timeTo) setTimeTo(""); }}>
+              <SelectTrigger className="w-[110px] font-body">
+                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
+                <SelectValue placeholder="—" />
+              </SelectTrigger>
+              <SelectContent>
+                {HOURS.map((h) => (
+                  <SelectItem key={h} value={h}>{h}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={timeTo} onValueChange={setTimeTo} disabled={!timeFrom}>
+              <SelectTrigger className="w-[110px] font-body">
+                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
+                <SelectValue placeholder="—" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableTimeTo.map((h) => (
+                  <SelectItem key={h} value={h}>{h}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* TO: date + time */}
+        <div className="mb-6">
+          <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {t("bookingDateTo")}
+          </label>
+          <div className="flex gap-3">
+            <Popover open={calToOpen} onOpenChange={setCalToOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-body font-normal",
+                    "flex-1 justify-start text-left font-body font-normal",
                     !dateTo && "text-muted-foreground"
                   )}
                 >
@@ -163,46 +184,32 @@ const BookingSection = () => {
                 />
               </PopoverContent>
             </Popover>
+
+            <Select value={timeFromEnd} onValueChange={(v) => { setTimeFromEnd(v); if (timeToEnd && v >= timeToEnd) setTimeToEnd(""); }}>
+              <SelectTrigger className="w-[110px] font-body">
+                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
+                <SelectValue placeholder="—" />
+              </SelectTrigger>
+              <SelectContent>
+                {HOURS.map((h) => (
+                  <SelectItem key={h} value={h}>{h}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={timeToEnd} onValueChange={setTimeToEnd} disabled={!timeFromEnd}>
+              <SelectTrigger className="w-[110px] font-body">
+                <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
+                <SelectValue placeholder="—" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableTimeToEnd.map((h) => (
+                  <SelectItem key={h} value={h}>{h}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
-
-        {/* Time pickers — only when same day */}
-        {sameDay && (
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="flex-1">
-              <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                <Clock className="mr-1 inline h-3 w-3" />
-                {t("bookingTimeFrom")}
-              </label>
-              <Select value={timeFrom} onValueChange={(v) => { setTimeFrom(v); if (timeTo && v >= timeTo) setTimeTo(""); }}>
-                <SelectTrigger className="w-full font-body">
-                  <SelectValue placeholder="—" />
-                </SelectTrigger>
-                <SelectContent>
-                  {HOURS.map((h) => (
-                    <SelectItem key={h} value={h}>{h}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex-1">
-              <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                <Clock className="mr-1 inline h-3 w-3" />
-                {t("bookingTimeTo")}
-              </label>
-              <Select value={timeTo} onValueChange={setTimeTo} disabled={!timeFrom}>
-                <SelectTrigger className="w-full font-body">
-                  <SelectValue placeholder="—" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableToHours.map((h) => (
-                    <SelectItem key={h} value={h}>{h}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        )}
 
         {/* Contact input */}
         <div className="mb-6">
