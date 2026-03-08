@@ -267,6 +267,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Кампании брендов и контент для соцсетей",
     aboutService5: "Свадебные и love story съёмки",
     aboutTravel: "Базируюсь на Майорке. Доступна для проектов по всей Испании и Европе.",
+    workClassic: "Классический портрет",
   },
   zh: {
     heroSubtitle: "时尚模特",
