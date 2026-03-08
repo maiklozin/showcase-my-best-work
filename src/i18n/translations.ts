@@ -356,6 +356,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workPaperDress: "前卫艺术",
     workRedBridge: "城市建筑",
     workCloseUp: "美妆特写",
+    aboutLabel: "关于",
     aboutTitle: "关于我",
     aboutLocation: "所在地",
     aboutHeight: "身高",
