@@ -322,6 +322,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedDone: "Kopiert!",
     bookingCopyBtn: "Kopieren & Instagram öffnen",
     bookingOpenIG: "DM öffnen",
+    bookingSentTitle: "Anfrage gesendet! ✅",
+    bookingSentDesc: "Ihre Buchungsanfrage wurde gesendet. Möchten Sie auch über Instagram schreiben?",
+    bookingAlsoIG: "Auch über Instagram senden",
+    bookingClose: "Schließen",
   },
   fr: {
     heroSubtitle: "Mannequin",
