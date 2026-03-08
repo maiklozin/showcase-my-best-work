@@ -74,6 +74,9 @@ type TranslationKeys = {
   bookingFollowReminder: string;
   bookingRequestDates: string;
   bookingSelectDates: string;
+  bookingCopiedTitle: string;
+  bookingCopiedDesc: string;
+  bookingCopyFallback: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
