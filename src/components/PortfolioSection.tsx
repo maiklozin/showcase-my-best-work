@@ -243,7 +243,7 @@ const PortfolioSection = () => {
 
       {/* Row 1 */}
       <div
-        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-none [&::-webkit-scrollbar]:hidden"
+        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
