@@ -105,7 +105,6 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
       hasDragged.current = true;
     }
     scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-    e.preventDefault();
   }, []);
 
   const onPointerUp = useCallback(() => {
