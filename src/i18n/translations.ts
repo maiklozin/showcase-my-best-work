@@ -252,6 +252,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workPaperDress: "Avant-Garde",
     workRedBridge: "Architecture Urbaine",
     workCloseUp: "Portrait Beauté",
+    aboutLabel: "À Propos",
     aboutTitle: "À Propos de Moi",
     aboutLocation: "Localisation",
     aboutHeight: "Taille",
