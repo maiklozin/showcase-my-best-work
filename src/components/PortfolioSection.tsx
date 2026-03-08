@@ -135,8 +135,6 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const row1Controls = useAutoScroll('left');
-  const row2Controls = useAutoScroll('right');
   const [lightbox, setLightbox] = useState<{ src: string; title: string; category: string } | null>(null);
 
   const works = [
@@ -165,15 +163,21 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const handleCardClick = (work: typeof works[0], hasDragged: React.MutableRefObject<boolean>) => {
-    if (!hasDragged.current) {
-      setLightbox(work);
-    }
-  };
+  const handleTap = useCallback((index: number) => {
+    const work = works[index % works.length];
+    if (work) setLightbox(work);
+  }, [works]);
 
-  const renderCard = (work: (typeof works)[0], i: number, hasDragged: React.MutableRefObject<boolean>) => (
+  const row1Controls = useAutoScroll('left', handleTap);
+  const row2Controls = useAutoScroll('right', (index: number) => {
+    const work = works[(index % works.length)];
+    if (work) setLightbox(work);
+  });
+
+  const renderCard = (work: (typeof works)[0], i: number, workIndex: number) => (
     <div
       key={i}
+      data-card-index={workIndex}
       className="group relative flex-shrink-0 cursor-pointer overflow-hidden select-none bg-secondary"
       style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
       onClick={() => handleCardClick(work, hasDragged)}
