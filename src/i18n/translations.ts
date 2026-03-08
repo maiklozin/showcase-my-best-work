@@ -70,6 +70,7 @@ type TranslationKeys = {
   bookingTimeTo: string;
   bookingContact: string;
   bookingContactPlaceholder: string;
+  bookingContactError: string;
   bookingMessage: string;
   bookingMessagePlaceholder: string;
   bookingFollowReminder: string;
@@ -146,6 +147,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "End time",
     bookingContact: "Your contact",
     bookingContactPlaceholder: "Instagram, email, or phone",
+    bookingContactError: "Please enter a valid email, phone, or @handle",
     bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
     bookingMessage: "Shoot details",
     bookingMessagePlaceholder: "Describe the type of shoot, location preferences, and any other details…",
@@ -220,6 +222,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "Hora fin",
     bookingContact: "Tu contacto",
     bookingContactPlaceholder: "Instagram, email o teléfono",
+    bookingContactError: "Introduce un email, teléfono o @usuario válido",
     bookingFollowReminder: "Por favor, sigue a @dara__es_ en Instagram para recibir respuesta",
     bookingMessage: "Detalles de la sesión",
     bookingMessagePlaceholder: "Describe el tipo de sesión, preferencias de ubicación y otros detalles…",
@@ -294,6 +297,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "Endzeit",
     bookingContact: "Dein Kontakt",
     bookingContactPlaceholder: "Instagram, E-Mail oder Telefon",
+    bookingContactError: "Bitte geben Sie eine gültige E-Mail, Telefonnummer oder @Handle ein",
     bookingFollowReminder: "Bitte folge @dara__es_ auf Instagram, um eine Antwort zu erhalten",
     bookingMessage: "Details zum Shooting",
     bookingMessagePlaceholder: "Beschreibe die Art des Shootings, bevorzugte Orte und weitere Details…",
@@ -368,6 +372,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "Heure fin",
     bookingContact: "Votre contact",
     bookingContactPlaceholder: "Instagram, email ou téléphone",
+    bookingContactError: "Veuillez entrer un email, téléphone ou @pseudo valide",
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
     bookingMessage: "Détails de la séance",
     bookingMessagePlaceholder: "Décrivez le type de séance, les préférences de lieu et autres détails…",
@@ -442,6 +447,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "Время окончания",
     bookingContact: "Ваш контакт",
     bookingContactPlaceholder: "Instagram, email или телефон",
+    bookingContactError: "Введите корректный email, телефон или @username",
     bookingFollowReminder: "Подпишитесь на @dara__es_ в Instagram, чтобы получить ответ",
     bookingMessage: "Детали съёмки",
     bookingMessagePlaceholder: "Опишите тип съёмки, предпочтения по локации и другие детали…",
@@ -516,6 +522,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "结束时间",
     bookingContact: "您的联系方式",
     bookingContactPlaceholder: "Instagram、邮箱或电话",
+    bookingContactError: "请输入有效的邮箱、电话或@用户名",
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
     bookingMessage: "拍摄详情",
     bookingMessagePlaceholder: "描述拍摄类型、地点偏好及其他细节…",

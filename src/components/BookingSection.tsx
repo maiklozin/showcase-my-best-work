@@ -57,14 +57,27 @@ const BookingSection = () => {
   const contactRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
 
+  // Contact validation: email, phone, or social handle (at least 3 chars with @, +, or digits)
+  const isContactValid = useMemo(() => {
+    const c = contact.trim();
+    if (c.length < 3) return false;
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRe = /[\d]{6,}/;
+    const handleRe = /^@[\w.]{2,}/;
+    return emailRe.test(c) || phoneRe.test(c.replace(/[\s\-()+ ]/g, '')) || handleRe.test(c);
+  }, [contact]);
+
+  // Message validation: at least 5 real characters
+  const isMessageValid = useMemo(() => userMessage.trim().length >= 5, [userMessage]);
+
   // Progressive step tracking
   const step = useMemo(() => {
     if (!date) return 0;
     if (!timeFrom || !timeTo) return 1;
-    if (!contact.trim()) return 2;
-    if (!userMessage.trim()) return 3;
+    if (!isContactValid) return 2;
+    if (!isMessageValid) return 3;
     return 4; // all filled
-  }, [date, timeFrom, timeTo, contact, userMessage]);
+  }, [date, timeFrom, timeTo, isContactValid, isMessageValid]);
 
   const isValid = step === 4;
 
@@ -247,6 +260,11 @@ const BookingSection = () => {
             maxLength={100}
             className={cn("font-body transition-all duration-300", step === 2 && glowClass)}
           />
+          {contact.trim().length > 0 && !isContactValid && (
+            <p className="mt-1 text-left font-body text-xs text-destructive">
+              {t("bookingContactError")}
+            </p>
+          )}
         </div>
 
         {/* Message textarea */}
@@ -318,26 +336,14 @@ const BookingSection = () => {
             {pendingMessage}
           </div>
 
-          <div className="flex gap-3">
-            <Button
+          <Button
               onClick={handleCopyAndOpen}
-              className="flex-1 gap-2"
+              className="w-full gap-2"
               variant={copied ? "secondary" : "default"}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? t("bookingCopiedDone") : t("bookingCopyBtn")}
             </Button>
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => {
-                window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, "_blank", "noopener,noreferrer");
-              }}
-            >
-              <Instagram size={14} />
-              {t("bookingOpenIG")}
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
     </section>
