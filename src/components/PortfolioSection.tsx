@@ -19,15 +19,53 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
+
+const useDragScroll = (setPaused: (v: boolean) => void) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStart = useRef(0);
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    dragging.current = true;
+    startX.current = e.clientX;
+    const el = ref.current;
+    if (el) {
+      const transform = getComputedStyle(el).transform;
+      const matrix = new DOMMatrixReadOnly(transform);
+      scrollStart.current = matrix.m41;
+    }
+    setPaused(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, [setPaused]);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current || !ref.current) return;
+    const dx = e.clientX - startX.current;
+    ref.current.style.transform = `translateX(${scrollStart.current + dx}px)`;
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    dragging.current = false;
+    setPaused(false);
+    if (ref.current) {
+      ref.current.style.transform = '';
+    }
+  }, [setPaused]);
+
+  return { ref, onPointerDown, onPointerMove, onPointerUp };
+};
 
 const PortfolioSection = () => {
   const { t } = useI18n();
   const [row1Paused, setRow1Paused] = useState(false);
   const [row2Paused, setRow2Paused] = useState(false);
+  const drag1 = useDragScroll(setRow1Paused);
+  const drag2 = useDragScroll(setRow2Paused);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -61,7 +99,7 @@ const PortfolioSection = () => {
   const renderCard = (work: (typeof works)[0], i: number) => (
     <div
       key={i}
-      className="group relative flex-shrink-0 cursor-pointer overflow-hidden"
+      className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none"
       style={{ width: `${CARD_WIDTH}px` }}
     >
       <div className="aspect-[3/4] overflow-hidden">
@@ -84,8 +122,8 @@ const PortfolioSection = () => {
   );
 
   return (
-    <section id="portfolio" className="px-0 py-24 overflow-hidden">
-      <div className="mb-16 text-center px-6">
+    <section id="portfolio" className="px-0 py-12 md:py-24 overflow-hidden">
+      <div className="mb-8 md:mb-16 text-center px-6">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("portfolioLabel")}
         </p>
@@ -96,13 +134,15 @@ const PortfolioSection = () => {
 
       {/* Row 1 — scrolls left */}
       <div
-        className="mb-4 overflow-hidden"
+        className="mb-4 overflow-hidden touch-pan-y"
+        onPointerDown={drag1.onPointerDown}
+        onPointerMove={drag1.onPointerMove}
+        onPointerUp={drag1.onPointerUp}
         onMouseEnter={() => setRow1Paused(true)}
-        onMouseLeave={() => setRow1Paused(false)}
-        onTouchStart={() => setRow1Paused(true)}
-        onTouchEnd={() => setRow1Paused(false)}
+        onMouseLeave={() => { setRow1Paused(false); }}
       >
         <div
+          ref={drag1.ref}
           className="flex gap-4"
           style={{
             width: `${row1Width * 2}px`,
@@ -116,13 +156,15 @@ const PortfolioSection = () => {
 
       {/* Row 2 — scrolls right */}
       <div
-        className="overflow-hidden"
+        className="overflow-hidden touch-pan-y"
+        onPointerDown={drag2.onPointerDown}
+        onPointerMove={drag2.onPointerMove}
+        onPointerUp={drag2.onPointerUp}
         onMouseEnter={() => setRow2Paused(true)}
-        onMouseLeave={() => setRow2Paused(false)}
-        onTouchStart={() => setRow2Paused(true)}
-        onTouchEnd={() => setRow2Paused(false)}
+        onMouseLeave={() => { setRow2Paused(false); }}
       >
         <div
+          ref={drag2.ref}
           className="flex gap-4"
           style={{
             width: `${row2Width * 2}px`,
