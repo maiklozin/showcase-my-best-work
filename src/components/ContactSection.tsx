@@ -19,10 +19,10 @@ const ContactSection = () => {
         href="https://instagram.com/dara__es_"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-5 rounded-xl border-2 border-primary bg-primary/10 px-14 py-7 font-body uppercase tracking-[0.3em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)]"
+        className="group inline-flex items-center gap-4 rounded-xl border-2 border-primary bg-primary/10 px-10 py-5 font-body uppercase tracking-[0.3em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)]"
       >
-        <InstagramIcon size={48} className="transition-transform duration-300 group-hover:scale-110" />
-        <span className="text-2xl font-bold md:text-3xl">@dara__es_</span>
+        <InstagramIcon size={36} className="transition-transform duration-300 group-hover:scale-110" />
+        <span className="text-xl font-bold md:text-2xl">@dara__es_</span>
       </a>
       <div className="mt-24 pb-6">
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
