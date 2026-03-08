@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Clock, Instagram, Send, Copy, Check } from "lucide-react";
+import { CalendarIcon, Clock, Instagram, Send, Copy, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -49,6 +50,7 @@ const BookingSection = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [copied, setCopied] = useState(false);
   const [pendingMessage, setPendingMessage] = useState("");
+  const [sending, setSending] = useState(false);
 
   const isValid = useMemo(() => {
     return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
@@ -87,11 +89,46 @@ const BookingSection = () => {
     return message;
   };
 
-  const handleRequest = () => {
-    if (!isValid) return;
+  const handleRequest = async () => {
+    if (!isValid || sending) return;
     const message = buildMessage();
     setPendingMessage(message);
     setCopied(false);
+    setSending(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-booking-email", {
+        body: {
+          dateFrom: dateFrom ? format(dateFrom, "dd.MM.yyyy") : "",
+          dateTo: dateTo ? format(dateTo, "dd.MM.yyyy") : "",
+          timeFrom,
+          timeTo,
+          timeFromEnd: timeFromEnd || "",
+          timeToEnd: timeToEnd || "",
+          contact: contact.trim(),
+          message,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: t("bookingCopiedTitle"),
+        description: data?.emailSent
+          ? "Booking saved & email sent!"
+          : "Booking saved!",
+      });
+    } catch (err) {
+      console.error("Booking error:", err);
+      toast({
+        title: "Error",
+        description: "Could not save booking. Please try via Instagram.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
+    }
+
     setShowDialog(true);
   };
 
@@ -263,12 +300,12 @@ const BookingSection = () => {
         {/* Submit */}
         <Button
           onClick={handleRequest}
-          disabled={!isValid}
+          disabled={!isValid || sending}
           className="inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground disabled:opacity-40"
           variant="outline"
         >
-          <Send size={14} />
-          {isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
+          {sending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+          {sending ? "Sending..." : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
         </Button>
       </div>
 
