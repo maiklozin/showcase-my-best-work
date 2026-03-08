@@ -318,26 +318,14 @@ const BookingSection = () => {
             {pendingMessage}
           </div>
 
-          <div className="flex gap-3">
-            <Button
+          <Button
               onClick={handleCopyAndOpen}
-              className="flex-1 gap-2"
+              className="w-full gap-2"
               variant={copied ? "secondary" : "default"}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? t("bookingCopiedDone") : t("bookingCopyBtn")}
             </Button>
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => {
-                window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, "_blank", "noopener,noreferrer");
-              }}
-            >
-              <Instagram size={14} />
-              {t("bookingOpenIG")}
-            </Button>
-          </div>
         </DialogContent>
       </Dialog>
     </section>
