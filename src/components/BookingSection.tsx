@@ -87,28 +87,28 @@ const BookingSection = () => {
     return message;
   };
 
-  const handleRequest = async () => {
+  const handleRequest = () => {
     if (!isValid) return;
     const message = buildMessage();
-    
-    try {
-      await navigator.clipboard.writeText(message);
-      toast({
-        title: t("bookingCopiedTitle"),
-        description: t("bookingCopiedDesc"),
-      });
-    } catch {
-      // fallback: prompt
-      window.prompt(t("bookingCopyFallback"), message);
-    }
+    setPendingMessage(message);
+    setCopied(false);
+    setShowDialog(true);
+  };
 
-    setTimeout(() => {
-      window.open(
-        `https://ig.me/m/${INSTAGRAM_USERNAME}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }, 600);
+  const handleCopyAndOpen = async () => {
+    try {
+      await navigator.clipboard.writeText(pendingMessage);
+      setCopied(true);
+      setTimeout(() => {
+        window.open(
+          `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }, 500);
+    } catch {
+      window.prompt(t("bookingCopyFallback"), pendingMessage);
+    }
   };
 
   return (
