@@ -86,12 +86,15 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
   const onMouseEnter = useCallback(() => { isPaused.current = true; }, []);
   const onMouseLeave = useCallback(() => { isPaused.current = false; isDragging.current = false; }, []);
 
+  const pointerTarget = useRef<EventTarget | null>(null);
+
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
     hasDragged.current = false;
     isPaused.current = true;
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    pointerTarget.current = e.target;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     e.preventDefault();
   }, []);
