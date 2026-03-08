@@ -55,8 +55,8 @@ const BookingSection = () => {
   const [sending, setSending] = useState(false);
 
   const isValid = useMemo(() => {
-    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
-  }, [dateFrom, dateTo, timeFrom, timeTo, contact]);
+    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim() && userMessage.trim());
+  }, [dateFrom, dateTo, timeFrom, timeTo, contact, userMessage]);
 
   const availableTimeTo = useMemo(() => HOURS.filter((h) => h > timeFrom), [timeFrom]);
   const availableTimeToEnd = useMemo(() => HOURS.filter((h) => h > timeFromEnd), [timeFromEnd]);
