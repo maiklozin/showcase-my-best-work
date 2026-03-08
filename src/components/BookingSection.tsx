@@ -322,13 +322,13 @@ const BookingSection = () => {
           onClick={handleRequest}
           disabled={!isValid || sending}
           className={cn(
-            "inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-all duration-500 hover:bg-primary hover:text-primary-foreground disabled:opacity-40",
+            "inline-flex items-center justify-center gap-3 border border-primary bg-transparent px-6 py-3.5 font-body text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-primary transition-all duration-500 hover:bg-primary hover:text-primary-foreground disabled:opacity-40 w-full max-w-md text-center whitespace-normal leading-relaxed",
             isValid && !sending && "ring-2 ring-primary/60 bg-primary/10 scale-[1.02]"
           )}
           variant="outline"
         >
-          {sending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-          {sending ? "Sending..." : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}
+          {sending ? <Loader2 size={14} className="animate-spin shrink-0" /> : <Send size={14} className="shrink-0" />}
+          <span>{sending ? "Sending..." : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}</span>
         </Button>
       </div>
 
