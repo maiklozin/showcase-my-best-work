@@ -19,12 +19,14 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
+import { X } from "lucide-react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
 const AUTO_SPEED = 1;
 const PERF_COUNT = 12;
+const DRAG_THRESHOLD = 5; // pixels — if moved less, it's a click
 
 const FilmPerforations = ({ side }: { side: 'top' | 'bottom' }) => (
   <div
@@ -49,6 +51,7 @@ const useAutoScroll = (direction: 'left' | 'right') => {
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
+  const hasDragged = useRef(false);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -85,6 +88,7 @@ const useAutoScroll = (direction: 'left' | 'right') => {
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
+    hasDragged.current = false;
     isPaused.current = true;
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
@@ -95,6 +99,9 @@ const useAutoScroll = (direction: 'left' | 'right') => {
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging.current || !scrollRef.current) return;
     const dx = e.clientX - dragStartX.current;
+    if (Math.abs(dx) > DRAG_THRESHOLD) {
+      hasDragged.current = true;
+    }
     scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
     e.preventDefault();
   }, []);
@@ -106,6 +113,7 @@ const useAutoScroll = (direction: 'left' | 'right') => {
 
   return {
     scrollRef,
+    hasDragged,
     onMouseEnter,
     onMouseLeave,
     onPointerDown,
@@ -118,6 +126,7 @@ const PortfolioSection = () => {
   const { t } = useI18n();
   const row1Controls = useAutoScroll('left');
   const row2Controls = useAutoScroll('right');
+  const [lightbox, setLightbox] = useState<{ src: string; title: string; category: string } | null>(null);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -145,11 +154,18 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const renderCard = (work: (typeof works)[0], i: number) => (
+  const handleCardClick = (work: typeof works[0], hasDragged: React.MutableRefObject<boolean>) => {
+    if (!hasDragged.current) {
+      setLightbox(work);
+    }
+  };
+
+  const renderCard = (work: (typeof works)[0], i: number, hasDragged: React.MutableRefObject<boolean>) => (
     <div
       key={i}
-      className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none bg-secondary"
+      className="group relative flex-shrink-0 cursor-pointer overflow-hidden select-none bg-secondary"
       style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
+      onClick={() => handleCardClick(work, hasDragged)}
     >
       <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
@@ -199,7 +215,7 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
-        {[...row1, ...row1].map((work, i) => renderCard(work, i))}
+        {[...row1, ...row1].map((work, i) => renderCard(work, i, row1Controls.hasDragged))}
       </div>
 
       {/* Row 2 */}
@@ -208,8 +224,38 @@ const PortfolioSection = () => {
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
-        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
+        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100, row2Controls.hasDragged))}
       </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            className="absolute top-6 right-6 text-foreground/70 hover:text-foreground transition-colors z-50"
+            onClick={() => setLightbox(null)}
+          >
+            <X size={32} />
+          </button>
+          <div className="max-w-[90vw] max-h-[85vh] flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={lightbox.src}
+              alt={lightbox.title}
+              className="max-w-full max-h-[75vh] object-contain animate-scale-in"
+            />
+            <div className="mt-4 text-center">
+              <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary">
+                {lightbox.category}
+              </p>
+              <p className="mt-1 font-display text-2xl italic text-foreground">
+                {lightbox.title}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
