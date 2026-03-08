@@ -72,9 +72,9 @@ const AboutSection = () => {
                 href="https://instagram.com/dara__es_"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 font-body text-sm text-foreground transition-colors hover:text-primary"
+                className="inline-flex items-center gap-3 rounded-lg border-2 border-primary bg-primary/10 px-8 py-4 font-body text-base font-semibold text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_25px_hsl(var(--primary)/0.4)]"
               >
-                <InstagramIcon size={16} />
+                <InstagramIcon size={28} />
                 @dara__es_
               </a>
             </div>
