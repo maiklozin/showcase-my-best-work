@@ -20,7 +20,7 @@ import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useRef, useEffect, useCallback, useState } from "react";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
@@ -135,7 +135,7 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const [lightbox, setLightbox] = useState<{ src: string; title: string; category: string } | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -163,16 +163,36 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const handleTap = useCallback((index: number) => {
-    const work = works[index % works.length];
-    if (work) setLightbox(work);
-  }, [works]);
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index % works.length);
+  }, [works.length]);
 
-  const row1Controls = useAutoScroll('left', handleTap);
+  const row1Controls = useAutoScroll('left', openLightbox);
   const row2Controls = useAutoScroll('right', (index: number) => {
-    const work = works[(index % works.length)];
-    if (work) setLightbox(work);
+    setLightboxIndex(index % works.length);
   });
+
+  const lightbox = lightboxIndex !== null ? works[lightboxIndex] : null;
+
+  const goNext = useCallback(() => {
+    setLightboxIndex(prev => prev !== null ? (prev + 1) % works.length : null);
+  }, [works.length]);
+
+  const goPrev = useCallback(() => {
+    setLightboxIndex(prev => prev !== null ? (prev - 1 + works.length) % works.length : null);
+  }, [works.length]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext();
+      else if (e.key === 'ArrowLeft') goPrev();
+      else if (e.key === 'Escape') setLightboxIndex(null);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightboxIndex, goNext, goPrev]);
 
   const renderCard = (work: (typeof works)[0], i: number, workIndex: number) => (
     <div
@@ -245,16 +265,34 @@ const PortfolioSection = () => {
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
-          onClick={() => setLightbox(null)}
+          onClick={() => setLightboxIndex(null)}
         >
           <button
             className="absolute top-6 right-6 text-foreground/70 hover:text-foreground transition-colors z-50"
-            onClick={() => setLightbox(null)}
+            onClick={() => setLightboxIndex(null)}
           >
             <X size={32} />
           </button>
+
+          {/* Previous */}
+          <button
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors z-50 p-2"
+            onClick={(e) => { e.stopPropagation(); goPrev(); }}
+          >
+            <ChevronLeft size={40} />
+          </button>
+
+          {/* Next */}
+          <button
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors z-50 p-2"
+            onClick={(e) => { e.stopPropagation(); goNext(); }}
+          >
+            <ChevronRight size={40} />
+          </button>
+
           <div className="max-w-[90vw] max-h-[85vh] flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img
+              key={lightboxIndex}
               src={lightbox.src}
               alt={lightbox.title}
               className="max-w-full max-h-[75vh] object-contain animate-scale-in"
@@ -265,6 +303,9 @@ const PortfolioSection = () => {
               </p>
               <p className="mt-1 font-display text-2xl italic text-foreground">
                 {lightbox.title}
+              </p>
+              <p className="mt-2 font-body text-xs text-muted-foreground">
+                {(lightboxIndex ?? 0) + 1} / {works.length}
               </p>
             </div>
           </div>
