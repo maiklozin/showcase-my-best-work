@@ -519,7 +519,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
     bookingMessage: "拍摄详情",
     bookingMessagePlaceholder: "描述拍摄类型、地点偏好及其他细节…",
-    bookingRequestDates: "通过 Instagram DM 请求",
+    bookingRequestDates: "发送请求",
     bookingSelectDates: "请先选择日期",
     bookingCopiedTitle: "消息已复制！",
     bookingCopiedDesc: "将其粘贴到即将打开的 Instagram DM 中",
