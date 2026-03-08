@@ -522,6 +522,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingTimeTo: "结束时间",
     bookingContact: "您的联系方式",
     bookingContactPlaceholder: "Instagram、邮箱或电话",
+    bookingContactError: "请输入有效的邮箱、电话或@用户名",
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
     bookingMessage: "拍摄详情",
     bookingMessagePlaceholder: "描述拍摄类型、地点偏好及其他细节…",
