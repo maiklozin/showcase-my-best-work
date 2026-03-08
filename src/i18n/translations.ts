@@ -95,6 +95,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutService4: "Brand campaigns and social media content",
     aboutService5: "Wedding and love story shoots",
     aboutTravel: "Based in Mallorca. Available for projects across Spain and Europe.",
+    workClassic: "Classic Portrait",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
