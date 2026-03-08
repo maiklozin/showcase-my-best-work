@@ -35,6 +35,7 @@ type TranslationKeys = {
   workPortrait: string;
   workDesert: string;
   workClassic: string;
+  workNight: string;
   aboutLabel: string;
   aboutTitle: string;
   aboutLocation: string;
