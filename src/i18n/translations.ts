@@ -225,6 +225,10 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingCopiedTitle: "¡Mensaje copiado!",
     bookingCopiedDesc: "Pégalo en el DM de Instagram que se abrirá ahora",
     bookingCopyFallback: "Copia este mensaje y pégalo en el DM de Instagram:",
+    bookingDialogInstruction: "Copia el mensaje y pégalo en el DM de Instagram después de que se abra",
+    bookingCopiedDone: "¡Copiado!",
+    bookingCopyBtn: "Copiar y abrir Instagram",
+    bookingOpenIG: "Abrir DM",
   },
   de: {
     heroSubtitle: "Fashion Model",
