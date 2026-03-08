@@ -62,6 +62,16 @@ type TranslationKeys = {
   aboutService4: string;
   aboutService5: string;
   aboutTravel: string;
+  bookingLabel: string;
+  bookingTitle: string;
+  bookingDescription: string;
+  bookingDateFrom: string;
+  bookingDateTo: string;
+  bookingContact: string;
+  bookingContactPlaceholder: string;
+  bookingFollowReminder: string;
+  bookingRequestDates: string;
+  bookingSelectDates: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -118,6 +128,16 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Night Elegance",
     workRunwayRed: "Runway Red",
     workRunwayFloral: "Floral Couture",
+    bookingLabel: "Booking",
+    bookingTitle: "Request Dates",
+    bookingDescription: "Select your preferred dates and leave your contact info. I'll get back to you via Instagram DM.",
+    bookingDateFrom: "From",
+    bookingDateTo: "To",
+    bookingContact: "Your contact",
+    bookingContactPlaceholder: "Instagram, email, or phone",
+    bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
+    bookingRequestDates: "Request via Instagram DM",
+    bookingSelectDates: "Please select dates first",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -172,6 +192,16 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Elegancia Nocturna",
     workRunwayRed: "Pasarela Rojo",
     workRunwayFloral: "Costura Floral",
+    bookingLabel: "Reserva",
+    bookingTitle: "Solicitar Fechas",
+    bookingDescription: "Selecciona tus fechas preferidas y deja tu información de contacto. Te responderé por Instagram DM.",
+    bookingDateFrom: "Desde",
+    bookingDateTo: "Hasta",
+    bookingContact: "Tu contacto",
+    bookingContactPlaceholder: "Instagram, email o teléfono",
+    bookingFollowReminder: "Por favor, sigue a @dara__es_ en Instagram para recibir respuesta",
+    bookingRequestDates: "Solicitar por Instagram DM",
+    bookingSelectDates: "Por favor, selecciona las fechas primero",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -226,6 +256,16 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Nächtliche Eleganz",
     workRunwayRed: "Laufsteg Rot",
     workRunwayFloral: "Blumen-Couture",
+    bookingLabel: "Buchung",
+    bookingTitle: "Termine anfragen",
+    bookingDescription: "Wähle deine bevorzugten Termine und hinterlasse deine Kontaktdaten. Ich melde mich per Instagram DM.",
+    bookingDateFrom: "Von",
+    bookingDateTo: "Bis",
+    bookingContact: "Dein Kontakt",
+    bookingContactPlaceholder: "Instagram, E-Mail oder Telefon",
+    bookingFollowReminder: "Bitte folge @dara__es_ auf Instagram, um eine Antwort zu erhalten",
+    bookingRequestDates: "Per Instagram DM anfragen",
+    bookingSelectDates: "Bitte wähle zuerst Termine aus",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -280,6 +320,16 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Élégance Nocturne",
     workRunwayRed: "Défilé Rouge",
     workRunwayFloral: "Couture Florale",
+    bookingLabel: "Réservation",
+    bookingTitle: "Demander des Dates",
+    bookingDescription: "Sélectionnez vos dates préférées et laissez vos coordonnées. Je vous répondrai par Instagram DM.",
+    bookingDateFrom: "Du",
+    bookingDateTo: "Au",
+    bookingContact: "Votre contact",
+    bookingContactPlaceholder: "Instagram, email ou téléphone",
+    bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
+    bookingRequestDates: "Demander par Instagram DM",
+    bookingSelectDates: "Veuillez d'abord sélectionner des dates",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -334,6 +384,16 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Ночная элегантность",
     workRunwayRed: "Подиум в красном",
     workRunwayFloral: "Цветочная кутюр",
+    bookingLabel: "Бронирование",
+    bookingTitle: "Запросить даты",
+    bookingDescription: "Выберите нужные даты и оставьте контакт. Я отвечу вам в Instagram DM.",
+    bookingDateFrom: "С",
+    bookingDateTo: "По",
+    bookingContact: "Ваш контакт",
+    bookingContactPlaceholder: "Instagram, email или телефон",
+    bookingFollowReminder: "Подпишитесь на @dara__es_ в Instagram, чтобы получить ответ",
+    bookingRequestDates: "Запросить через Instagram DM",
+    bookingSelectDates: "Сначала выберите даты",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -388,5 +448,15 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "夜之优雅",
     workRunwayRed: "红色走秀",
     workRunwayFloral: "花卉高定",
+    bookingLabel: "预约",
+    bookingTitle: "请求档期",
+    bookingDescription: "选择您偏好的日期并留下联系方式。我会通过 Instagram DM 回复您。",
+    bookingDateFrom: "从",
+    bookingDateTo: "到",
+    bookingContact: "您的联系方式",
+    bookingContactPlaceholder: "Instagram、邮箱或电话",
+    bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
+    bookingRequestDates: "通过 Instagram DM 请求",
+    bookingSelectDates: "请先选择日期",
   },
 };
