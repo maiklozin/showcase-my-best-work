@@ -36,7 +36,14 @@ type TranslationKeys = {
   workDesert: string;
   workClassic: string;
   workNight: string;
-  aboutLabel: string;
+  workBeach: string;
+  workWhiteDress: string;
+  workSilverJacket: string;
+  workGoldDress: string;
+  workRedLight: string;
+  workPaperDress: string;
+  workRedBridge: string;
+  workCloseUp: string;
   aboutTitle: string;
   aboutLocation: string;
   aboutHeight: string;
