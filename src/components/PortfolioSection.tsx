@@ -95,8 +95,7 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
     pointerTarget.current = e.target;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    e.preventDefault();
+    // Don't call preventDefault — let browser handle vertical scroll
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
@@ -106,7 +105,6 @@ const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => v
       hasDragged.current = true;
     }
     scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-    e.preventDefault();
   }, []);
 
   const onPointerUp = useCallback(() => {
@@ -245,7 +243,7 @@ const PortfolioSection = () => {
 
       {/* Row 1 */}
       <div
-        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-none [&::-webkit-scrollbar]:hidden"
+        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
@@ -254,7 +252,7 @@ const PortfolioSection = () => {
 
       {/* Row 2 */}
       <div
-        className="flex gap-4 overflow-x-auto cursor-grab touch-none [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
