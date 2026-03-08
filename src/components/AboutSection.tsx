@@ -1,4 +1,4 @@
-import { Instagram } from "lucide-react";
+import InstagramIcon from "@/components/InstagramIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const AboutSection = () => {
