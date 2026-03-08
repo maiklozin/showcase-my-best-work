@@ -3,19 +3,16 @@ import AboutSection from "@/components/AboutSection";
 import PortfolioSection from "@/components/PortfolioSection";
 import ContactSection from "@/components/ContactSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { I18nProvider } from "@/i18n/I18nProvider";
 
 const Index = () => {
   return (
-    <I18nProvider>
-      <main className="min-h-screen bg-background">
-        <LanguageSwitcher />
-        <HeroSection />
-        <AboutSection />
-        <PortfolioSection />
-        <ContactSection />
-      </main>
-    </I18nProvider>
+    <main className="min-h-screen bg-background">
+      <LanguageSwitcher />
+      <HeroSection />
+      <AboutSection />
+      <PortfolioSection />
+      <ContactSection />
+    </main>
   );
 };
 
