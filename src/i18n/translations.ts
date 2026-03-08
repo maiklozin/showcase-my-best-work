@@ -371,7 +371,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
     bookingMessage: "Détails de la séance",
     bookingMessagePlaceholder: "Décrivez le type de séance, les préférences de lieu et autres détails…",
-    bookingRequestDates: "Demander par Instagram DM",
+    bookingRequestDates: "Envoyer la demande",
     bookingSelectDates: "Veuillez d'abord sélectionner des dates",
     bookingCopiedTitle: "Message copié !",
     bookingCopiedDesc: "Collez-le dans le DM Instagram qui va s'ouvrir",
