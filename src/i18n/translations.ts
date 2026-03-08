@@ -34,6 +34,22 @@ type TranslationKeys = {
   workOcean: string;
   workPortrait: string;
   workDesert: string;
+  aboutLabel: string;
+  aboutTitle: string;
+  aboutLocation: string;
+  aboutHeight: string;
+  aboutExperience: string;
+  aboutExperienceValue: string;
+  aboutLanguages: string;
+  aboutLanguagesValue: string;
+  aboutBio: string;
+  aboutAvailable: string;
+  aboutService1: string;
+  aboutService2: string;
+  aboutService3: string;
+  aboutService4: string;
+  aboutService5: string;
+  aboutTravel: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -62,6 +78,22 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "Ocean Breeze",
     workPortrait: "Natural Beauty",
     workDesert: "Desert Noir",
+    aboutLabel: "About",
+    aboutTitle: "About Me",
+    aboutLocation: "Location",
+    aboutHeight: "Height",
+    aboutExperience: "Experience",
+    aboutExperienceValue: "6+ years",
+    aboutLanguages: "Languages",
+    aboutLanguagesValue: "Spanish, English, Russian, German",
+    aboutBio: "Professional model with over 6 years of experience in the fashion industry. Experienced in fashion weeks, runway shows, commercial productions, and advertising campaigns.",
+    aboutAvailable: "Available for",
+    aboutService1: "Runway and fashion shows",
+    aboutService2: "Commercial and advertising campaigns",
+    aboutService3: "Photo and video productions",
+    aboutService4: "Brand campaigns and social media content",
+    aboutService5: "Wedding and love story shoots",
+    aboutTravel: "Based in Mallorca. Available for projects across Spain and Europe.",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -88,6 +120,22 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "Brisa del Mar",
     workPortrait: "Belleza Natural",
     workDesert: "Desierto Noir",
+    aboutLabel: "Sobre mí",
+    aboutTitle: "Sobre Mí",
+    aboutLocation: "Ubicación",
+    aboutHeight: "Altura",
+    aboutExperience: "Experiencia",
+    aboutExperienceValue: "6+ años",
+    aboutLanguages: "Idiomas",
+    aboutLanguagesValue: "Español, Inglés, Ruso, Alemán",
+    aboutBio: "Modelo profesional con más de 6 años de experiencia en la industria de la moda. Experiencia en semanas de la moda, desfiles, producciones comerciales y campañas publicitarias.",
+    aboutAvailable: "Disponible para",
+    aboutService1: "Desfiles y shows de moda",
+    aboutService2: "Campañas comerciales y publicitarias",
+    aboutService3: "Producciones de foto y vídeo",
+    aboutService4: "Campañas de marca y contenido para redes sociales",
+    aboutService5: "Sesiones de boda y love story",
+    aboutTravel: "Con base en Mallorca. Disponible para proyectos en toda España y Europa.",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -114,6 +162,22 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "Meeresbrise",
     workPortrait: "Natürliche Schönheit",
     workDesert: "Wüsten-Noir",
+    aboutLabel: "Über mich",
+    aboutTitle: "Über Mich",
+    aboutLocation: "Standort",
+    aboutHeight: "Größe",
+    aboutExperience: "Erfahrung",
+    aboutExperienceValue: "6+ Jahre",
+    aboutLanguages: "Sprachen",
+    aboutLanguagesValue: "Spanisch, Englisch, Russisch, Deutsch",
+    aboutBio: "Professionelles Model mit über 6 Jahren Erfahrung in der Modebranche. Erfahrung bei Modewochen, Laufsteg-Shows, kommerziellen Produktionen und Werbekampagnen.",
+    aboutAvailable: "Verfügbar für",
+    aboutService1: "Laufsteg- und Modeshows",
+    aboutService2: "Kommerzielle und Werbekampagnen",
+    aboutService3: "Foto- und Videoproduktionen",
+    aboutService4: "Markenkampagnen und Social-Media-Inhalte",
+    aboutService5: "Hochzeits- und Liebesgeschichten-Shootings",
+    aboutTravel: "Ansässig auf Mallorca. Verfügbar für Projekte in Spanien und Europa.",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -140,6 +204,22 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "Brise Marine",
     workPortrait: "Beauté Naturelle",
     workDesert: "Désert Noir",
+    aboutLabel: "À propos",
+    aboutTitle: "À Propos de Moi",
+    aboutLocation: "Localisation",
+    aboutHeight: "Taille",
+    aboutExperience: "Expérience",
+    aboutExperienceValue: "6+ ans",
+    aboutLanguages: "Langues",
+    aboutLanguagesValue: "Espagnol, Anglais, Russe, Allemand",
+    aboutBio: "Mannequin professionnelle avec plus de 6 ans d'expérience dans l'industrie de la mode. Expérimentée dans les semaines de la mode, défilés, productions commerciales et campagnes publicitaires.",
+    aboutAvailable: "Disponible pour",
+    aboutService1: "Défilés et shows de mode",
+    aboutService2: "Campagnes commerciales et publicitaires",
+    aboutService3: "Productions photo et vidéo",
+    aboutService4: "Campagnes de marque et contenu réseaux sociaux",
+    aboutService5: "Shootings mariage et love story",
+    aboutTravel: "Basée à Majorque. Disponible pour des projets en Espagne et en Europe.",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -166,6 +246,22 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "Морской бриз",
     workPortrait: "Естественная красота",
     workDesert: "Пустынный нуар",
+    aboutLabel: "Обо мне",
+    aboutTitle: "Обо Мне",
+    aboutLocation: "Локация",
+    aboutHeight: "Рост",
+    aboutExperience: "Опыт",
+    aboutExperienceValue: "6+ лет",
+    aboutLanguages: "Языки",
+    aboutLanguagesValue: "Испанский, Английский, Русский, Немецкий",
+    aboutBio: "Профессиональная модель с более чем 6-летним опытом работы в индустрии моды. Опыт участия в неделях моды, показах, коммерческих съёмках и рекламных кампаниях.",
+    aboutAvailable: "Доступна для",
+    aboutService1: "Показы и модные шоу",
+    aboutService2: "Коммерческие и рекламные кампании",
+    aboutService3: "Фото- и видеопродакшн",
+    aboutService4: "Кампании брендов и контент для соцсетей",
+    aboutService5: "Свадебные и love story съёмки",
+    aboutTravel: "Базируюсь на Майорке. Доступна для проектов по всей Испании и Европе.",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -192,5 +288,21 @@ export const translations: Record<Language, TranslationKeys> = {
     workOcean: "海风",
     workPortrait: "自然之美",
     workDesert: "沙漠暗黑",
+    aboutLabel: "关于",
+    aboutTitle: "关于我",
+    aboutLocation: "所在地",
+    aboutHeight: "身高",
+    aboutExperience: "经验",
+    aboutExperienceValue: "6年以上",
+    aboutLanguages: "语言",
+    aboutLanguagesValue: "西班牙语、英语、俄语、德语",
+    aboutBio: "专业模特，拥有超过6年的时尚行业经验。在时装周、走秀、商业制作和广告活动方面经验丰富。",
+    aboutAvailable: "可承接",
+    aboutService1: "走秀和时装表演",
+    aboutService2: "商业和广告活动",
+    aboutService3: "照片和视频制作",
+    aboutService4: "品牌活动和社交媒体内容",
+    aboutService5: "婚礼和爱情故事拍摄",
+    aboutTravel: "常驻马略卡岛。可接受西班牙和欧洲各地的项目。",
   },
 };
