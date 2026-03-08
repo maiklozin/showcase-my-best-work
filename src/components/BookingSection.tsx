@@ -36,6 +36,8 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
   return `${h.toString().padStart(2, "0")}:00`;
 });
 
+const RATE_LIMIT_MS = 30_000; // 30 seconds between submissions
+
 const BookingSection = () => {
   const { t } = useI18n();
   const { toast } = useToast();
@@ -49,6 +51,8 @@ const BookingSection = () => {
   const [copied, setCopied] = useState(false);
   const [pendingMessage, setPendingMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const lastSubmitRef = useRef<number>(0);
 
   const contactRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
