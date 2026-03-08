@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Popover,
   PopoverContent,
@@ -47,14 +48,15 @@ const BookingSection = () => {
   const [timeFromEnd, setTimeFromEnd] = useState("");
   const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
+  const [userMessage, setUserMessage] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [copied, setCopied] = useState(false);
   const [pendingMessage, setPendingMessage] = useState("");
   const [sending, setSending] = useState(false);
 
   const isValid = useMemo(() => {
-    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
-  }, [dateFrom, dateTo, timeFrom, timeTo, contact]);
+    return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim() && userMessage.trim());
+  }, [dateFrom, dateTo, timeFrom, timeTo, contact, userMessage]);
 
   const availableTimeTo = useMemo(() => HOURS.filter((h) => h > timeFrom), [timeFrom]);
   const availableTimeToEnd = useMemo(() => HOURS.filter((h) => h > timeFromEnd), [timeFromEnd]);
@@ -86,6 +88,7 @@ const BookingSection = () => {
       message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
     }
     message += `\n\nMy contact: ${contact.trim()}`;
+    message += `\n\n${userMessage.trim()}`;
     return message;
   };
 
@@ -106,7 +109,7 @@ const BookingSection = () => {
           timeFromEnd: timeFromEnd || "",
           timeToEnd: timeToEnd || "",
           contact: contact.trim(),
-          message,
+          message: message + (userMessage.trim() ? `\n\n${userMessage.trim()}` : ""),
         },
       });
 
@@ -291,7 +294,24 @@ const BookingSection = () => {
           />
         </div>
 
-        {/* Follow reminder */}
+        {/* Message textarea */}
+        <div className="mb-6">
+          <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {t("bookingMessage")}
+          </label>
+          <Textarea
+            value={userMessage}
+            onChange={(e) => setUserMessage(e.target.value.slice(0, 500))}
+            placeholder={t("bookingMessagePlaceholder")}
+            maxLength={500}
+            rows={3}
+            className="font-body resize-none"
+          />
+          <p className="mt-1 text-right font-body text-xs text-muted-foreground">
+            {userMessage.length}/500
+          </p>
+        </div>
+
         <p className="mb-8 flex items-center justify-center gap-2 font-body text-xs text-muted-foreground">
           <Instagram size={14} />
           {t("bookingFollowReminder")}

@@ -71,6 +71,8 @@ type TranslationKeys = {
   bookingTimeTo: string;
   bookingContact: string;
   bookingContactPlaceholder: string;
+  bookingMessage: string;
+  bookingMessagePlaceholder: string;
   bookingFollowReminder: string;
   bookingRequestDates: string;
   bookingSelectDates: string;
@@ -147,6 +149,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "Your contact",
     bookingContactPlaceholder: "Instagram, email, or phone",
     bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
+    bookingMessage: "Shoot details",
+    bookingMessagePlaceholder: "Describe the type of shoot, location preferences, and any other details…",
     bookingRequestDates: "Request via Instagram DM",
     bookingSelectDates: "Please select dates first",
     bookingCopiedTitle: "Message copied!",
@@ -220,6 +224,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "Tu contacto",
     bookingContactPlaceholder: "Instagram, email o teléfono",
     bookingFollowReminder: "Por favor, sigue a @dara__es_ en Instagram para recibir respuesta",
+    bookingMessage: "Detalles de la sesión",
+    bookingMessagePlaceholder: "Describe el tipo de sesión, preferencias de ubicación y otros detalles…",
     bookingRequestDates: "Solicitar por Instagram DM",
     bookingSelectDates: "Por favor, selecciona las fechas primero",
     bookingCopiedTitle: "¡Mensaje copiado!",
@@ -293,6 +299,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "Dein Kontakt",
     bookingContactPlaceholder: "Instagram, E-Mail oder Telefon",
     bookingFollowReminder: "Bitte folge @dara__es_ auf Instagram, um eine Antwort zu erhalten",
+    bookingMessage: "Details zum Shooting",
+    bookingMessagePlaceholder: "Beschreibe die Art des Shootings, bevorzugte Orte und weitere Details…",
     bookingRequestDates: "Per Instagram DM anfragen",
     bookingSelectDates: "Bitte wähle zuerst Termine aus",
     bookingCopiedTitle: "Nachricht kopiert!",
@@ -366,6 +374,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "Votre contact",
     bookingContactPlaceholder: "Instagram, email ou téléphone",
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
+    bookingMessage: "Détails de la séance",
+    bookingMessagePlaceholder: "Décrivez le type de séance, les préférences de lieu et autres détails…",
     bookingRequestDates: "Demander par Instagram DM",
     bookingSelectDates: "Veuillez d'abord sélectionner des dates",
     bookingCopiedTitle: "Message copié !",
@@ -439,6 +449,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "Ваш контакт",
     bookingContactPlaceholder: "Instagram, email или телефон",
     bookingFollowReminder: "Подпишитесь на @dara__es_ в Instagram, чтобы получить ответ",
+    bookingMessage: "Детали съёмки",
+    bookingMessagePlaceholder: "Опишите тип съёмки, предпочтения по локации и другие детали…",
     bookingRequestDates: "Запросить через Instagram DM",
     bookingSelectDates: "Сначала выберите даты",
     bookingCopiedTitle: "Сообщение скопировано!",
@@ -512,6 +524,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingContact: "您的联系方式",
     bookingContactPlaceholder: "Instagram、邮箱或电话",
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
+    bookingMessage: "拍摄详情",
+    bookingMessagePlaceholder: "描述拍摄类型、地点偏好及其他细节…",
     bookingRequestDates: "通过 Instagram DM 请求",
     bookingSelectDates: "请先选择日期",
     bookingCopiedTitle: "消息已复制！",
