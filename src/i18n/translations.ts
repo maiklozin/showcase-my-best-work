@@ -386,5 +386,7 @@ export const translations: Record<Language, TranslationKeys> = {
     aboutTravel: "常驻马略卡岛。可接受西班牙和欧洲各地的项目。",
     workClassic: "经典肖像",
     workNight: "夜之优雅",
+    workRunwayRed: "红色走秀",
+    workRunwayFloral: "花卉高定",
   },
 };
