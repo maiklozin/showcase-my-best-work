@@ -4,33 +4,33 @@ import portfolio3 from "@/assets/portfolio-3.jpg";
 import portfolio4 from "@/assets/portfolio-4.jpg";
 import portfolio5 from "@/assets/portfolio-5.jpg";
 import portfolio6 from "@/assets/portfolio-6.jpg";
-
-const works = [
-  { src: portfolio1, title: "Vogue Editorial", category: "Editorial" },
-  { src: portfolio2, title: "Beauty Campaign", category: "Beauty" },
-  { src: portfolio3, title: "Milan Fashion Week", category: "Runway" },
-  { src: portfolio4, title: "Street Style", category: "Editorial" },
-  { src: portfolio5, title: "Noir Collection", category: "Haute Couture" },
-  { src: portfolio6, title: "Summer Campaign", category: "Commercial" },
-];
+import { useI18n } from "@/i18n/I18nProvider";
 
 const PortfolioSection = () => {
+  const { t } = useI18n();
+
+  const works = [
+    { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
+    { src: portfolio2, title: t("workBeauty"), category: t("catBeauty") },
+    { src: portfolio3, title: t("workMilan"), category: t("catRunway") },
+    { src: portfolio4, title: t("workStreet"), category: t("catEditorial") },
+    { src: portfolio5, title: t("workNoir"), category: t("catHauteCouture") },
+    { src: portfolio6, title: t("workSummer"), category: t("catCommercial") },
+  ];
+
   return (
     <section id="portfolio" className="px-6 py-24 md:px-12 lg:px-24">
       <div className="mb-16 text-center">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
-          Избранное
+          {t("portfolioLabel")}
         </p>
         <h2 className="font-display text-4xl font-medium italic text-foreground md:text-5xl">
-          Портфолио
+          {t("portfolioTitle")}
         </h2>
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {works.map((work, i) => (
-          <div
-            key={i}
-            className="group relative cursor-pointer overflow-hidden"
-          >
+          <div key={i} className="group relative cursor-pointer overflow-hidden">
             <div className="aspect-[3/4] overflow-hidden">
               <img
                 src={work.src}
