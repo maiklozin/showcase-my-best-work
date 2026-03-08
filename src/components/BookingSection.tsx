@@ -343,7 +343,10 @@ const BookingSection = () => {
 
           <Button
               onClick={handleCopyAndOpen}
-              className="w-full gap-2"
+              className={cn(
+                "w-full gap-2",
+                !copied && "bg-instagram text-instagram-foreground hover:bg-instagram/90"
+              )}
               variant={copied ? "secondary" : "default"}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}

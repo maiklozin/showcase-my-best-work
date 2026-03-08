@@ -19,7 +19,7 @@ const ContactSection = () => {
         href="https://instagram.com/dara__es_"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-3 border border-primary px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground"
+        className="inline-flex items-center gap-3 border border-instagram px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-instagram transition-colors duration-300 hover:bg-instagram hover:text-instagram-foreground"
       >
         <Instagram size={16} />
         @dara__es_
