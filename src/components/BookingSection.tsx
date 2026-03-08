@@ -304,7 +304,7 @@ const BookingSection = () => {
           href="https://instagram.com/dara__es_"
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-muted-foreground transition-colors hover:text-primary"
+          className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-instagram/70 transition-colors hover:text-instagram"
         >
           <Instagram size={14} />
           {t("bookingFollowReminder")}
