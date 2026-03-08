@@ -21,7 +21,7 @@ const ContactSection = () => {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-3 border border-primary px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground"
       >
-        <Instagram size={16} className="text-instagram" />
+        <Instagram size={16} className="text-instagram" strokeWidth={2.5} />
         @dara__es_
       </a>
       <div className="mt-24 pb-6">
