@@ -251,7 +251,7 @@ const PortfolioSection = () => {
 
       {/* Row 1 */}
       <div
-        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
+        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-auto [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row1Controls)}
       >
@@ -260,7 +260,7 @@ const PortfolioSection = () => {
 
       {/* Row 2 */}
       <div
-        className="flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto cursor-grab touch-auto [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: 'none' }}
         {...rowProps(row2Controls)}
       >
@@ -272,6 +272,17 @@ const PortfolioSection = () => {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
           onClick={() => setLightboxIndex(null)}
+          onTouchStart={(e) => {
+            lightboxTouchX.current = e.touches[0].clientX;
+          }}
+          onTouchEnd={(e) => {
+            const dx = e.changedTouches[0].clientX - lightboxTouchX.current;
+            if (Math.abs(dx) > 50) {
+              e.stopPropagation();
+              if (dx < 0) goNext();
+              else goPrev();
+            }
+          }}
         >
           <button
             className="absolute top-6 right-6 text-foreground/70 hover:text-foreground transition-colors z-50"
