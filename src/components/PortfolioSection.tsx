@@ -9,6 +9,14 @@ import portfolio8 from "@/assets/portfolio-8.jpg";
 import portfolio9 from "@/assets/portfolio-9.jpg";
 import portfolio10 from "@/assets/portfolio-10.jpg";
 import portfolio11 from "@/assets/portfolio-11.jpg";
+import portfolio12 from "@/assets/portfolio-12.jpg";
+import portfolio13 from "@/assets/portfolio-13.jpg";
+import portfolio14 from "@/assets/portfolio-14.jpg";
+import portfolio15 from "@/assets/portfolio-15.jpg";
+import portfolio16 from "@/assets/portfolio-16.jpg";
+import portfolio17 from "@/assets/portfolio-17.jpg";
+import portfolio18 from "@/assets/portfolio-18.jpg";
+import portfolio19 from "@/assets/portfolio-19.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const PortfolioSection = () => {
@@ -26,6 +34,14 @@ const PortfolioSection = () => {
     { src: portfolio9, title: t("workDesert"), category: t("catEditorial") },
     { src: portfolio10, title: t("workClassic"), category: t("catBeauty") },
     { src: portfolio11, title: t("workNight"), category: t("catHauteCouture") },
+    { src: portfolio12, title: t("workBeach"), category: t("catEditorial") },
+    { src: portfolio13, title: t("workWhiteDress"), category: t("catHauteCouture") },
+    { src: portfolio14, title: t("workSilverJacket"), category: t("catCommercial") },
+    { src: portfolio15, title: t("workGoldDress"), category: t("catEditorial") },
+    { src: portfolio16, title: t("workRedLight"), category: t("catBeauty") },
+    { src: portfolio17, title: t("workPaperDress"), category: t("catHauteCouture") },
+    { src: portfolio18, title: t("workRedBridge"), category: t("catLifestyle") },
+    { src: portfolio19, title: t("workCloseUp"), category: t("catBeauty") },
   ];
 
   return (
