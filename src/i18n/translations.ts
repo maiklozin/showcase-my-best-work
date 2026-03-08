@@ -465,6 +465,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "选择您偏好的日期并留下联系方式。我会通过 Instagram DM 回复您。",
     bookingDateFrom: "从",
     bookingDateTo: "到",
+    bookingTimeFrom: "开始时间",
+    bookingTimeTo: "结束时间",
     bookingContact: "您的联系方式",
     bookingContactPlaceholder: "Instagram、邮箱或电话",
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
