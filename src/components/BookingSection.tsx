@@ -268,6 +268,20 @@ const BookingSection = () => {
           </p>
         </div>
 
+        {/* Honeypot — invisible to users, bots will fill it */}
+        <div className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
+        </div>
+
         <p className="mb-8 flex items-center justify-center gap-2 font-body text-xs text-muted-foreground">
           <Instagram size={14} />
           {t("bookingFollowReminder")}
