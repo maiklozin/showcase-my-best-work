@@ -19,19 +19,21 @@ type TranslationKeys = {
   contactTitle: string;
   contactDescription: string;
   copyright: string;
-  // portfolio item categories
   catEditorial: string;
   catBeauty: string;
   catRunway: string;
   catHauteCouture: string;
   catCommercial: string;
-  // portfolio item titles
+  catLifestyle: string;
   workVogue: string;
   workBeauty: string;
   workMilan: string;
   workStreet: string;
   workNoir: string;
   workSummer: string;
+  workOcean: string;
+  workPortrait: string;
+  workDesert: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -50,12 +52,16 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "Runway",
     catHauteCouture: "Haute Couture",
     catCommercial: "Commercial",
-    workVogue: "Vogue Editorial",
-    workBeauty: "Beauty Campaign",
-    workMilan: "Milan Fashion Week",
-    workStreet: "Street Style",
-    workNoir: "Noir Collection",
-    workSummer: "Summer Campaign",
+    catLifestyle: "Lifestyle",
+    workVogue: "Urban Editorial",
+    workBeauty: "Studio Session",
+    workMilan: "Glamour Portrait",
+    workStreet: "Marina Collection",
+    workNoir: "Roses & Sunset",
+    workSummer: "Boho Spirit",
+    workOcean: "Ocean Breeze",
+    workPortrait: "Natural Beauty",
+    workDesert: "Desert Noir",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -72,12 +78,16 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "Pasarela",
     catHauteCouture: "Alta Costura",
     catCommercial: "Comercial",
-    workVogue: "Editorial Vogue",
-    workBeauty: "Campaña de Belleza",
-    workMilan: "Semana de la Moda de Milán",
-    workStreet: "Estilo Urbano",
-    workNoir: "Colección Noir",
-    workSummer: "Campaña de Verano",
+    catLifestyle: "Estilo de vida",
+    workVogue: "Editorial Urbano",
+    workBeauty: "Sesión de Estudio",
+    workMilan: "Retrato Glamour",
+    workStreet: "Colección Marina",
+    workNoir: "Rosas & Atardecer",
+    workSummer: "Espíritu Boho",
+    workOcean: "Brisa del Mar",
+    workPortrait: "Belleza Natural",
+    workDesert: "Desierto Noir",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -94,12 +104,16 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "Laufsteg",
     catHauteCouture: "Haute Couture",
     catCommercial: "Kommerziell",
-    workVogue: "Vogue Editorial",
-    workBeauty: "Beauty-Kampagne",
-    workMilan: "Mailänder Modewoche",
-    workStreet: "Street Style",
-    workNoir: "Noir Kollektion",
-    workSummer: "Sommer-Kampagne",
+    catLifestyle: "Lifestyle",
+    workVogue: "Urban Editorial",
+    workBeauty: "Studio-Session",
+    workMilan: "Glamour-Porträt",
+    workStreet: "Marina Kollektion",
+    workNoir: "Rosen & Sonnenuntergang",
+    workSummer: "Boho Spirit",
+    workOcean: "Meeresbrise",
+    workPortrait: "Natürliche Schönheit",
+    workDesert: "Wüsten-Noir",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -116,12 +130,16 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "Défilé",
     catHauteCouture: "Haute Couture",
     catCommercial: "Commercial",
-    workVogue: "Éditorial Vogue",
-    workBeauty: "Campagne Beauté",
-    workMilan: "Semaine de la Mode de Milan",
-    workStreet: "Style de Rue",
-    workNoir: "Collection Noir",
-    workSummer: "Campagne Été",
+    catLifestyle: "Style de vie",
+    workVogue: "Éditorial Urbain",
+    workBeauty: "Séance Studio",
+    workMilan: "Portrait Glamour",
+    workStreet: "Collection Marina",
+    workNoir: "Roses & Coucher de Soleil",
+    workSummer: "Esprit Bohème",
+    workOcean: "Brise Marine",
+    workPortrait: "Beauté Naturelle",
+    workDesert: "Désert Noir",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -138,12 +156,16 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "Подиум",
     catHauteCouture: "Высокая мода",
     catCommercial: "Коммерция",
-    workVogue: "Vogue Эдиториал",
-    workBeauty: "Бьюти-кампания",
-    workMilan: "Неделя моды в Милане",
-    workStreet: "Уличный стиль",
-    workNoir: "Коллекция Noir",
-    workSummer: "Летняя кампания",
+    catLifestyle: "Лайфстайл",
+    workVogue: "Городской эдиториал",
+    workBeauty: "Студийная съёмка",
+    workMilan: "Гламурный портрет",
+    workStreet: "Коллекция Marina",
+    workNoir: "Розы & Закат",
+    workSummer: "Бохо-стиль",
+    workOcean: "Морской бриз",
+    workPortrait: "Естественная красота",
+    workDesert: "Пустынный нуар",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -160,11 +182,15 @@ export const translations: Record<Language, TranslationKeys> = {
     catRunway: "走秀",
     catHauteCouture: "高级定制",
     catCommercial: "商业拍摄",
-    workVogue: "Vogue 编辑拍摄",
-    workBeauty: "美妆广告",
-    workMilan: "米兰时装周",
-    workStreet: "街拍风格",
-    workNoir: "Noir 系列",
-    workSummer: "夏季广告",
+    catLifestyle: "生活方式",
+    workVogue: "城市编辑拍摄",
+    workBeauty: "工作室拍摄",
+    workMilan: "魅力肖像",
+    workStreet: "游艇系列",
+    workNoir: "玫瑰与日落",
+    workSummer: "波西米亚风",
+    workOcean: "海风",
+    workPortrait: "自然之美",
+    workDesert: "沙漠暗黑",
   },
 };
