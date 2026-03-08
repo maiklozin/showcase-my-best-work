@@ -88,6 +88,7 @@ const BookingSection = () => {
       message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
     }
     message += `\n\nMy contact: ${contact.trim()}`;
+    message += `\n\n${userMessage.trim()}`;
     return message;
   };
 
