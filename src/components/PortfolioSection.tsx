@@ -19,9 +19,14 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 const PortfolioSection = () => {
   const { t } = useI18n();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const animRef = useRef<number>(0);
+  const speedRef = useRef(0.6); // px per frame
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -46,9 +51,58 @@ const PortfolioSection = () => {
     { src: portfolio21, title: t("workRunwayFloral"), category: t("catHauteCouture") },
   ];
 
+  // Split into two rows
+  const row1 = works.slice(0, 10);
+  const row2 = works.slice(10);
+
+  const animate = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || isPaused) {
+      animRef.current = requestAnimationFrame(animate);
+      return;
+    }
+    el.scrollLeft += speedRef.current;
+    // Seamless loop: when we've scrolled past the first set, jump back
+    const halfWidth = el.scrollWidth / 2;
+    if (el.scrollLeft >= halfWidth) {
+      el.scrollLeft -= halfWidth;
+    }
+    animRef.current = requestAnimationFrame(animate);
+  }, [isPaused]);
+
+  useEffect(() => {
+    animRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [animate]);
+
+  const renderCard = (work: (typeof works)[0], i: number) => (
+    <div
+      key={i}
+      className="group relative flex-shrink-0 cursor-pointer overflow-hidden"
+      style={{ width: "280px" }}
+    >
+      <div className="aspect-[3/4] overflow-hidden">
+        <img
+          src={work.src}
+          alt={work.title}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+      <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-background/80 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary">
+          {work.category}
+        </p>
+        <p className="mt-1 font-display text-xl italic text-foreground">
+          {work.title}
+        </p>
+      </div>
+    </div>
+  );
+
   return (
-    <section id="portfolio" className="px-6 py-24 md:px-12 lg:px-24">
-      <div className="mb-16 text-center">
+    <section id="portfolio" className="px-0 py-24">
+      <div className="mb-16 text-center px-6">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("portfolioLabel")}
         </p>
@@ -56,28 +110,38 @@ const PortfolioSection = () => {
           {t("portfolioTitle")}
         </h2>
       </div>
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {works.map((work, i) => (
-          <div key={i} className="group relative cursor-pointer overflow-hidden">
-            <div className="aspect-[3/4] overflow-hidden">
-              <img
-                src={work.src}
-                alt={work.title}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-            </div>
-            <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-background/80 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-              <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary">
-                {work.category}
-              </p>
-              <p className="mt-1 font-display text-xl italic text-foreground">
-                {work.title}
-              </p>
-            </div>
-          </div>
-        ))}
+
+      {/* Auto-scrolling row 1 */}
+      <div
+        ref={scrollRef}
+        className="mb-4 flex gap-4 overflow-hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+      >
+        {/* Duplicate items for seamless loop */}
+        {[...row1, ...row1].map((work, i) => renderCard(work, i))}
       </div>
+
+      {/* Static row 2 — scrolls opposite via CSS */}
+      <div
+        className="flex gap-4 overflow-hidden"
+        style={{
+          animation: "scroll-reverse 60s linear infinite",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = "paused")}
+        onMouseLeave={(e) => (e.currentTarget.style.animationPlayState = "running")}
+      >
+        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
+      </div>
+
+      <style>{`
+        @keyframes scroll-reverse {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0%); }
+        }
+      `}</style>
     </section>
   );
 };
