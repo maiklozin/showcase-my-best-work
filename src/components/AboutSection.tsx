@@ -1,3 +1,4 @@
+import { Instagram } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const AboutSection = () => {
@@ -63,6 +64,20 @@ const AboutSection = () => {
             <p className="font-body text-xs text-muted-foreground italic">
               {t("aboutTravel")}
             </p>
+            <div className="mt-6 pt-6 border-t border-border">
+              <p className="mb-3 font-body text-xs uppercase tracking-[0.3em] text-primary">
+                {t("contactLabel")}
+              </p>
+              <a
+                href="https://instagram.com/dara__es_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 font-body text-sm text-foreground transition-colors hover:text-primary"
+              >
+                <Instagram size={16} />
+                @dara__es_
+              </a>
+            </div>
           </div>
         </div>
       </div>
