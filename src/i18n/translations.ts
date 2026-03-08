@@ -70,6 +70,7 @@ type TranslationKeys = {
   bookingTimeTo: string;
   bookingContact: string;
   bookingContactPlaceholder: string;
+  bookingContactError: string;
   bookingMessage: string;
   bookingMessagePlaceholder: string;
   bookingFollowReminder: string;
