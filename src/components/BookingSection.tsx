@@ -165,7 +165,7 @@ const BookingSection = () => {
 
   return (
     <section id="booking" className="border-t border-border px-6 py-24">
-      <div className="mx-auto max-w-lg text-center">
+      <div className="relative mx-auto max-w-lg text-center">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
           {t("bookingLabel")}
         </p>
