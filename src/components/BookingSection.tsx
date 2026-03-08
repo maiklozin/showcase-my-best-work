@@ -300,10 +300,15 @@ const BookingSection = () => {
           />
         </div>
 
-        <p className="mb-8 flex items-center justify-center gap-2 font-body text-xs text-muted-foreground">
+        <a
+          href="https://instagram.com/dara__es_"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-muted-foreground transition-colors hover:text-primary"
+        >
           <Instagram size={14} />
           {t("bookingFollowReminder")}
-        </p>
+        </a>
 
         {/* Submit */}
         <Button
