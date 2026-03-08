@@ -83,6 +83,10 @@ type TranslationKeys = {
   bookingCopiedDone: string;
   bookingCopyBtn: string;
   bookingOpenIG: string;
+  bookingSentTitle: string;
+  bookingSentDesc: string;
+  bookingAlsoIG: string;
+  bookingClose: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
