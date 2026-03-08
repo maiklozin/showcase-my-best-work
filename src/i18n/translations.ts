@@ -67,6 +67,8 @@ type TranslationKeys = {
   bookingDescription: string;
   bookingDateFrom: string;
   bookingDateTo: string;
+  bookingTimeFrom: string;
+  bookingTimeTo: string;
   bookingContact: string;
   bookingContactPlaceholder: string;
   bookingFollowReminder: string;
@@ -133,6 +135,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Select your preferred dates and leave your contact info. I'll get back to you via Instagram DM.",
     bookingDateFrom: "From",
     bookingDateTo: "To",
+    bookingTimeFrom: "Start time",
+    bookingTimeTo: "End time",
     bookingContact: "Your contact",
     bookingContactPlaceholder: "Instagram, email, or phone",
     bookingFollowReminder: "Please follow @dara__es_ on Instagram to receive a reply",
@@ -197,6 +201,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Selecciona tus fechas preferidas y deja tu información de contacto. Te responderé por Instagram DM.",
     bookingDateFrom: "Desde",
     bookingDateTo: "Hasta",
+    bookingTimeFrom: "Hora inicio",
+    bookingTimeTo: "Hora fin",
     bookingContact: "Tu contacto",
     bookingContactPlaceholder: "Instagram, email o teléfono",
     bookingFollowReminder: "Por favor, sigue a @dara__es_ en Instagram para recibir respuesta",
@@ -261,6 +267,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Wähle deine bevorzugten Termine und hinterlasse deine Kontaktdaten. Ich melde mich per Instagram DM.",
     bookingDateFrom: "Von",
     bookingDateTo: "Bis",
+    bookingTimeFrom: "Startzeit",
+    bookingTimeTo: "Endzeit",
     bookingContact: "Dein Kontakt",
     bookingContactPlaceholder: "Instagram, E-Mail oder Telefon",
     bookingFollowReminder: "Bitte folge @dara__es_ auf Instagram, um eine Antwort zu erhalten",
@@ -325,6 +333,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Sélectionnez vos dates préférées et laissez vos coordonnées. Je vous répondrai par Instagram DM.",
     bookingDateFrom: "Du",
     bookingDateTo: "Au",
+    bookingTimeFrom: "Heure début",
+    bookingTimeTo: "Heure fin",
     bookingContact: "Votre contact",
     bookingContactPlaceholder: "Instagram, email ou téléphone",
     bookingFollowReminder: "Veuillez suivre @dara__es_ sur Instagram pour recevoir une réponse",
@@ -389,6 +399,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "Выберите нужные даты и оставьте контакт. Я отвечу вам в Instagram DM.",
     bookingDateFrom: "С",
     bookingDateTo: "По",
+    bookingTimeFrom: "Время начала",
+    bookingTimeTo: "Время окончания",
     bookingContact: "Ваш контакт",
     bookingContactPlaceholder: "Instagram, email или телефон",
     bookingFollowReminder: "Подпишитесь на @dara__es_ в Instagram, чтобы получить ответ",
@@ -453,6 +465,8 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingDescription: "选择您偏好的日期并留下联系方式。我会通过 Instagram DM 回复您。",
     bookingDateFrom: "从",
     bookingDateTo: "到",
+    bookingTimeFrom: "开始时间",
+    bookingTimeTo: "结束时间",
     bookingContact: "您的联系方式",
     bookingContactPlaceholder: "Instagram、邮箱或电话",
     bookingFollowReminder: "请关注 Instagram @dara__es_ 以便收到回复",
