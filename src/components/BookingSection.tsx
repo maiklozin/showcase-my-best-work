@@ -60,9 +60,8 @@ const BookingSection = () => {
     setCalToOpen(false);
   };
 
-  const handleRequest = () => {
-    if (!isValid || !dateFrom || !dateTo) return;
-
+  const buildMessage = () => {
+    if (!dateFrom || !dateTo) return "";
     const fromDate = format(dateFrom, "dd.MM.yyyy");
     const toDate = format(dateTo, "dd.MM.yyyy");
     const fromTime = `${timeFrom}–${timeTo}`;
@@ -71,17 +70,35 @@ const BookingSection = () => {
     let message: string;
     if (fromDate === toDate) {
       message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
-      if (toTime) message = `Hi! I'd like to book: ${fromDate}, ${fromTime}.`;
     } else {
       message = `Hi! I'd like to book:\n📅 ${fromDate}, ${fromTime}\n📅 ${toDate}${toTime ? `, ${toTime}` : ""}`;
     }
     message += `\n\nMy contact: ${contact.trim()}`;
+    return message;
+  };
 
-    window.open(
-      `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
+  const handleRequest = async () => {
+    if (!isValid) return;
+    const message = buildMessage();
+    
+    try {
+      await navigator.clipboard.writeText(message);
+      toast({
+        title: t("bookingCopiedTitle"),
+        description: t("bookingCopiedDesc"),
+      });
+    } catch {
+      // fallback: prompt
+      window.prompt(t("bookingCopyFallback"), message);
+    }
+
+    setTimeout(() => {
+      window.open(
+        `https://ig.me/m/${INSTAGRAM_USERNAME}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }, 600);
   };
 
   return (
