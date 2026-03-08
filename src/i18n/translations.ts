@@ -77,6 +77,10 @@ type TranslationKeys = {
   bookingCopiedTitle: string;
   bookingCopiedDesc: string;
   bookingCopyFallback: string;
+  bookingDialogInstruction: string;
+  bookingCopiedDone: string;
+  bookingCopyBtn: string;
+  bookingOpenIG: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
