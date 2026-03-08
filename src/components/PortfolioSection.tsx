@@ -149,7 +149,7 @@ const PortfolioSection = () => {
     <div
       key={i}
       className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none bg-secondary"
-      style={{ width: `${CARD_WIDTH}px`, padding: '14px 4px' }}
+      style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
     >
       <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
