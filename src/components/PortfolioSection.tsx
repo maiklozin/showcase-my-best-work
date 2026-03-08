@@ -19,53 +19,107 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useState, useRef, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 
 const CARD_WIDTH = 280;
 const GAP = 16;
+const AUTO_SPEED = 1; // pixels per frame
 
-const useDragScroll = (setPaused: (v: boolean) => void) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-  const startX = useRef(0);
-  const scrollStart = useRef(0);
+const useAutoScroll = (direction: 'left' | 'right') => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isPaused = useRef(false);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragScrollLeft = useRef(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    // Set initial scroll position for right-scrolling row
+    const halfScroll = el.scrollWidth / 2;
+    if (direction === 'right') {
+      el.scrollLeft = halfScroll;
+    }
+
+    let raf: number;
+    const animate = () => {
+      if (!isPaused.current && !isDragging.current && el) {
+        if (direction === 'left') {
+          el.scrollLeft += AUTO_SPEED;
+          // Loop: when we've scrolled past the first set, jump back
+          if (el.scrollLeft >= halfScroll) {
+            el.scrollLeft -= halfScroll;
+          }
+        } else {
+          el.scrollLeft -= AUTO_SPEED;
+          if (el.scrollLeft <= 0) {
+            el.scrollLeft += halfScroll;
+          }
+        }
+      }
+      raf = requestAnimationFrame(animate);
+    };
+    raf = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf);
+  }, [direction]);
+
+  const onMouseEnter = useCallback(() => { isPaused.current = true; }, []);
+  const onMouseLeave = useCallback(() => { isPaused.current = false; isDragging.current = false; }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
-    dragging.current = true;
-    startX.current = e.clientX;
-    const el = ref.current;
-    if (el) {
-      const transform = getComputedStyle(el).transform;
-      const matrix = new DOMMatrixReadOnly(transform);
-      scrollStart.current = matrix.m41;
-    }
-    setPaused(true);
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  }, [setPaused]);
+    isDragging.current = true;
+    dragStartX.current = e.clientX;
+    dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current || !ref.current) return;
-    const dx = e.clientX - startX.current;
-    ref.current.style.transform = `translateX(${scrollStart.current + dx}px)`;
+    if (!isDragging.current || !scrollRef.current) return;
+    const dx = e.clientX - dragStartX.current;
+    scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
   }, []);
 
   const onPointerUp = useCallback(() => {
-    dragging.current = false;
-    setPaused(false);
-    if (ref.current) {
-      ref.current.style.transform = '';
-    }
-  }, [setPaused]);
+    isDragging.current = false;
+  }, []);
 
-  return { ref, onPointerDown, onPointerMove, onPointerUp };
+  // Touch events for mobile
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    isPaused.current = true;
+    isDragging.current = true;
+    dragStartX.current = e.touches[0].clientX;
+    dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const dx = e.touches[0].clientX - dragStartX.current;
+    scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
+  }, []);
+
+  const onTouchEnd = useCallback(() => {
+    isDragging.current = false;
+    isPaused.current = false;
+  }, []);
+
+  return {
+    scrollRef,
+    onMouseEnter,
+    onMouseLeave,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  };
 };
 
 const PortfolioSection = () => {
   const { t } = useI18n();
-  const [row1Paused, setRow1Paused] = useState(false);
-  const [row2Paused, setRow2Paused] = useState(false);
-  const drag1 = useDragScroll(setRow1Paused);
-  const drag2 = useDragScroll(setRow2Paused);
+  const row1Controls = useAutoScroll('left');
+  const row2Controls = useAutoScroll('right');
 
   const works = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
@@ -93,9 +147,6 @@ const PortfolioSection = () => {
   const row1 = works.slice(0, 10);
   const row2 = works.slice(10);
 
-  const row1Width = row1.length * (CARD_WIDTH + GAP);
-  const row2Width = row2.length * (CARD_WIDTH + GAP);
-
   const renderCard = (work: (typeof works)[0], i: number) => (
     <div
       key={i}
@@ -108,6 +159,7 @@ const PortfolioSection = () => {
           alt={work.title}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
+          draggable={false}
         />
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-end bg-gradient-to-t from-background/80 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
@@ -121,6 +173,18 @@ const PortfolioSection = () => {
     </div>
   );
 
+  const rowProps = (controls: typeof row1Controls) => ({
+    ref: controls.scrollRef,
+    onMouseEnter: controls.onMouseEnter,
+    onMouseLeave: controls.onMouseLeave,
+    onPointerDown: controls.onPointerDown,
+    onPointerMove: controls.onPointerMove,
+    onPointerUp: controls.onPointerUp,
+    onTouchStart: controls.onTouchStart,
+    onTouchMove: controls.onTouchMove,
+    onTouchEnd: controls.onTouchEnd,
+  });
+
   return (
     <section id="portfolio" className="px-0 py-12 md:py-24 overflow-hidden">
       <div className="mb-8 md:mb-16 text-center px-6">
@@ -132,60 +196,23 @@ const PortfolioSection = () => {
         </h2>
       </div>
 
-      {/* Row 1 — scrolls left */}
+      {/* Row 1 — auto scrolls left, manual drag */}
       <div
-        className="mb-4 overflow-hidden touch-pan-y"
-        onPointerDown={drag1.onPointerDown}
-        onPointerMove={drag1.onPointerMove}
-        onPointerUp={drag1.onPointerUp}
-        onMouseEnter={() => setRow1Paused(true)}
-        onMouseLeave={() => { setRow1Paused(false); }}
+        className="mb-4 flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        {...rowProps(row1Controls)}
       >
-        <div
-          ref={drag1.ref}
-          className="flex gap-4"
-          style={{
-            width: `${row1Width * 2}px`,
-            animation: `marquee-left ${row1.length * 4}s linear infinite`,
-            animationPlayState: row1Paused ? "paused" : "running",
-          }}
-        >
-          {[...row1, ...row1].map((work, i) => renderCard(work, i))}
-        </div>
+        {[...row1, ...row1].map((work, i) => renderCard(work, i))}
       </div>
 
-      {/* Row 2 — scrolls right */}
+      {/* Row 2 — auto scrolls right, manual drag */}
       <div
-        className="overflow-hidden touch-pan-y"
-        onPointerDown={drag2.onPointerDown}
-        onPointerMove={drag2.onPointerMove}
-        onPointerUp={drag2.onPointerUp}
-        onMouseEnter={() => setRow2Paused(true)}
-        onMouseLeave={() => { setRow2Paused(false); }}
+        className="flex gap-4 overflow-x-auto cursor-grab touch-pan-y [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        {...rowProps(row2Controls)}
       >
-        <div
-          ref={drag2.ref}
-          className="flex gap-4"
-          style={{
-            width: `${row2Width * 2}px`,
-            animation: `marquee-right ${row2.length * 4}s linear infinite`,
-            animationPlayState: row2Paused ? "paused" : "running",
-          }}
-        >
-          {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
-        </div>
+        {[...row2, ...row2].map((work, i) => renderCard(work, i + 100))}
       </div>
-
-      <style>{`
-        @keyframes marquee-left {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-${row1Width}px); }
-        }
-        @keyframes marquee-right {
-          0% { transform: translateX(-${row2Width}px); }
-          100% { transform: translateX(0); }
-        }
-      `}</style>
     </section>
   );
 };
