@@ -44,6 +44,7 @@ type TranslationKeys = {
   workPaperDress: string;
   workRedBridge: string;
   workCloseUp: string;
+  aboutLabel: string;
   aboutTitle: string;
   aboutLocation: string;
   aboutHeight: string;
