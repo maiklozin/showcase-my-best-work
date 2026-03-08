@@ -294,7 +294,24 @@ const BookingSection = () => {
           />
         </div>
 
-        {/* Follow reminder */}
+        {/* Message textarea */}
+        <div className="mb-6">
+          <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {t("bookingMessage")}
+          </label>
+          <Textarea
+            value={userMessage}
+            onChange={(e) => setUserMessage(e.target.value.slice(0, 500))}
+            placeholder={t("bookingMessagePlaceholder")}
+            maxLength={500}
+            rows={3}
+            className="font-body resize-none"
+          />
+          <p className="mt-1 text-right font-body text-xs text-muted-foreground">
+            {userMessage.length}/500
+          </p>
+        </div>
+
         <p className="mb-8 flex items-center justify-center gap-2 font-body text-xs text-muted-foreground">
           <Instagram size={14} />
           {t("bookingFollowReminder")}
