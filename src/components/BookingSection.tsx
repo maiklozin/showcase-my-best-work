@@ -46,6 +46,9 @@ const BookingSection = () => {
   const [timeFromEnd, setTimeFromEnd] = useState("");
   const [timeToEnd, setTimeToEnd] = useState("");
   const [contact, setContact] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState("");
 
   const isValid = useMemo(() => {
     return !!(dateFrom && dateTo && timeFrom && timeTo && contact.trim());
