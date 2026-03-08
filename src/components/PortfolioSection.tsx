@@ -45,7 +45,7 @@ const FilmPerforations = ({ side }: { side: 'top' | 'bottom' }) => (
   </div>
 );
 
-const useAutoScroll = (direction: 'left' | 'right') => {
+const useAutoScroll = (direction: 'left' | 'right', onTap?: (index: number) => void) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isPaused = useRef(false);
   const isDragging = useRef(false);
