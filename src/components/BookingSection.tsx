@@ -316,7 +316,7 @@ const BookingSection = () => {
           disabled={!isValid || sending}
           className={cn(
             "inline-flex items-center gap-3 border border-primary bg-transparent px-8 py-3.5 font-body text-xs uppercase tracking-[0.3em] text-primary transition-all duration-500 hover:bg-primary hover:text-primary-foreground disabled:opacity-40",
-            isValid && !sending && "ring-2 ring-primary/60 bg-primary/10 scale-[1.02]"
+            isValid && !sending && "border-instagram ring-2 ring-instagram/60 bg-instagram/10 text-instagram hover:bg-instagram hover:text-instagram-foreground scale-[1.02]"
           )}
           variant="outline"
         >
