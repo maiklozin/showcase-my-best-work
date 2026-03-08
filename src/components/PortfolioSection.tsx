@@ -99,7 +99,7 @@ const PortfolioSection = () => {
   const renderCard = (work: (typeof works)[0], i: number) => (
     <div
       key={i}
-      className="group relative flex-shrink-0 cursor-pointer overflow-hidden"
+      className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none"
       style={{ width: `${CARD_WIDTH}px` }}
     >
       <div className="aspect-[3/4] overflow-hidden">
