@@ -24,20 +24,20 @@ import { useRef, useEffect, useCallback } from "react";
 const CARD_WIDTH = 280;
 const GAP = 16;
 const AUTO_SPEED = 1;
-const PERF_COUNT = 8; // number of perforations per side
+const PERF_COUNT = 12;
 
 const FilmPerforations = ({ side }: { side: 'top' | 'bottom' }) => (
   <div
-    className={`absolute left-0 right-0 flex justify-between px-3 z-10 pointer-events-none ${
+    className={`absolute left-0 right-0 z-10 pointer-events-none flex items-center justify-between px-2 ${
       side === 'top' ? 'top-0' : 'bottom-0'
     }`}
-    style={{ height: '12px', [side === 'top' ? 'top' : 'bottom']: '2px' }}
+    style={{ height: '18px' }}
   >
     {Array.from({ length: PERF_COUNT }).map((_, i) => (
       <div
         key={i}
-        className="rounded-[1px] bg-background/80"
-        style={{ width: '16px', height: '8px' }}
+        className="rounded-sm bg-background"
+        style={{ width: '10px', height: '10px' }}
       />
     ))}
   </div>
@@ -149,7 +149,7 @@ const PortfolioSection = () => {
     <div
       key={i}
       className="group relative flex-shrink-0 cursor-grab overflow-hidden select-none bg-secondary"
-      style={{ width: `${CARD_WIDTH}px`, padding: '14px 4px' }}
+      style={{ width: `${CARD_WIDTH}px`, padding: '18px 4px' }}
     >
       <FilmPerforations side="top" />
       <div className="aspect-[3/4] overflow-hidden">
