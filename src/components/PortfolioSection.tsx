@@ -19,58 +19,157 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const CARD_WIDTH = 260;
 const CARD_GAP = 16;
 const STEP = CARD_WIDTH + CARD_GAP;
+const PERF_COUNT = 12;
+const AUTO_SCROLL_PX_PER_SECOND = 36;
+const AUTO_SCROLL_RESUME_DELAY_MS = 900;
+const MAX_ANIMATION_FRAME_MS = 32;
+const PROGRAMMATIC_SCROLL_GUARD_MS = 48;
+const TICK_COOLDOWN_MS = 55;
+const MAX_BURST_TICKS = 4;
 
-/* ── Tick sound via Web Audio API ── */
-const audioCtxRef: { current: AudioContext | null } = { current: null };
+type PortfolioWork = {
+  src: string;
+  title: string;
+  category: string;
+};
 
-function playTick() {
+type WindowWithWebkitAudio = Window &
+  typeof globalThis & {
+    webkitAudioContext?: typeof AudioContext;
+  };
+
+const tickAudio = {
+  ctx: null as AudioContext | null,
+  buffer: null as AudioBuffer | null,
+  unlocked: false,
+  lastPlayAt: 0,
+};
+
+function getAudioContextCtor() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const audioWindow = window as WindowWithWebkitAudio;
+  return audioWindow.AudioContext ?? audioWindow.webkitAudioContext ?? null;
+}
+
+function createTickBuffer(ctx: AudioContext) {
+  const bufferSize = Math.floor(ctx.sampleRate * 0.012);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < bufferSize; i += 1) {
+    const decay = 1 - i / bufferSize;
+    data[i] = (Math.random() * 2 - 1) * decay * decay;
+  }
+
+  return buffer;
+}
+
+function ensureTickAudioContext() {
+  const AudioContextCtor = getAudioContextCtor();
+
+  if (!AudioContextCtor) {
+    return null;
+  }
+
+  if (!tickAudio.ctx) {
+    tickAudio.ctx = new AudioContextCtor();
+  }
+
+  if (!tickAudio.buffer) {
+    tickAudio.buffer = createTickBuffer(tickAudio.ctx);
+  }
+
+  return tickAudio.ctx;
+}
+
+function warmupTickAudio(ctx: AudioContext) {
+  const silentBuffer = ctx.createBuffer(1, 1, 22050);
+  const source = ctx.createBufferSource();
+  const gain = ctx.createGain();
+
+  source.buffer = silentBuffer;
+  gain.gain.value = 0.00001;
+
+  source.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(ctx.currentTime);
+}
+
+function unlockTickAudio() {
   try {
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new AudioContext();
-    }
-    const ctx = audioCtxRef.current;
-    if (ctx.state === "suspended") ctx.resume();
+    const ctx = ensureTickAudioContext();
 
-    // Short noise burst = ratchet/mechanical click sound
-    const bufferSize = Math.floor(ctx.sampleRate * 0.012); // 12ms
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      // Rapid decay noise
-      const decay = 1 - i / bufferSize;
-      data[i] = (Math.random() * 2 - 1) * decay * decay;
+    if (!ctx) {
+      return;
+    }
+
+    if (ctx.state !== "running") {
+      void ctx
+        .resume()
+        .then(() => {
+          tickAudio.unlocked = ctx.state === "running";
+          warmupTickAudio(ctx);
+        })
+        .catch(() => {
+          tickAudio.unlocked = false;
+        });
+      return;
+    }
+
+    tickAudio.unlocked = true;
+    warmupTickAudio(ctx);
+  } catch {
+    tickAudio.unlocked = false;
+  }
+}
+
+function playTick(delaySeconds = 0) {
+  try {
+    const ctx = ensureTickAudioContext();
+
+    if (!ctx || !tickAudio.buffer || !tickAudio.unlocked || ctx.state !== "running") {
+      return;
+    }
+
+    const now = performance.now();
+    if (delaySeconds === 0 && now - tickAudio.lastPlayAt < TICK_COOLDOWN_MS) {
+      return;
+    }
+
+    if (delaySeconds === 0) {
+      tickAudio.lastPlayAt = now;
     }
 
     const source = ctx.createBufferSource();
-    source.buffer = buffer;
+    source.buffer = tickAudio.buffer;
 
-    // Bandpass filter to shape the click
     const filter = ctx.createBiquadFilter();
     filter.type = "bandpass";
     filter.frequency.value = 3000;
     filter.Q.value = 1.5;
 
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.15, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime + delaySeconds);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delaySeconds + 0.015);
 
     source.connect(filter);
     filter.connect(gain);
     gain.connect(ctx.destination);
-    source.start(ctx.currentTime);
+    source.start(ctx.currentTime + delaySeconds);
   } catch {
-    // silently ignore if audio not supported
+    // Ignore audio failures on unsupported browsers.
   }
 }
 
-/* ── Film perforations ── */
-const PERF_COUNT = 12;
 const FilmPerforations = ({ side }: { side: "top" | "bottom" }) => (
   <div
     className={`absolute left-0 right-0 z-10 pointer-events-none flex items-center justify-between px-2 ${
@@ -84,25 +183,33 @@ const FilmPerforations = ({ side }: { side: "top" | "bottom" }) => (
   </div>
 );
 
-/* ── Coverflow carousel hook ── */
-function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) => void) {
+function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterChange?: (index: number) => void) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
   const hasDragged = useRef(false);
   const lastCenterIndex = useRef(-1);
-  const autoSpeed = useRef(0.6);
+  const lastCenterPosition = useRef<number | null>(null);
   const isPaused = useRef(false);
-  const isUserInteracting = useRef(false);
   const interactionTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const lastAnimationFrameAt = useRef(0);
+  const ignoreScrollEventsUntil = useRef(0);
 
   const singleWidth = itemCount * STEP;
 
-  // Seamless infinite scroll reset
+  const setCardRef = useCallback((node: HTMLDivElement | null, position: number) => {
+    cardRefs.current[position] = node;
+  }, []);
+
   const resetIfNeeded = useCallback(() => {
     const el = scrollRef.current;
-    if (!el) return;
+
+    if (!el) {
+      return;
+    }
+
     if (el.scrollLeft >= singleWidth * 2) {
       el.scrollLeft -= singleWidth;
     } else if (el.scrollLeft < singleWidth * 0.5) {
@@ -110,185 +217,333 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
     }
   }, [singleWidth]);
 
-  // Track which card is in center and play tick
+  const updateCardTransforms = useCallback(() => {
+    const el = scrollRef.current;
+
+    if (!el) {
+      return;
+    }
+
+    const containerCenter = el.scrollLeft + el.clientWidth / 2;
+    const maxDist = Math.max(el.clientWidth / 2, STEP);
+
+    for (let position = 0; position < renderedCount; position += 1) {
+      const card = cardRefs.current[position];
+
+      if (!card) {
+        continue;
+      }
+
+      const cardCenter = position * STEP + CARD_WIDTH / 2;
+      const distance = cardCenter - containerCenter;
+      const normalized = Math.max(-1.25, Math.min(1.25, distance / maxDist));
+      const absNorm = Math.abs(normalized);
+      const scale = Math.max(0.72, 1 - absNorm * 0.35);
+      const rotateY = normalized * -45;
+      const translateZ = Math.max(0, (1 - Math.min(absNorm, 1)) * 50);
+      const opacity = Math.max(0.35, 1 - absNorm * 0.5);
+
+      card.style.transform = `perspective(1000px) rotateY(${rotateY}deg) scale(${scale}) translateZ(${translateZ}px)`;
+      card.style.opacity = opacity.toFixed(3);
+      card.style.zIndex = String(Math.round((1.5 - absNorm) * 100));
+    }
+  }, [renderedCount]);
+
   const updateCenter = useCallback(() => {
     const el = scrollRef.current;
-    if (!el) return;
+
+    if (!el) {
+      return;
+    }
+
     const center = el.scrollLeft + el.clientWidth / 2;
     const idx = Math.round(center / STEP) % itemCount;
     const normalizedIdx = ((idx % itemCount) + itemCount) % itemCount;
-    if (normalizedIdx !== lastCenterIndex.current) {
+
+    if (lastCenterIndex.current === -1) {
       lastCenterIndex.current = normalizedIdx;
-      if (isUserInteracting.current) {
-        playTick();
+      lastCenterPosition.current = center;
+      onCenterChange?.(normalizedIdx);
+      return;
+    }
+
+    if (normalizedIdx !== lastCenterIndex.current) {
+      let movement = 0;
+
+      if (lastCenterPosition.current !== null) {
+        movement = center - lastCenterPosition.current;
+
+        if (movement > singleWidth / 2) {
+          movement -= singleWidth;
+        } else if (movement < -singleWidth / 2) {
+          movement += singleWidth;
+        }
       }
+
+      const crossedSteps = Math.max(
+        1,
+        Math.min(MAX_BURST_TICKS, Math.round(Math.abs(movement) / STEP) || 1)
+      );
+
+      for (let tickIndex = 0; tickIndex < crossedSteps; tickIndex += 1) {
+        playTick(tickIndex * 0.018);
+      }
+
+      lastCenterIndex.current = normalizedIdx;
       onCenterChange?.(normalizedIdx);
     }
-  }, [itemCount, onCenterChange]);
 
-  // Listen for native scroll events (catches touch scroll on mobile)
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const onScroll = () => {
-      resetIfNeeded();
-      updateCenter();
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, [resetIfNeeded, updateCenter]);
+    lastCenterPosition.current = center;
+  }, [itemCount, onCenterChange, singleWidth]);
 
-  // Auto scroll
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollLeft = singleWidth;
+  const syncFromScroll = useCallback(() => {
+    resetIfNeeded();
+    updateCenter();
+    updateCardTransforms();
+  }, [resetIfNeeded, updateCenter, updateCardTransforms]);
 
-    let raf: number;
-    const animate = () => {
-      if (!isPaused.current && !isDragging.current && el) {
-        el.scrollLeft += autoSpeed.current;
-        resetIfNeeded();
-        updateCenter();
-      }
-      raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  }, [singleWidth, resetIfNeeded, updateCenter]);
-
-  const markInteracting = useCallback(() => {
-    isUserInteracting.current = true;
+  const pauseAutoScroll = useCallback(() => {
     isPaused.current = true;
     clearTimeout(interactionTimeout.current);
   }, []);
 
-  const unmarkInteracting = useCallback(() => {
+  const resumeAutoScroll = useCallback((delay = AUTO_SCROLL_RESUME_DELAY_MS) => {
     clearTimeout(interactionTimeout.current);
     interactionTimeout.current = setTimeout(() => {
-      isUserInteracting.current = false;
-      isPaused.current = false;
-    }, 400);
+      if (!isDragging.current && !document.hidden) {
+        isPaused.current = false;
+      }
+    }, delay);
   }, []);
+
+  const beginInteraction = useCallback(() => {
+    unlockTickAudio();
+    pauseAutoScroll();
+  }, [pauseAutoScroll]);
+
+  useEffect(() => {
+    const unlockOnFirstGesture = () => {
+      unlockTickAudio();
+    };
+
+    window.addEventListener("pointerdown", unlockOnFirstGesture, { passive: true });
+    window.addEventListener("touchstart", unlockOnFirstGesture, { passive: true });
+    window.addEventListener("keydown", unlockOnFirstGesture);
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockOnFirstGesture);
+      window.removeEventListener("touchstart", unlockOnFirstGesture);
+      window.removeEventListener("keydown", unlockOnFirstGesture);
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+
+    if (!el) {
+      return;
+    }
+
+    ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
+    el.scrollLeft = singleWidth;
+    syncFromScroll();
+
+    let raf = 0;
+
+    const animate = (timestamp: number) => {
+      const previousFrameAt = lastAnimationFrameAt.current || timestamp;
+      const deltaMs = Math.min(timestamp - previousFrameAt, MAX_ANIMATION_FRAME_MS);
+      lastAnimationFrameAt.current = timestamp;
+
+      if (!document.hidden && !isPaused.current && !isDragging.current) {
+        ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
+        el.scrollLeft += AUTO_SCROLL_PX_PER_SECOND * (deltaMs / 1000);
+        syncFromScroll();
+      }
+
+      raf = requestAnimationFrame(animate);
+    };
+
+    raf = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      lastAnimationFrameAt.current = 0;
+      clearTimeout(interactionTimeout.current);
+    };
+  }, [singleWidth, syncFromScroll]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+
+    if (!el) {
+      return;
+    }
+
+    const onScroll = () => {
+      syncFromScroll();
+
+      if (performance.now() <= ignoreScrollEventsUntil.current) {
+        return;
+      }
+
+      hasDragged.current = true;
+      pauseAutoScroll();
+      resumeAutoScroll();
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+    };
+  }, [pauseAutoScroll, resumeAutoScroll, syncFromScroll]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      syncFromScroll();
+    };
+
+    const handleVisibilityChange = () => {
+      lastAnimationFrameAt.current = 0;
+
+      if (!document.hidden) {
+        ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
+        syncFromScroll();
+        resumeAutoScroll(120);
+      }
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [resumeAutoScroll, syncFromScroll]);
 
   const onMouseEnter = useCallback(() => {
-    isPaused.current = true;
-  }, []);
+    pauseAutoScroll();
+  }, [pauseAutoScroll]);
+
   const onMouseLeave = useCallback(() => {
-    isPaused.current = false;
-    isDragging.current = false;
-    isUserInteracting.current = false;
-  }, []);
+    resumeAutoScroll(120);
+  }, [resumeAutoScroll]);
 
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    // Only manually control scroll on non-touch (let touch use native scroll)
-    isDragging.current = e.pointerType !== "touch";
-    hasDragged.current = false;
-    markInteracting();
-    dragStartX.current = e.clientX;
-    dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-  }, [markInteracting]);
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      beginInteraction();
+      hasDragged.current = false;
+      dragStartX.current = e.clientX;
+      dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+      isDragging.current = e.pointerType !== "touch";
 
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const dx = e.clientX - dragStartX.current;
-    if (Math.abs(dx) > 5) hasDragged.current = true;
-    scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-  }, []);
+      if (isDragging.current) {
+        e.currentTarget.setPointerCapture?.(e.pointerId);
+      }
+    },
+    [beginInteraction]
+  );
 
-  const onPointerUp = useCallback(() => {
-    isDragging.current = false;
-    unmarkInteracting();
-  }, [unmarkInteracting]);
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging.current || !scrollRef.current) {
+        return;
+      }
+
+      const dx = e.clientX - dragStartX.current;
+
+      if (Math.abs(dx) > 4) {
+        hasDragged.current = true;
+      }
+
+      scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
+      syncFromScroll();
+    },
+    [syncFromScroll]
+  );
+
+  const endPointerInteraction = useCallback(
+    (e?: React.PointerEvent<HTMLDivElement>) => {
+      if (e?.currentTarget.hasPointerCapture?.(e.pointerId)) {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      }
+
+      isDragging.current = false;
+      resumeAutoScroll();
+    },
+    [resumeAutoScroll]
+  );
 
   const onTouchStart = useCallback(() => {
-    markInteracting();
-  }, [markInteracting]);
+    beginInteraction();
+  }, [beginInteraction]);
 
   const onTouchEnd = useCallback(() => {
-    unmarkInteracting();
-  }, [unmarkInteracting]);
+    resumeAutoScroll();
+  }, [resumeAutoScroll]);
 
-  // Wheel scroll for desktop
-  const onWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const el = scrollRef.current;
-    if (!el) return;
-    markInteracting();
-    el.scrollLeft += e.deltaY + e.deltaX;
-    unmarkInteracting();
-  }, [markInteracting, unmarkInteracting]);
+  const onWheel = useCallback(
+    (e: React.WheelEvent<HTMLDivElement>) => {
+      e.preventDefault();
+
+      const el = scrollRef.current;
+
+      if (!el) {
+        return;
+      }
+
+      beginInteraction();
+      el.scrollLeft += e.deltaY + e.deltaX;
+      syncFromScroll();
+      resumeAutoScroll(500);
+    },
+    [beginInteraction, resumeAutoScroll, syncFromScroll]
+  );
 
   return {
     scrollRef,
+    setCardRef,
     hasDragged,
     onMouseEnter,
     onMouseLeave,
     onPointerDown,
     onPointerMove,
-    onPointerUp,
+    onPointerUp: endPointerInteraction,
+    onPointerCancel: endPointerInteraction,
     onTouchStart,
     onTouchEnd,
+    onTouchCancel: onTouchEnd,
     onWheel,
   };
 }
 
-
-
-/* ── Card with 3D coverflow transform ── */
 function CoverflowCard({
   work,
-  index,
-  scrollRef,
+  cardPosition,
+  setCardRef,
   onClick,
 }: {
-  work: { src: string; title: string; category: string };
-  index: number;
-  scrollRef: React.RefObject<HTMLDivElement>;
+  work: PortfolioWork;
+  cardPosition: number;
+  setCardRef: (node: HTMLDivElement | null, position: number) => void;
   onClick: () => void;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState({ scale: 0.75, rotateY: 0, translateZ: 0, opacity: 0.6 });
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    const card = cardRef.current;
-    if (!el || !card) return;
-
-    let raf: number;
-    const update = () => {
-      const containerCenter = el.scrollLeft + el.clientWidth / 2;
-      const cardCenter = card.offsetLeft + CARD_WIDTH / 2;
-      const distance = cardCenter - containerCenter;
-      const maxDist = el.clientWidth / 2;
-      const normalized = Math.max(-1, Math.min(1, distance / maxDist));
-      const absNorm = Math.abs(normalized);
-
-      const scale = 1 - absNorm * 0.35;
-      const rotateY = normalized * -45;
-      const translateZ = (1 - absNorm) * 50;
-      const opacity = 1 - absNorm * 0.5;
-
-      setTransform({ scale, rotateY, translateZ, opacity });
-      raf = requestAnimationFrame(update);
-    };
-    raf = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(raf);
-  }, [scrollRef, index]);
-
   return (
     <div
-      ref={cardRef}
-      data-card-index={index}
+      ref={(node) => setCardRef(node, cardPosition)}
+      data-card-position={cardPosition}
       className="group relative flex-shrink-0 cursor-pointer select-none bg-secondary"
       style={{
         width: `${CARD_WIDTH}px`,
         padding: "18px 4px",
-        transform: `perspective(1000px) rotateY(${transform.rotateY}deg) scale(${transform.scale}) translateZ(${transform.translateZ}px)`,
-        opacity: transform.opacity,
-        transition: "opacity 0.1s ease-out",
+        transform: "perspective(1000px) scale(0.75)",
+        opacity: 0.6,
+        transition: "opacity 0.12s linear",
         transformStyle: "preserve-3d",
-        zIndex: Math.round(transform.scale * 100),
+        willChange: "transform, opacity",
+        zIndex: 1,
       }}
       onClick={onClick}
     >
@@ -311,12 +566,11 @@ function CoverflowCard({
   );
 }
 
-/* ── Main component ── */
 const PortfolioSection = () => {
   const { t } = useI18n();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const works = [
+  const works: PortfolioWork[] = [
     { src: portfolio1, title: t("workVogue"), category: t("catEditorial") },
     { src: portfolio2, title: t("workBeauty"), category: t("catHauteCouture") },
     { src: portfolio3, title: t("workMilan"), category: t("catBeauty") },
@@ -339,17 +593,17 @@ const PortfolioSection = () => {
     { src: portfolio21, title: t("workRunwayFloral"), category: t("catHauteCouture") },
   ];
 
+  const tripled = [...works, ...works, ...works];
+  const controls = useCoverflowScroll(works.length, tripled.length);
+  const lightbox = lightboxIndex !== null ? works[lightboxIndex] : null;
+  const lightboxTouchX = useRef(0);
+
   const openLightbox = useCallback(
     (index: number) => {
       setLightboxIndex(((index % works.length) + works.length) % works.length);
     },
     [works.length]
   );
-
-  const controls = useCoverflowScroll(works.length);
-
-  const lightbox = lightboxIndex !== null ? works[lightboxIndex] : null;
-  const lightboxTouchX = useRef(0);
 
   const goNext = useCallback(() => {
     setLightboxIndex((prev) => (prev !== null ? (prev + 1) % works.length : null));
@@ -359,29 +613,35 @@ const PortfolioSection = () => {
     setLightboxIndex((prev) => (prev !== null ? (prev - 1 + works.length) % works.length : null));
   }, [works.length]);
 
-  // Keyboard navigation
   useEffect(() => {
-    if (lightboxIndex === null) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") goNext();
-      else if (e.key === "ArrowLeft") goPrev();
-      else if (e.key === "Escape") setLightboxIndex(null);
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [lightboxIndex, goNext, goPrev]);
+    if (lightboxIndex === null) {
+      return;
+    }
 
-  // Render 3x copies for infinite scrolling
-  const tripled = [...works, ...works, ...works];
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        goNext();
+      } else if (e.key === "ArrowLeft") {
+        goPrev();
+      } else if (e.key === "Escape") {
+        setLightboxIndex(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [goNext, goPrev, lightboxIndex]);
 
   return (
-    <section id="portfolio" className="px-0 py-12 md:py-24 overflow-hidden">
-      <div className="mb-8 md:mb-16 text-center px-6">
+    <section id="portfolio" className="overflow-hidden px-0 py-12 md:py-24">
+      <div className="mb-8 px-6 text-center md:mb-16">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">{t("portfolioLabel")}</p>
         <h2 className="font-display text-4xl font-medium italic text-foreground md:text-5xl">{t("portfolioTitle")}</h2>
       </div>
 
-      {/* Coverflow carousel */}
       <div
         ref={controls.scrollRef}
         className="flex items-center cursor-grab overflow-x-auto [&::-webkit-scrollbar]:hidden"
@@ -390,22 +650,28 @@ const PortfolioSection = () => {
           gap: `${CARD_GAP}px`,
           paddingTop: "40px",
           paddingBottom: "40px",
+          overflowY: "hidden",
+          overscrollBehaviorX: "contain",
+          WebkitOverflowScrolling: "touch",
+          scrollBehavior: "auto",
         }}
         onMouseEnter={controls.onMouseEnter}
         onMouseLeave={controls.onMouseLeave}
         onPointerDown={controls.onPointerDown}
         onPointerMove={controls.onPointerMove}
         onPointerUp={controls.onPointerUp}
+        onPointerCancel={controls.onPointerCancel}
         onTouchStart={controls.onTouchStart}
         onTouchEnd={controls.onTouchEnd}
+        onTouchCancel={controls.onTouchCancel}
         onWheel={controls.onWheel}
       >
         {tripled.map((work, i) => (
           <CoverflowCard
             key={i}
             work={work}
-            index={i % works.length}
-            scrollRef={controls.scrollRef as React.RefObject<HTMLDivElement>}
+            cardPosition={i}
+            setCardRef={controls.setCardRef}
             onClick={() => {
               if (!controls.hasDragged.current) {
                 openLightbox(i % works.length);
@@ -415,7 +681,6 @@ const PortfolioSection = () => {
         ))}
       </div>
 
-      {/* Lightbox */}
       {lightbox && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
@@ -426,22 +691,27 @@ const PortfolioSection = () => {
           }}
           onTouchEnd={(e) => {
             const dx = e.changedTouches[0].clientX - lightboxTouchX.current;
+
             if (Math.abs(dx) > 50) {
               e.stopPropagation();
-              if (dx < 0) goNext();
-              else goPrev();
+
+              if (dx < 0) {
+                goNext();
+              } else {
+                goPrev();
+              }
             }
           }}
         >
           <button
-            className="absolute top-6 right-6 text-foreground/70 hover:text-foreground transition-colors z-50"
+            className="absolute right-6 top-6 z-50 text-foreground/70 transition-colors hover:text-foreground"
             onClick={() => setLightboxIndex(null)}
           >
             <X size={32} />
           </button>
 
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors z-50 p-2"
+            className="absolute left-4 top-1/2 z-50 -translate-y-1/2 p-2 text-foreground/50 transition-colors hover:text-foreground"
             onClick={(e) => {
               e.stopPropagation();
               goPrev();
@@ -451,7 +721,7 @@ const PortfolioSection = () => {
           </button>
 
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors z-50 p-2"
+            className="absolute right-4 top-1/2 z-50 -translate-y-1/2 p-2 text-foreground/50 transition-colors hover:text-foreground"
             onClick={(e) => {
               e.stopPropagation();
               goNext();
@@ -460,12 +730,12 @@ const PortfolioSection = () => {
             <ChevronRight size={40} />
           </button>
 
-          <div className="max-w-[90vw] max-h-[85vh] flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+          <div className="flex max-h-[85vh] max-w-[90vw] flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img
               key={lightboxIndex}
               src={lightbox.src}
               alt={lightbox.title}
-              className="max-w-full max-h-[75vh] object-contain animate-scale-in"
+              className="max-h-[75vh] max-w-full animate-scale-in object-contain"
             />
             <div className="mt-4 text-center">
               <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary">{lightbox.category}</p>
