@@ -396,6 +396,8 @@ const PortfolioSection = () => {
         onPointerDown={controls.onPointerDown}
         onPointerMove={controls.onPointerMove}
         onPointerUp={controls.onPointerUp}
+        onTouchStart={controls.onTouchStart}
+        onTouchEnd={controls.onTouchEnd}
         onWheel={controls.onWheel}
       >
         {tripled.map((work, i) => (
