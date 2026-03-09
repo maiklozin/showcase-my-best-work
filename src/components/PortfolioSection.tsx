@@ -232,19 +232,8 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
     onWheel,
   };
 }
-  return {
-    scrollRef,
-    hasDragged,
-    onMouseEnter,
-    onMouseLeave,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    onWheel,
-    updateCenter,
-    resetIfNeeded,
-  };
-}
+
+
 
 /* ── Card with 3D coverflow transform ── */
 function CoverflowCard({
