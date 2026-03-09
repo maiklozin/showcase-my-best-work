@@ -29,6 +29,7 @@ const PERF_COUNT = 12;
 const AUTO_SCROLL_PX_PER_SECOND = 36;
 const AUTO_SCROLL_RESUME_DELAY_MS = 900;
 const MAX_ANIMATION_FRAME_MS = 32;
+const DRAG_THRESHOLD_PX = 6;
 const TICK_COOLDOWN_MS = 55;
 const MAX_BURST_TICKS = 4;
 
@@ -140,6 +141,7 @@ function playTick(delaySeconds = 0) {
     }
 
     const now = performance.now();
+
     if (delaySeconds === 0 && now - tickAudio.lastPlayAt < TICK_COOLDOWN_MS) {
       return;
     }
@@ -183,19 +185,21 @@ const FilmPerforations = ({ side }: { side: "top" | "bottom" }) => (
 );
 
 function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterChange?: (index: number) => void) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const hasDragged = useRef(false);
+  const isPointerDown = useRef(false);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
-  const dragScrollLeft = useRef(0);
-  const hasDragged = useRef(false);
+  const dragStartY = useRef(0);
+  const dragStartOffset = useRef(0);
+  const positionRef = useRef(0);
   const lastCenterIndex = useRef(-1);
   const lastCenterPosition = useRef<number | null>(null);
   const isPaused = useRef(false);
   const interactionTimeout = useRef<ReturnType<typeof setTimeout>>();
   const lastAnimationFrameAt = useRef(0);
-  const touchStartX = useRef(0);
-  const touchStartScrollLeft = useRef(0);
 
   const singleWidth = itemCount * STEP;
 
@@ -203,60 +207,22 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     cardRefs.current[position] = node;
   }, []);
 
-  const resetIfNeeded = useCallback(() => {
-    const el = scrollRef.current;
-
-    if (!el) {
-      return;
-    }
-
-    if (el.scrollLeft >= singleWidth * 2) {
-      el.scrollLeft -= singleWidth;
-    } else if (el.scrollLeft < singleWidth * 0.5) {
-      el.scrollLeft += singleWidth;
+  const normalizePosition = useCallback(() => {
+    if (positionRef.current >= singleWidth * 2) {
+      positionRef.current -= singleWidth;
+    } else if (positionRef.current < singleWidth * 0.5) {
+      positionRef.current += singleWidth;
     }
   }, [singleWidth]);
 
-  const updateCardTransforms = useCallback(() => {
-    const el = scrollRef.current;
-
-    if (!el) {
-      return;
-    }
-
-    const containerCenter = el.scrollLeft + el.clientWidth / 2;
-    const maxDist = Math.max(el.clientWidth / 2, STEP);
-
-    for (let position = 0; position < renderedCount; position += 1) {
-      const card = cardRefs.current[position];
-
-      if (!card) {
-        continue;
-      }
-
-      const cardCenter = position * STEP + CARD_WIDTH / 2;
-      const distance = cardCenter - containerCenter;
-      const normalized = Math.max(-1.25, Math.min(1.25, distance / maxDist));
-      const absNorm = Math.abs(normalized);
-      const scale = Math.max(0.72, 1 - absNorm * 0.35);
-      const rotateY = normalized * -45;
-      const translateZ = Math.max(0, (1 - Math.min(absNorm, 1)) * 50);
-      const opacity = Math.max(0.35, 1 - absNorm * 0.5);
-
-      card.style.transform = `perspective(1000px) rotateY(${rotateY}deg) scale(${scale}) translateZ(${translateZ}px)`;
-      card.style.opacity = opacity.toFixed(3);
-      card.style.zIndex = String(Math.round((1.5 - absNorm) * 100));
-    }
-  }, [renderedCount]);
-
   const updateCenter = useCallback(() => {
-    const el = scrollRef.current;
+    const viewport = viewportRef.current;
 
-    if (!el) {
+    if (!viewport) {
       return;
     }
 
-    const center = el.scrollLeft + el.clientWidth / 2;
+    const center = positionRef.current + viewport.clientWidth / 2;
     const idx = Math.round(center / STEP) % itemCount;
     const normalizedIdx = ((idx % itemCount) + itemCount) % itemCount;
 
@@ -280,10 +246,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
         }
       }
 
-      const crossedSteps = Math.max(
-        1,
-        Math.min(MAX_BURST_TICKS, Math.round(Math.abs(movement) / STEP) || 1)
-      );
+      const crossedSteps = Math.max(1, Math.min(MAX_BURST_TICKS, Math.round(Math.abs(movement) / STEP) || 1));
 
       for (let tickIndex = 0; tickIndex < crossedSteps; tickIndex += 1) {
         playTick(tickIndex * 0.018);
@@ -296,11 +259,50 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     lastCenterPosition.current = center;
   }, [itemCount, onCenterChange, singleWidth]);
 
-  const syncFromScroll = useCallback(() => {
-    resetIfNeeded();
+  const updateCardTransforms = useCallback(() => {
+    const viewport = viewportRef.current;
+
+    if (!viewport) {
+      return;
+    }
+
+    const containerCenter = positionRef.current + viewport.clientWidth / 2;
+    const maxDist = Math.max(viewport.clientWidth / 2, STEP);
+
+    for (let position = 0; position < renderedCount; position += 1) {
+      const card = cardRefs.current[position];
+
+      if (!card) {
+        continue;
+      }
+
+      const cardCenter = position * STEP + CARD_WIDTH / 2;
+      const distance = cardCenter - containerCenter;
+      const normalized = Math.max(-1.25, Math.min(1.25, distance / maxDist));
+      const absNorm = Math.abs(normalized);
+      const scale = Math.max(0.72, 1 - absNorm * 0.35);
+      const rotateY = normalized * -45;
+      const translateZ = Math.max(0, (1 - Math.min(absNorm, 1)) * 50);
+      const opacity = Math.max(0.35, 1 - absNorm * 0.5);
+
+      card.style.transform = `perspective(1000px) rotateY(${rotateY}deg) scale(${scale}) translateZ(${translateZ}px)`;
+      card.style.opacity = opacity.toFixed(3);
+      card.style.zIndex = String(Math.round((1.5 - absNorm) * 100));
+    }
+  }, [renderedCount]);
+
+  const syncLayout = useCallback(() => {
+    const track = trackRef.current;
+
+    if (!track) {
+      return;
+    }
+
+    normalizePosition();
+    track.style.transform = `translate3d(${-positionRef.current}px, 0, 0)`;
     updateCenter();
     updateCardTransforms();
-  }, [resetIfNeeded, updateCenter, updateCardTransforms]);
+  }, [normalizePosition, updateCardTransforms, updateCenter]);
 
   const pauseAutoScroll = useCallback(() => {
     isPaused.current = true;
@@ -338,14 +340,8 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
   }, []);
 
   useEffect(() => {
-    const el = scrollRef.current;
-
-    if (!el) {
-      return;
-    }
-
-    el.scrollLeft = singleWidth;
-    syncFromScroll();
+    positionRef.current = singleWidth;
+    syncLayout();
 
     let raf = 0;
 
@@ -355,8 +351,8 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       lastAnimationFrameAt.current = timestamp;
 
       if (!document.hidden && !isPaused.current && !isDragging.current) {
-        el.scrollLeft += AUTO_SCROLL_PX_PER_SECOND * (deltaMs / 1000);
-        syncFromScroll();
+        positionRef.current += AUTO_SCROLL_PX_PER_SECOND * (deltaMs / 1000);
+        syncLayout();
       }
 
       raf = requestAnimationFrame(animate);
@@ -366,39 +362,21 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
     return () => {
       cancelAnimationFrame(raf);
-      lastAnimationFrameAt.current = 0;
       clearTimeout(interactionTimeout.current);
+      lastAnimationFrameAt.current = 0;
     };
-  }, [singleWidth, syncFromScroll]);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-
-    if (!el) {
-      return;
-    }
-
-    const onScroll = () => {
-      syncFromScroll();
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-    };
-  }, [syncFromScroll]);
+  }, [singleWidth, syncLayout]);
 
   useEffect(() => {
     const handleResize = () => {
-      syncFromScroll();
+      syncLayout();
     };
 
     const handleVisibilityChange = () => {
       lastAnimationFrameAt.current = 0;
 
       if (!document.hidden) {
-        syncFromScroll();
+        syncLayout();
         resumeAutoScroll(120);
       }
     };
@@ -410,121 +388,92 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [resumeAutoScroll, syncFromScroll]);
+  }, [resumeAutoScroll, syncLayout]);
 
   const onMouseEnter = useCallback(() => {
     pauseAutoScroll();
   }, [pauseAutoScroll]);
 
   const onMouseLeave = useCallback(() => {
-    resumeAutoScroll(120);
+    if (!isPointerDown.current) {
+      resumeAutoScroll(120);
+    }
   }, [resumeAutoScroll]);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === "mouse" && e.button !== 0) {
+        return;
+      }
+
       beginInteraction();
+      isPointerDown.current = true;
+      isDragging.current = false;
       hasDragged.current = false;
       dragStartX.current = e.clientX;
-      dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-      isDragging.current = e.pointerType !== "touch";
-
-      if (isDragging.current) {
-        e.currentTarget.setPointerCapture?.(e.pointerId);
-      }
+      dragStartY.current = e.clientY;
+      dragStartOffset.current = positionRef.current;
     },
     [beginInteraction]
   );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!isDragging.current || !scrollRef.current) {
+      if (!isPointerDown.current) {
         return;
       }
 
       const dx = e.clientX - dragStartX.current;
+      const dy = e.clientY - dragStartY.current;
 
-      if (Math.abs(dx) > 4) {
+      if (!isDragging.current) {
+        if (Math.abs(dx) < DRAG_THRESHOLD_PX) {
+          return;
+        }
+
+        if (e.pointerType !== "mouse" && Math.abs(dy) > Math.abs(dx)) {
+          return;
+        }
+
+        isDragging.current = true;
         hasDragged.current = true;
       }
 
-      scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-      syncFromScroll();
+      positionRef.current = dragStartOffset.current - dx;
+      syncLayout();
     },
-    [syncFromScroll]
+    [syncLayout]
   );
 
-  const endPointerInteraction = useCallback(
-    (e?: React.PointerEvent<HTMLDivElement>) => {
-      if (e?.currentTarget.hasPointerCapture?.(e.pointerId)) {
-        e.currentTarget.releasePointerCapture?.(e.pointerId);
-      }
-
-      isDragging.current = false;
-      resumeAutoScroll();
-    },
-    [resumeAutoScroll]
-  );
-
-  const onTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    beginInteraction();
-    touchStartX.current = e.touches[0]?.clientX ?? 0;
-    touchStartScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-  }, [beginInteraction]);
-
-  const onTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    const touchX = e.touches[0]?.clientX ?? 0;
-
-    if (touchStartX.current === 0) {
-      touchStartX.current = touchX;
-      return;
-    }
-
-    const currentScrollLeft = scrollRef.current?.scrollLeft ?? touchStartScrollLeft.current;
-    const horizontalDelta = Math.abs(touchX - touchStartX.current);
-    const scrollDelta = Math.abs(currentScrollLeft - touchStartScrollLeft.current);
-
-    if (horizontalDelta > 4 || scrollDelta > 4) {
-      hasDragged.current = true;
-    }
-  }, []);
-
-  const onTouchEnd = useCallback(() => {
-    touchStartX.current = 0;
+  const endInteraction = useCallback(() => {
+    isPointerDown.current = false;
+    isDragging.current = false;
     resumeAutoScroll();
   }, [resumeAutoScroll]);
 
   const onWheel = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
       e.preventDefault();
-
-      const el = scrollRef.current;
-
-      if (!el) {
-        return;
-      }
-
       beginInteraction();
-      el.scrollLeft += e.deltaY + e.deltaX;
-      syncFromScroll();
+      positionRef.current += e.deltaY + e.deltaX;
+      hasDragged.current = true;
+      syncLayout();
       resumeAutoScroll(500);
     },
-    [beginInteraction, resumeAutoScroll, syncFromScroll]
+    [beginInteraction, resumeAutoScroll, syncLayout]
   );
 
   return {
-    scrollRef,
+    viewportRef,
+    trackRef,
     setCardRef,
     hasDragged,
     onMouseEnter,
     onMouseLeave,
     onPointerDown,
     onPointerMove,
-    onPointerUp: endPointerInteraction,
-    onPointerCancel: endPointerInteraction,
-    onTouchStart,
-    onTouchMove,
-    onTouchEnd,
-    onTouchCancel: onTouchEnd,
+    onPointerUp: endInteraction,
+    onPointerCancel: endInteraction,
     onWheel,
   };
 }
@@ -653,17 +602,13 @@ const PortfolioSection = () => {
       </div>
 
       <div
-        ref={controls.scrollRef}
-        className="flex items-center cursor-grab overflow-x-auto [&::-webkit-scrollbar]:hidden"
+        ref={controls.viewportRef}
+        className="cursor-grab overflow-hidden"
         style={{
-          scrollbarWidth: "none",
-          gap: `${CARD_GAP}px`,
           paddingTop: "40px",
           paddingBottom: "40px",
-          overflowY: "hidden",
-          overscrollBehaviorX: "contain",
-          WebkitOverflowScrolling: "auto",
-          scrollBehavior: "auto",
+          touchAction: "pan-y",
+          userSelect: "none",
         }}
         onMouseEnter={controls.onMouseEnter}
         onMouseLeave={controls.onMouseLeave}
@@ -671,25 +616,32 @@ const PortfolioSection = () => {
         onPointerMove={controls.onPointerMove}
         onPointerUp={controls.onPointerUp}
         onPointerCancel={controls.onPointerCancel}
-        onTouchStart={controls.onTouchStart}
-        onTouchMove={controls.onTouchMove}
-        onTouchEnd={controls.onTouchEnd}
-        onTouchCancel={controls.onTouchCancel}
         onWheel={controls.onWheel}
       >
-        {tripled.map((work, i) => (
-          <CoverflowCard
-            key={i}
-            work={work}
-            cardPosition={i}
-            setCardRef={controls.setCardRef}
-            onClick={() => {
-              if (!controls.hasDragged.current) {
-                openLightbox(i % works.length);
-              }
-            }}
-          />
-        ))}
+        <div
+          ref={controls.trackRef}
+          className="flex items-center"
+          style={{
+            gap: `${CARD_GAP}px`,
+            width: "max-content",
+            willChange: "transform",
+            transform: "translate3d(0, 0, 0)",
+          }}
+        >
+          {tripled.map((work, i) => (
+            <CoverflowCard
+              key={i}
+              work={work}
+              cardPosition={i}
+              setCardRef={controls.setCardRef}
+              onClick={() => {
+                if (!controls.hasDragged.current) {
+                  openLightbox(i % works.length);
+                }
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       {lightbox && (
