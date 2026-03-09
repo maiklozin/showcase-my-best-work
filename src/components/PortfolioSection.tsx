@@ -29,7 +29,6 @@ const PERF_COUNT = 12;
 const AUTO_SCROLL_PX_PER_SECOND = 36;
 const AUTO_SCROLL_RESUME_DELAY_MS = 900;
 const MAX_ANIMATION_FRAME_MS = 32;
-const PROGRAMMATIC_SCROLL_GUARD_MS = 48;
 const TICK_COOLDOWN_MS = 55;
 const MAX_BURST_TICKS = 4;
 
@@ -195,7 +194,8 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
   const isPaused = useRef(false);
   const interactionTimeout = useRef<ReturnType<typeof setTimeout>>();
   const lastAnimationFrameAt = useRef(0);
-  const ignoreScrollEventsUntil = useRef(0);
+  const touchStartX = useRef(0);
+  const touchStartScrollLeft = useRef(0);
 
   const singleWidth = itemCount * STEP;
 
@@ -344,7 +344,6 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       return;
     }
 
-    ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
     el.scrollLeft = singleWidth;
     syncFromScroll();
 
@@ -356,7 +355,6 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       lastAnimationFrameAt.current = timestamp;
 
       if (!document.hidden && !isPaused.current && !isDragging.current) {
-        ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
         el.scrollLeft += AUTO_SCROLL_PX_PER_SECOND * (deltaMs / 1000);
         syncFromScroll();
       }
@@ -382,14 +380,6 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
     const onScroll = () => {
       syncFromScroll();
-
-      if (performance.now() <= ignoreScrollEventsUntil.current) {
-        return;
-      }
-
-      hasDragged.current = true;
-      pauseAutoScroll();
-      resumeAutoScroll();
     };
 
     el.addEventListener("scroll", onScroll, { passive: true });
@@ -397,7 +387,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     return () => {
       el.removeEventListener("scroll", onScroll);
     };
-  }, [pauseAutoScroll, resumeAutoScroll, syncFromScroll]);
+  }, [syncFromScroll]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -408,7 +398,6 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       lastAnimationFrameAt.current = 0;
 
       if (!document.hidden) {
-        ignoreScrollEventsUntil.current = performance.now() + PROGRAMMATIC_SCROLL_GUARD_MS;
         syncFromScroll();
         resumeAutoScroll(120);
       }
@@ -476,11 +465,31 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     [resumeAutoScroll]
   );
 
-  const onTouchStart = useCallback(() => {
+  const onTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     beginInteraction();
+    touchStartX.current = e.touches[0]?.clientX ?? 0;
+    touchStartScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
   }, [beginInteraction]);
 
+  const onTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    const touchX = e.touches[0]?.clientX ?? 0;
+
+    if (touchStartX.current === 0) {
+      touchStartX.current = touchX;
+      return;
+    }
+
+    const currentScrollLeft = scrollRef.current?.scrollLeft ?? touchStartScrollLeft.current;
+    const horizontalDelta = Math.abs(touchX - touchStartX.current);
+    const scrollDelta = Math.abs(currentScrollLeft - touchStartScrollLeft.current);
+
+    if (horizontalDelta > 4 || scrollDelta > 4) {
+      hasDragged.current = true;
+    }
+  }, []);
+
   const onTouchEnd = useCallback(() => {
+    touchStartX.current = 0;
     resumeAutoScroll();
   }, [resumeAutoScroll]);
 
@@ -513,6 +522,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     onPointerUp: endPointerInteraction,
     onPointerCancel: endPointerInteraction,
     onTouchStart,
+    onTouchMove,
     onTouchEnd,
     onTouchCancel: onTouchEnd,
     onWheel,
@@ -652,7 +662,7 @@ const PortfolioSection = () => {
           paddingBottom: "40px",
           overflowY: "hidden",
           overscrollBehaviorX: "contain",
-          WebkitOverflowScrolling: "touch",
+          WebkitOverflowScrolling: "auto",
           scrollBehavior: "auto",
         }}
         onMouseEnter={controls.onMouseEnter}
@@ -662,6 +672,7 @@ const PortfolioSection = () => {
         onPointerUp={controls.onPointerUp}
         onPointerCancel={controls.onPointerCancel}
         onTouchStart={controls.onTouchStart}
+        onTouchMove={controls.onTouchMove}
         onTouchEnd={controls.onTouchEnd}
         onTouchCancel={controls.onTouchCancel}
         onWheel={controls.onWheel}
