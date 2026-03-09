@@ -37,20 +37,33 @@ function playTick() {
     const ctx = audioCtxRef.current;
     if (ctx.state === "suspended") ctx.resume();
 
-    const osc = ctx.createOscillator();
+    // Short noise burst = ratchet/mechanical click sound
+    const bufferSize = Math.floor(ctx.sampleRate * 0.012); // 12ms
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      // Rapid decay noise
+      const decay = 1 - i / bufferSize;
+      data[i] = (Math.random() * 2 - 1) * decay * decay;
+    }
+
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+
+    // Bandpass filter to shape the click
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.value = 3000;
+    filter.Q.value = 1.5;
+
     const gain = ctx.createGain();
-    osc.connect(gain);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.015);
+
+    source.connect(filter);
+    filter.connect(gain);
     gain.connect(ctx.destination);
-
-    osc.type = "square";
-    osc.frequency.setValueAtTime(1800, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.03);
-
-    gain.gain.setValueAtTime(0.08, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.05);
+    source.start(ctx.currentTime);
   } catch {
     // silently ignore if audio not supported
   }
@@ -378,7 +391,8 @@ const PortfolioSection = () => {
       {/* Lightbox */}
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in"
+          style={{ zIndex: 9999 }}
           onClick={() => setLightboxIndex(null)}
           onTouchStart={(e) => {
             lightboxTouchX.current = e.touches[0].clientX;
