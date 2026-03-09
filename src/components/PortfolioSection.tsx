@@ -595,7 +595,7 @@ const PortfolioSection = () => {
   }, [goNext, goPrev, lightboxIndex]);
 
   return (
-    <section id="portfolio" className="overflow-hidden px-0 py-12 md:py-24">
+    <section id="portfolio" className="overflow-hidden px-0 pt-12 pb-4 md:pt-24 md:pb-10">
       <div className="mb-8 px-6 text-center md:mb-16">
         <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">{t("portfolioLabel")}</p>
         <h2 className="font-display text-4xl font-medium italic text-foreground md:text-5xl">{t("portfolioTitle")}</h2>

@@ -13,7 +13,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="px-6 py-12 md:py-24 md:px-12 lg:px-24">
+    <section id="about" className="px-6 pt-4 pb-12 md:px-12 md:pt-10 md:pb-24 lg:px-24">
       <div className="mx-auto max-w-4xl">
         <div className="mb-16 text-center">
           <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
