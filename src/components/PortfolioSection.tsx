@@ -95,19 +95,20 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
   const autoSpeed = useRef(0.6);
   const isPaused = useRef(false);
   const isUserInteracting = useRef(false);
+  const interactionTimeout = useRef<ReturnType<typeof setTimeout>>();
+
+  const singleWidth = itemCount * STEP;
 
   // Seamless infinite scroll reset
   const resetIfNeeded = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const singleWidth = itemCount * STEP;
-    // We render 3x copies, so keep scroll in the middle third
     if (el.scrollLeft >= singleWidth * 2) {
       el.scrollLeft -= singleWidth;
     } else if (el.scrollLeft < singleWidth * 0.5) {
       el.scrollLeft += singleWidth;
     }
-  }, [itemCount]);
+  }, [singleWidth]);
 
   // Track which card is in center and play tick
   const updateCenter = useCallback(() => {
@@ -125,12 +126,23 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
     }
   }, [itemCount, onCenterChange]);
 
+  // Listen for native scroll events (catches touch scroll on mobile)
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      resetIfNeeded();
+      updateCenter();
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [resetIfNeeded, updateCenter]);
+
   // Auto scroll
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    // Start in the middle third
-    el.scrollLeft = itemCount * STEP;
+    el.scrollLeft = singleWidth;
 
     let raf: number;
     const animate = () => {
@@ -143,7 +155,21 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
     };
     raf = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(raf);
-  }, [itemCount, resetIfNeeded, updateCenter]);
+  }, [singleWidth, resetIfNeeded, updateCenter]);
+
+  const markInteracting = useCallback(() => {
+    isUserInteracting.current = true;
+    isPaused.current = true;
+    clearTimeout(interactionTimeout.current);
+  }, []);
+
+  const unmarkInteracting = useCallback(() => {
+    clearTimeout(interactionTimeout.current);
+    interactionTimeout.current = setTimeout(() => {
+      isUserInteracting.current = false;
+      isPaused.current = false;
+    }, 400);
+  }, []);
 
   const onMouseEnter = useCallback(() => {
     isPaused.current = true;
@@ -155,46 +181,43 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
   }, []);
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
-    isDragging.current = true;
+    // Only manually control scroll on non-touch (let touch use native scroll)
+    isDragging.current = e.pointerType !== "touch";
     hasDragged.current = false;
-    isPaused.current = true;
-    isUserInteracting.current = true;
+    markInteracting();
     dragStartX.current = e.clientX;
     dragScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-  }, []);
+  }, [markInteracting]);
 
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging.current || !scrollRef.current) return;
     const dx = e.clientX - dragStartX.current;
     if (Math.abs(dx) > 5) hasDragged.current = true;
     scrollRef.current.scrollLeft = dragScrollLeft.current - dx;
-    resetIfNeeded();
-    updateCenter();
-  }, [resetIfNeeded, updateCenter]);
+  }, []);
 
   const onPointerUp = useCallback(() => {
     isDragging.current = false;
-    isPaused.current = false;
-    setTimeout(() => {
-      isUserInteracting.current = false;
-    }, 300);
-  }, []);
+    unmarkInteracting();
+  }, [unmarkInteracting]);
+
+  const onTouchStart = useCallback(() => {
+    markInteracting();
+  }, [markInteracting]);
+
+  const onTouchEnd = useCallback(() => {
+    unmarkInteracting();
+  }, [unmarkInteracting]);
 
   // Wheel scroll for desktop
   const onWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
     const el = scrollRef.current;
     if (!el) return;
-    isUserInteracting.current = true;
+    markInteracting();
     el.scrollLeft += e.deltaY + e.deltaX;
-    resetIfNeeded();
-    updateCenter();
-    // Reset user interacting after a pause
-    clearTimeout((onWheel as any)._timeout);
-    (onWheel as any)._timeout = setTimeout(() => {
-      isUserInteracting.current = false;
-    }, 300);
-  }, [resetIfNeeded, updateCenter]);
+    unmarkInteracting();
+  }, [markInteracting, unmarkInteracting]);
 
   return {
     scrollRef,
@@ -204,11 +227,13 @@ function useCoverflowScroll(itemCount: number, onCenterChange?: (index: number) 
     onPointerDown,
     onPointerMove,
     onPointerUp,
+    onTouchStart,
+    onTouchEnd,
     onWheel,
-    updateCenter,
-    resetIfNeeded,
   };
 }
+
+
 
 /* ── Card with 3D coverflow transform ── */
 function CoverflowCard({
@@ -371,6 +396,8 @@ const PortfolioSection = () => {
         onPointerDown={controls.onPointerDown}
         onPointerMove={controls.onPointerMove}
         onPointerUp={controls.onPointerUp}
+        onTouchStart={controls.onTouchStart}
+        onTouchEnd={controls.onTouchEnd}
         onWheel={controls.onWheel}
       >
         {tripled.map((work, i) => (
