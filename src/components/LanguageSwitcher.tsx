@@ -20,7 +20,7 @@ const LanguageSwitcher = () => {
       {showBookingCta ? (
         <a
           href="/contact#booking"
-          className={`${quietCtaSecondaryClass} bg-background/34 backdrop-blur-md`}
+          className={`${quietCtaSecondaryClass} bg-background/12 backdrop-blur-md`}
         >
           {copy.nav.booking}
         </a>
