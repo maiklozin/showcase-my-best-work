@@ -29,8 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const INSTAGRAM_USERNAME = "dara__es_";
+import { INSTAGRAM_DM_URL, INSTAGRAM_PROFILE_URL } from "@/lib/social";
 
 const HOURS = Array.from({ length: 13 }, (_, i) => {
   const h = i + 8;
@@ -174,7 +173,7 @@ const BookingSection = () => {
       await navigator.clipboard.writeText(pendingMessage);
       setCopied(true);
       setTimeout(() => {
-        window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, "_blank", "noopener,noreferrer");
+        window.open(INSTAGRAM_DM_URL, "_blank", "noopener,noreferrer");
       }, 500);
     } catch {
       window.prompt(t("bookingCopyFallback"), pendingMessage);
@@ -308,7 +307,7 @@ const BookingSection = () => {
         </div>
 
         <a
-          href="https://instagram.com/dara__es_"
+          href={INSTAGRAM_PROFILE_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="mb-8 inline-flex items-center justify-center gap-2 font-body text-xs text-muted-foreground transition-colors hover:text-primary"

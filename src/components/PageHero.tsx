@@ -5,6 +5,8 @@ type PageHeroLink = {
   href?: string;
   to?: string;
   label: string;
+  variant?: "primary" | "secondary";
+  external?: boolean;
 };
 
 type PageHeroProps = {
@@ -41,7 +43,13 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
               <a
                 key={link.href}
                 href={link.href}
-                className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className={
+                  link.variant === "primary"
+                    ? "border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
+                    : "border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                }
               >
                 {link.label}
               </a>
@@ -49,7 +57,11 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
               <NavLink
                 key={link.to}
                 to={link.to ?? "/"}
-                className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                className={
+                  link.variant === "primary"
+                    ? "border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
+                    : "border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                }
               >
                 {link.label}
               </NavLink>

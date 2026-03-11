@@ -6,6 +6,7 @@ import SeoHead from "@/components/SeoHead";
 import SiteHeaderNav from "@/components/SiteHeaderNav";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getPageSeo } from "@/lib/seo";
+import { INSTAGRAM_PROFILE_URL } from "@/lib/social";
 
 const ContactPage = () => {
   const { lang } = useI18n();
@@ -28,11 +29,16 @@ const ContactPage = () => {
       <PageHero
         eyebrow="Contact Dara Model"
         title="Bookings and collaborations in Mallorca, Palma de Mallorca, and Spain"
-        description="Reach out for editorials, commercial campaigns, bridal shoots, runway bookings, and brand collaborations. Dara is based in Mallorca and available for travel across Spain and Europe."
+        description="For bookings, collaborations, and availability, Instagram is the fastest way to reach Dara. Share your dates, location, and project details there or continue below with the booking form."
         imageAlt="Dara Model contact page portrait."
         links={[
-          { href: "/#portfolio", label: "Portfolio" },
-          { to: "/about", label: "About" },
+          {
+            href: INSTAGRAM_PROFILE_URL,
+            label: "Contact on Instagram",
+            variant: "primary",
+            external: true,
+          },
+          { href: "/#portfolio", label: "View Portfolio" },
         ]}
       />
 
