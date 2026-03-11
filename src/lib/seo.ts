@@ -3,8 +3,12 @@ import { Language } from "@/i18n/translations";
 export const SITE_URL = "https://daramodel.com";
 export const DEFAULT_ROBOTS =
   "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
-// Set this to `${SITE_URL}/og-image.jpg` after a real social preview image is added to `public/`.
-export const OG_IMAGE_URL: string | null = null;
+export const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
+export const OG_IMAGE_ALT =
+  "Dara Model social preview with fashion portrait, Mallorca location, and booking details.";
+export const OG_IMAGE_TYPE = "image/jpeg";
+export const OG_IMAGE_WIDTH = "1200";
+export const OG_IMAGE_HEIGHT = "630";
 
 type SeoFact = {
   label: string;

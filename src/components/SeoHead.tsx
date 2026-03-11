@@ -1,6 +1,15 @@
 import { useEffect } from "react";
 import { Language } from "@/i18n/translations";
-import { DEFAULT_ROBOTS, OG_IMAGE_URL, SITE_URL, getSeoCopy } from "@/lib/seo";
+import {
+  DEFAULT_ROBOTS,
+  OG_IMAGE_ALT,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_TYPE,
+  OG_IMAGE_URL,
+  OG_IMAGE_WIDTH,
+  SITE_URL,
+  getSeoCopy,
+} from "@/lib/seo";
 
 type SeoHeadProps = {
   lang: Language;
@@ -85,7 +94,20 @@ const SeoHead = ({
 
     if (imageUrl) {
       upsertMeta("meta[property='og:image']", { property: "og:image" }, imageUrl);
+      upsertMeta("meta[property='og:image:alt']", { property: "og:image:alt" }, OG_IMAGE_ALT);
+      upsertMeta("meta[property='og:image:type']", { property: "og:image:type" }, OG_IMAGE_TYPE);
+      upsertMeta(
+        "meta[property='og:image:width']",
+        { property: "og:image:width" },
+        OG_IMAGE_WIDTH
+      );
+      upsertMeta(
+        "meta[property='og:image:height']",
+        { property: "og:image:height" },
+        OG_IMAGE_HEIGHT
+      );
       upsertMeta("meta[name='twitter:image']", { name: "twitter:image" }, imageUrl);
+      upsertMeta("meta[name='twitter:image:alt']", { name: "twitter:image:alt" }, OG_IMAGE_ALT);
       upsertMeta(
         "meta[name='twitter:card']",
         { name: "twitter:card" },
@@ -93,7 +115,12 @@ const SeoHead = ({
       );
     } else {
       removeMeta("meta[property='og:image']");
+      removeMeta("meta[property='og:image:alt']");
+      removeMeta("meta[property='og:image:type']");
+      removeMeta("meta[property='og:image:width']");
+      removeMeta("meta[property='og:image:height']");
       removeMeta("meta[name='twitter:image']");
+      removeMeta("meta[name='twitter:image:alt']");
       upsertMeta("meta[name='twitter:card']", { name: "twitter:card" }, "summary");
     }
   }, [description, imageUrl, lang, pathname, robots, title, type]);
