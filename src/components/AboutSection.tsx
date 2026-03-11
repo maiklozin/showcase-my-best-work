@@ -1,5 +1,7 @@
 import InstagramIcon from "@/components/InstagramIcon";
 import { useI18n } from "@/i18n/I18nProvider";
+import { quietSocialChipClass, quietSocialHandleClass } from "@/lib/ctaStyles";
+import { INSTAGRAM_HANDLE, INSTAGRAM_PROFILE_URL } from "@/lib/social";
 
 const AboutSection = () => {
   const { t } = useI18n();
@@ -69,13 +71,13 @@ const AboutSection = () => {
                 {t("contactLabel")}
               </p>
               <a
-                href="https://instagram.com/dara__es_"
+                href={INSTAGRAM_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 rounded-lg border-2 border-primary bg-primary/10 px-8 py-4 font-body text-base font-semibold text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_25px_hsl(var(--primary)/0.4)]"
+                className={quietSocialChipClass}
               >
-                <InstagramIcon size={28} />
-                @dara__es_
+                <InstagramIcon size={16} className="transition-transform duration-300 group-hover:scale-105" />
+                <span className={quietSocialHandleClass}>{INSTAGRAM_HANDLE}</span>
               </a>
             </div>
           </div>

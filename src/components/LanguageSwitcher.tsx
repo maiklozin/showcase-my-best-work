@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Language, languageNames } from "@/i18n/translations";
+import { quietCtaSecondaryClass } from "@/lib/ctaStyles";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { Globe } from "lucide-react";
 import { useLocation } from "react-router-dom";
@@ -19,7 +20,7 @@ const LanguageSwitcher = () => {
       {showBookingCta ? (
         <a
           href="/contact#booking"
-          className="inline-flex items-center justify-center whitespace-nowrap border border-primary bg-primary/10 px-3 py-2 font-body text-[10px] uppercase tracking-[0.18em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:px-4 sm:text-[11px] sm:tracking-[0.22em]"
+          className={`${quietCtaSecondaryClass} bg-background/34 backdrop-blur-md`}
         >
           {copy.nav.booking}
         </a>
@@ -27,7 +28,7 @@ const LanguageSwitcher = () => {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 whitespace-nowrap border border-border bg-background/80 px-3 py-2 font-body text-[11px] uppercase tracking-[0.14em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:px-4 sm:text-xs sm:tracking-wider"
+          className="inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full border border-border/70 bg-background/72 px-3 py-2 font-body text-[10px] uppercase tracking-[0.16em] text-foreground/88 backdrop-blur-md transition-all duration-300 ease-out hover:border-primary/42 hover:bg-background/82 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 sm:min-h-[42px] sm:px-3.5 sm:text-[11px] sm:tracking-[0.2em]"
         >
           <Globe size={14} />
           {languageNames[lang]}

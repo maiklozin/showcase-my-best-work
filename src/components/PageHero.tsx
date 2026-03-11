@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import heroImage from "@/assets/hero.jpg";
 import { NavLink } from "@/components/NavLink";
+import { quietCtaPrimaryClass, quietCtaSecondaryClass } from "@/lib/ctaStyles";
 
 type PageHeroLink = {
   href?: string;
@@ -39,7 +40,7 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
         <p className="mt-6 max-w-2xl font-body text-sm leading-relaxed text-secondary-foreground md:text-base">
           {description}
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-7 flex max-w-lg flex-wrap items-center gap-2">
           {links.map((link) => (
             link.href ? (
               <a
@@ -49,11 +50,11 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
                 rel={link.external ? "noopener noreferrer" : undefined}
                 className={
                   link.variant === "primary"
-                    ? "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-primary bg-primary/10 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
-                    : "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-border bg-background/70 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:w-auto"
+                    ? quietCtaPrimaryClass
+                    : quietCtaSecondaryClass
                 }
               >
-                {link.icon ? <span className="shrink-0">{link.icon}</span> : null}
+                {link.icon ? <span className="shrink-0 opacity-90">{link.icon}</span> : null}
                 {link.label}
               </a>
             ) : (
@@ -62,11 +63,11 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
                 to={link.to ?? "/"}
                 className={
                   link.variant === "primary"
-                    ? "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-primary bg-primary/10 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
-                    : "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-border bg-background/70 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:w-auto"
+                    ? quietCtaPrimaryClass
+                    : quietCtaSecondaryClass
                 }
               >
-                {link.icon ? <span className="shrink-0">{link.icon}</span> : null}
+                {link.icon ? <span className="shrink-0 opacity-90">{link.icon}</span> : null}
                 {link.label}
               </NavLink>
             )

@@ -1,6 +1,7 @@
 import { useI18n } from "@/i18n/I18nProvider";
 import InstagramIcon from "@/components/InstagramIcon";
 import SiteFooterLinks from "@/components/SiteFooterLinks";
+import { quietSocialChipClass, quietSocialHandleClass } from "@/lib/ctaStyles";
 import { INSTAGRAM_HANDLE, INSTAGRAM_PROFILE_URL } from "@/lib/social";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -23,10 +24,10 @@ const ContactSection = () => {
         href={INSTAGRAM_PROFILE_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-4 rounded-xl border-2 border-primary bg-primary/10 px-10 py-5 font-body uppercase tracking-[0.3em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)]"
+        className={quietSocialChipClass}
       >
-        <InstagramIcon size={36} className="transition-transform duration-300 group-hover:scale-110" />
-        <span className="text-xl font-bold md:text-2xl">{INSTAGRAM_HANDLE}</span>
+        <InstagramIcon size={16} className="transition-transform duration-300 group-hover:scale-105" />
+        <span className={quietSocialHandleClass}>{INSTAGRAM_HANDLE}</span>
       </a>
       <div className="mt-14">
         <p className="mb-4 font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">

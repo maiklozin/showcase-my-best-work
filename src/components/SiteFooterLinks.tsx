@@ -1,5 +1,6 @@
 import { NavLink } from "@/components/NavLink";
 import { useI18n } from "@/i18n/I18nProvider";
+import { quietCtaTertiaryClass } from "@/lib/ctaStyles";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { useLocation } from "react-router-dom";
 
@@ -24,7 +25,7 @@ const SiteFooterLinks = () => {
           <a
             key={link.anchor}
             href={portfolioHref}
-            className="inline-flex items-center justify-center border border-border bg-background/60 px-4 py-2 text-center font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            className={`${quietCtaTertiaryClass} bg-background/18 backdrop-blur-sm`}
           >
             {link.label}
           </a>
@@ -32,8 +33,8 @@ const SiteFooterLinks = () => {
           <NavLink
             key={link.to}
             to={link.to ?? "/"}
-            className="inline-flex items-center justify-center border border-border bg-background/60 px-4 py-2 text-center font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-            activeClassName="border-primary text-primary"
+            className={`${quietCtaTertiaryClass} bg-background/18 backdrop-blur-sm`}
+            activeClassName="border-primary/24 bg-background/32 text-primary"
           >
             {link.label}
           </NavLink>
