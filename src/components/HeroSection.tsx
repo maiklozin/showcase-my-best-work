@@ -30,12 +30,12 @@ const HeroSection = () => {
           className="mt-12 flex flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-up"
           style={{ animationDelay: "0.8s" }}
         >
-          <NavLink
-            to="/portfolio"
+          <a
+            href="#portfolio"
             className="border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             View Portfolio
-          </NavLink>
+          </a>
           <NavLink
             to="/contact"
             className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"

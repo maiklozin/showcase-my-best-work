@@ -31,7 +31,7 @@ const ContactPage = () => {
         description="Reach out for editorials, commercial campaigns, bridal shoots, runway bookings, and brand collaborations. Dara is based in Mallorca and available for travel across Spain and Europe."
         imageAlt="Dara Model contact page portrait."
         links={[
-          { to: "/portfolio", label: "Portfolio" },
+          { href: "/#portfolio", label: "Portfolio" },
           { to: "/about", label: "About" },
         ]}
       />

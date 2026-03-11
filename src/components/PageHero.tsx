@@ -2,7 +2,8 @@ import heroImage from "@/assets/hero.jpg";
 import { NavLink } from "@/components/NavLink";
 
 type PageHeroLink = {
-  to: string;
+  href?: string;
+  to?: string;
   label: string;
 };
 
@@ -36,13 +37,23 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
-            >
-              {link.label}
-            </NavLink>
+            link.href ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <NavLink
+                key={link.to}
+                to={link.to ?? "/"}
+                className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+              >
+                {link.label}
+              </NavLink>
+            )
           ))}
         </div>
       </div>

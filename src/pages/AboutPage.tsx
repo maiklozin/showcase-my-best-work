@@ -31,7 +31,7 @@ const AboutPage = () => {
         description="Dara works across editorials, commercial campaigns, bridal shoots, runway bookings, and branded content for clients in Mallorca, Palma de Mallorca, Spain, and Europe."
         imageAlt="Dara Model portrait introducing the About page."
         links={[
-          { to: "/portfolio", label: "Portfolio" },
+          { href: "/#portfolio", label: "Portfolio" },
           { to: "/contact", label: "Contact" },
         ]}
       />
