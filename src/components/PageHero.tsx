@@ -40,7 +40,7 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
         <p className="mt-6 max-w-2xl font-body text-sm leading-relaxed text-secondary-foreground md:text-base">
           {description}
         </p>
-        <div className="mt-7 flex max-w-lg flex-wrap items-center gap-2">
+        <div className="mt-7 flex max-w-xl flex-wrap items-center gap-2">
           {links.map((link) => (
             link.href ? (
               <a

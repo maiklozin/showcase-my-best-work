@@ -34,7 +34,7 @@ const AboutPage = () => {
         imageAlt={copy.aboutPage.imageAlt}
         links={[
           { href: "/#portfolio", label: copy.nav.portfolio },
-          { to: "/contact", label: copy.nav.contact },
+          { href: "/contact#booking", label: copy.nav.booking, variant: "primary" },
         ]}
       />
 
