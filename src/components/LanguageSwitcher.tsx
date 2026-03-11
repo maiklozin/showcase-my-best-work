@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Language, languageNames } from "@/i18n/translations";
+import { getSiteCopy } from "@/lib/siteCopy";
 import { Globe } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
@@ -11,21 +12,22 @@ const LanguageSwitcher = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const showBookingCta = location.pathname === "/";
+  const copy = getSiteCopy(lang);
 
   return (
-    <div className="fixed right-4 top-4 z-50 flex items-center gap-2 md:right-6 md:top-6">
+    <div className="fixed right-4 top-4 z-50 flex items-center gap-1.5 md:right-6 md:top-6 md:gap-2">
       {showBookingCta ? (
         <a
           href="/contact#booking"
-          className="border border-primary bg-primary/10 px-3 py-2 font-body text-[10px] uppercase tracking-[0.22em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:px-4 sm:text-[11px]"
+          className="inline-flex items-center justify-center whitespace-nowrap border border-primary bg-primary/10 px-3 py-2 font-body text-[10px] uppercase tracking-[0.18em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:px-4 sm:text-[11px] sm:tracking-[0.22em]"
         >
-          Booking
+          {copy.nav.booking}
         </a>
       ) : null}
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 border border-border bg-background/80 px-4 py-2 font-body text-xs uppercase tracking-wider text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+          className="flex items-center gap-2 whitespace-nowrap border border-border bg-background/80 px-3 py-2 font-body text-[11px] uppercase tracking-[0.14em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:px-4 sm:text-xs sm:tracking-wider"
         >
           <Globe size={14} />
           {languageNames[lang]}

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { getSiteCopy } from "@/lib/siteCopy";
 import {
   Dialog,
   DialogContent,
@@ -39,8 +40,9 @@ const HOURS = Array.from({ length: 13 }, (_, i) => {
 const RATE_LIMIT_MS = 30_000; // 30 seconds between submissions
 
 const BookingSection = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
   const { toast } = useToast();
+  const copy = getSiteCopy(lang);
   const [calOpen, setCalOpen] = useState(false);
   const [date, setDate] = useState<Date>();
   const [timeFrom, setTimeFrom] = useState("");
@@ -116,7 +118,7 @@ const BookingSection = () => {
     if (now - lastSubmitRef.current < RATE_LIMIT_MS) {
       toast({
         title: "⏳",
-        description: "Please wait before submitting again.",
+        description: copy.booking.waitBeforeRetry,
         variant: "destructive",
       });
       return;
@@ -159,8 +161,8 @@ const BookingSection = () => {
     } catch (err) {
       console.error("Booking error:", err);
       toast({
-        title: "Error",
-        description: "Could not save booking. Please try via Instagram.",
+        title: copy.booking.errorTitle,
+        description: copy.booking.errorDescription,
         variant: "destructive",
       });
     } finally {
@@ -327,7 +329,7 @@ const BookingSection = () => {
           variant="outline"
         >
           {sending ? <Loader2 size={14} className="animate-spin shrink-0" /> : <Send size={14} className="shrink-0" />}
-          <span>{sending ? "Sending..." : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}</span>
+          <span>{sending ? copy.booking.sending : isValid ? t("bookingRequestDates") : t("bookingSelectDates")}</span>
         </Button>
       </div>
 

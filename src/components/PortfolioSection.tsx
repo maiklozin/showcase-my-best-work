@@ -19,6 +19,7 @@ import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
+import { formatPortfolioImageAlt } from "@/lib/siteCopy";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -38,9 +39,6 @@ type PortfolioWork = {
   title: string;
   category: string;
 };
-
-const getWorkAlt = (work: PortfolioWork) =>
-  `Dara Model ${work.category.toLowerCase()} portfolio image: ${work.title}.`;
 
 type WindowWithWebkitAudio = Window &
   typeof globalThis & {
@@ -483,11 +481,13 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
 function CoverflowCard({
   work,
+  lang,
   cardPosition,
   setCardRef,
   onClick,
 }: {
   work: PortfolioWork;
+  lang: ReturnType<typeof useI18n>["lang"];
   cardPosition: number;
   setCardRef: (node: HTMLDivElement | null, position: number) => void;
   onClick: () => void;
@@ -513,7 +513,7 @@ function CoverflowCard({
       <div className="aspect-[3/4] overflow-hidden">
         <img
           src={work.src}
-          alt={getWorkAlt(work)}
+          alt={formatPortfolioImageAlt(lang, work.category, work.title)}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
           draggable={false}
@@ -529,7 +529,7 @@ function CoverflowCard({
 }
 
 const PortfolioSection = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const works: PortfolioWork[] = [
@@ -635,6 +635,7 @@ const PortfolioSection = () => {
             <CoverflowCard
               key={i}
               work={work}
+              lang={lang}
               cardPosition={i}
               setCardRef={controls.setCardRef}
               onClick={() => {
@@ -700,7 +701,7 @@ const PortfolioSection = () => {
             <img
               key={lightboxIndex}
               src={lightbox.src}
-              alt={getWorkAlt(lightbox)}
+              alt={formatPortfolioImageAlt(lang, lightbox.category, lightbox.title)}
               className="max-h-[75vh] max-w-full animate-scale-in object-contain"
             />
             <div className="mt-4 text-center">

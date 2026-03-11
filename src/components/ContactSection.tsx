@@ -2,9 +2,11 @@ import { useI18n } from "@/i18n/I18nProvider";
 import InstagramIcon from "@/components/InstagramIcon";
 import SiteFooterLinks from "@/components/SiteFooterLinks";
 import { INSTAGRAM_HANDLE, INSTAGRAM_PROFILE_URL } from "@/lib/social";
+import { getSiteCopy } from "@/lib/siteCopy";
 
 const ContactSection = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
+  const copy = getSiteCopy(lang);
 
   return (
     <section id="contact" className="border-t border-border px-6 py-12 text-center md:py-24">
@@ -28,7 +30,7 @@ const ContactSection = () => {
       </a>
       <div className="mt-14">
         <p className="mb-4 font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Explore Dara Model
+          {copy.contactSection.exploreHeading}
         </p>
         <SiteFooterLinks />
       </div>

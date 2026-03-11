@@ -1,9 +1,11 @@
 import heroImage from "@/assets/hero.jpg";
 import { NavLink } from "@/components/NavLink";
 import { useI18n } from "@/i18n/I18nProvider";
+import { getSiteCopy } from "@/lib/siteCopy";
 
 const HeroSection = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
+  const copy = getSiteCopy(lang);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -27,20 +29,20 @@ const HeroSection = () => {
           {t("heroCategories")}
         </p>
         <div
-          className="mt-12 flex flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-up"
+          className="mt-12 flex w-full max-w-md flex-col items-center gap-3 opacity-0 animate-fade-up sm:flex-row sm:flex-wrap sm:justify-center"
           style={{ animationDelay: "0.8s" }}
         >
           <a
             href="#portfolio"
-            className="border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="inline-flex min-h-12 w-full items-center justify-center border border-primary bg-primary/10 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
           >
-            View Portfolio
+            {copy.cta.viewPortfolio}
           </a>
           <NavLink
             to="/contact"
-            className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex min-h-12 w-full items-center justify-center border border-border bg-background/70 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:w-auto"
           >
-            Contact
+            {copy.home.contactLink}
           </NavLink>
         </div>
         <NavLink
@@ -48,7 +50,7 @@ const HeroSection = () => {
           className="mt-5 font-body text-[11px] uppercase tracking-[0.28em] text-muted-foreground opacity-0 animate-fade-up transition-colors hover:text-primary"
           style={{ animationDelay: "0.95s" }}
         >
-          About
+          {copy.home.aboutLink}
         </NavLink>
       </div>
     </section>

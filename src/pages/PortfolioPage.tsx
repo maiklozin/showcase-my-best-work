@@ -6,10 +6,12 @@ import SiteFooterLinks from "@/components/SiteFooterLinks";
 import SiteHeaderNav from "@/components/SiteHeaderNav";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getPageSeo } from "@/lib/seo";
+import { getSiteCopy } from "@/lib/siteCopy";
 
 const PortfolioPage = () => {
   const { lang } = useI18n();
   const seo = getPageSeo("portfolio", lang);
+  const copy = getSiteCopy(lang);
 
   return (
     <main className="min-h-screen bg-background">
@@ -26,13 +28,13 @@ const PortfolioPage = () => {
       <SiteHeaderNav />
       <LanguageSwitcher />
       <PageHero
-        eyebrow="Dara Model Portfolio"
-        title="Fashion model portfolio for editorial, commercial, beauty, and runway work"
-        description="A curated portfolio from Mallorca and Palma de Mallorca, featuring fashion editorials, commercial productions, beauty imagery, bridal work, and couture looks."
-        imageAlt="Dara Model portfolio page hero portrait."
+        eyebrow={copy.portfolioPage.eyebrow}
+        title={copy.portfolioPage.title}
+        description={copy.portfolioPage.description}
+        imageAlt={copy.portfolioPage.imageAlt}
         links={[
-          { to: "/about", label: "About" },
-          { to: "/contact", label: "Contact" },
+          { to: "/about", label: copy.nav.about },
+          { to: "/contact", label: copy.nav.contact },
         ]}
       />
 
@@ -41,24 +43,21 @@ const PortfolioPage = () => {
       <section className="border-t border-border px-6 py-14 md:px-12 lg:px-24">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
           <article>
-            <h2 className="font-display text-3xl font-medium italic text-foreground">Editorial</h2>
+            <h2 className="font-display text-3xl font-medium italic text-foreground">{copy.portfolioPage.editorialTitle}</h2>
             <p className="mt-4 font-body text-sm leading-relaxed text-secondary-foreground">
-              Fashion editorials with a luxury mood, strong portrait presence, and location-aware
-              storytelling for magazines, photographers, and creative teams.
+              {copy.portfolioPage.editorialBody}
             </p>
           </article>
           <article>
-            <h2 className="font-display text-3xl font-medium italic text-foreground">Commercial</h2>
+            <h2 className="font-display text-3xl font-medium italic text-foreground">{copy.portfolioPage.commercialTitle}</h2>
             <p className="mt-4 font-body text-sm leading-relaxed text-secondary-foreground">
-              Commercial model work for brands that need polished campaign imagery, social media
-              content, and adaptable visual direction in Mallorca and across Spain.
+              {copy.portfolioPage.commercialBody}
             </p>
           </article>
           <article>
-            <h2 className="font-display text-3xl font-medium italic text-foreground">Runway</h2>
+            <h2 className="font-display text-3xl font-medium italic text-foreground">{copy.portfolioPage.runwayTitle}</h2>
             <p className="mt-4 font-body text-sm leading-relaxed text-secondary-foreground">
-              Runway, showroom, and couture presentation work supported by experience with fashion week,
-              event production, and client-facing presentations.
+              {copy.portfolioPage.runwayBody}
             </p>
           </article>
         </div>
@@ -67,7 +66,7 @@ const PortfolioPage = () => {
       <section className="border-t border-border px-6 py-10 md:px-12 lg:px-24">
         <div className="mx-auto max-w-5xl text-center">
           <p className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-primary">
-            Continue Browsing
+            {copy.portfolioPage.footerHeading}
           </p>
           <SiteFooterLinks />
         </div>

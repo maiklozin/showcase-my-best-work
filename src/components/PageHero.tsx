@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import heroImage from "@/assets/hero.jpg";
 import { NavLink } from "@/components/NavLink";
 
@@ -7,6 +8,7 @@ type PageHeroLink = {
   label: string;
   variant?: "primary" | "secondary";
   external?: boolean;
+  icon?: ReactNode;
 };
 
 type PageHeroProps = {
@@ -31,10 +33,10 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
 
       <div className="relative z-10 mx-auto max-w-6xl">
         <p className="mb-4 font-body text-xs uppercase tracking-[0.4em] text-primary">{eyebrow}</p>
-        <h1 className="max-w-4xl font-display text-5xl font-medium italic text-foreground md:text-7xl">
+        <h1 className="max-w-4xl font-display text-4xl font-medium italic leading-[1.05] text-foreground sm:text-5xl md:text-7xl">
           {title}
         </h1>
-        <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-secondary-foreground">
+        <p className="mt-6 max-w-2xl font-body text-sm leading-relaxed text-secondary-foreground md:text-base">
           {description}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -47,10 +49,11 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
                 rel={link.external ? "noopener noreferrer" : undefined}
                 className={
                   link.variant === "primary"
-                    ? "border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
-                    : "border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                    ? "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-primary bg-primary/10 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
+                    : "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-border bg-background/70 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:w-auto"
                 }
               >
+                {link.icon ? <span className="shrink-0">{link.icon}</span> : null}
                 {link.label}
               </a>
             ) : (
@@ -59,10 +62,11 @@ const PageHero = ({ eyebrow, title, description, imageAlt, links }: PageHeroProp
                 to={link.to ?? "/"}
                 className={
                   link.variant === "primary"
-                    ? "border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
-                    : "border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+                    ? "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-primary bg-primary/10 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto"
+                    : "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-border bg-background/70 px-5 py-3 text-center font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary sm:w-auto"
                 }
               >
+                {link.icon ? <span className="shrink-0">{link.icon}</span> : null}
                 {link.label}
               </NavLink>
             )
