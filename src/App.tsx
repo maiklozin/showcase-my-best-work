@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,23 +8,45 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const browserQueryClient = new QueryClient();
 
-const App = () => (
+export const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
+type AppShellProps = {
+  router: ReactNode;
+  includeNotifications?: boolean;
+  queryClient?: QueryClient;
+};
+
+export const AppShell = ({
+  router,
+  includeNotifications = true,
+  queryClient = browserQueryClient,
+}: AppShellProps) => (
   <QueryClientProvider client={queryClient}>
     <I18nProvider>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        {includeNotifications ? <Toaster /> : null}
+        {includeNotifications ? <Sonner /> : null}
+        {router}
       </TooltipProvider>
     </I18nProvider>
   </QueryClientProvider>
+);
+
+const App = () => (
+  <AppShell
+    router={
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    }
+  />
 );
 
 export default App;
