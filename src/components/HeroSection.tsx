@@ -22,7 +22,7 @@ const HeroSection = () => {
         <p className="mb-4 font-body text-sm uppercase tracking-[0.4em] text-primary opacity-0 animate-fade-up">
           {t("heroSubtitle")}
         </p>
-        <h1 className="mb-6 font-display text-6xl font-medium italic tracking-wide text-foreground opacity-0 animate-fade-up md:text-8xl lg:text-9xl" style={{ animationDelay: "0.2s" }}>
+        <h1 className="mb-6 font-display text-6xl font-medium italic tracking-wide text-foreground/90 drop-shadow-[0_10px_24px_hsl(var(--background)/0.16)] opacity-0 animate-fade-up md:text-8xl lg:text-9xl" style={{ animationDelay: "0.2s" }}>
           Dara Model
         </h1>
         <div className="h-px w-24 bg-primary opacity-0 animate-fade-up" style={{ animationDelay: "0.4s" }} />
