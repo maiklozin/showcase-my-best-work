@@ -39,6 +39,9 @@ type PortfolioWork = {
   category: string;
 };
 
+const getWorkAlt = (work: PortfolioWork) =>
+  `Dara Model ${work.category.toLowerCase()} portfolio image: ${work.title}.`;
+
 type WindowWithWebkitAudio = Window &
   typeof globalThis & {
     webkitAudioContext?: typeof AudioContext;
@@ -510,7 +513,7 @@ function CoverflowCard({
       <div className="aspect-[3/4] overflow-hidden">
         <img
           src={work.src}
-          alt={work.title}
+          alt={getWorkAlt(work)}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
           draggable={false}
@@ -697,7 +700,7 @@ const PortfolioSection = () => {
             <img
               key={lightboxIndex}
               src={lightbox.src}
-              alt={lightbox.title}
+              alt={getWorkAlt(lightbox)}
               className="max-h-[75vh] max-w-full animate-scale-in object-contain"
             />
             <div className="mt-4 text-center">

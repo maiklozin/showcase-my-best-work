@@ -1,11 +1,12 @@
 import { useI18n } from "@/i18n/I18nProvider";
 import InstagramIcon from "@/components/InstagramIcon";
+import SiteFooterLinks from "@/components/SiteFooterLinks";
 
 const ContactSection = () => {
   const { t } = useI18n();
 
   return (
-    <section className="border-t border-border px-6 py-12 md:py-24 text-center">
+    <section id="contact" className="border-t border-border px-6 py-12 text-center md:py-24">
       <p className="mb-3 font-body text-xs uppercase tracking-[0.4em] text-primary">
         {t("contactLabel")}
       </p>
@@ -24,6 +25,12 @@ const ContactSection = () => {
         <InstagramIcon size={36} className="transition-transform duration-300 group-hover:scale-110" />
         <span className="text-xl font-bold md:text-2xl">@dara__es_</span>
       </a>
+      <div className="mt-14">
+        <p className="mb-4 font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+          Explore Dara Model
+        </p>
+        <SiteFooterLinks />
+      </div>
       <div className="mt-24 pb-6">
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           {t("copyright")}

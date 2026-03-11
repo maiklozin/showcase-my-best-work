@@ -1,4 +1,5 @@
 import heroImage from "@/assets/hero.jpg";
+import { NavLink } from "@/components/NavLink";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const HeroSection = () => {
@@ -9,7 +10,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Fashion editorial portrait"
+          alt="Dara Model fashion portrait introducing editorial and commercial work in Mallorca."
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-background/60" />
@@ -19,7 +20,7 @@ const HeroSection = () => {
           {t("heroSubtitle")}
         </p>
         <h1 className="mb-6 font-display text-6xl font-medium italic tracking-wide text-foreground opacity-0 animate-fade-up md:text-8xl lg:text-9xl" style={{ animationDelay: "0.2s" }}>
-          Dara
+          Dara Model
         </h1>
         <div className="h-px w-24 bg-primary opacity-0 animate-fade-up" style={{ animationDelay: "0.4s" }} />
         <p className="mt-6 max-w-md font-body text-sm font-light leading-relaxed text-secondary-foreground opacity-0 animate-fade-up" style={{ animationDelay: "0.6s" }}>
@@ -32,6 +33,29 @@ const HeroSection = () => {
         >
           {t("viewPortfolio")}
         </a>
+        <div
+          className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-up"
+          style={{ animationDelay: "0.95s" }}
+        >
+          <NavLink
+            to="/about"
+            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+          >
+            About Dara Model
+          </NavLink>
+          <NavLink
+            to="/portfolio"
+            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+          >
+            Fashion Model Portfolio
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+          >
+            Contact for Bookings
+          </NavLink>
+        </div>
       </div>
     </section>
   );

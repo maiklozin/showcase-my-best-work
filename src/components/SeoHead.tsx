@@ -19,6 +19,7 @@ type SeoHeadProps = {
   robots?: string;
   type?: string;
   imageUrl?: string | null;
+  structuredData?: Record<string, unknown> | null;
 };
 
 const upsertMeta = (selector: string, attributes: Record<string, string>, content: string) => {
@@ -35,6 +36,26 @@ const upsertMeta = (selector: string, attributes: Record<string, string>, conten
 
 const removeMeta = (selector: string) => {
   document.head.querySelector(selector)?.remove();
+};
+
+const upsertStructuredData = (data: Record<string, unknown> | null) => {
+  const selector = "script[data-seo-jsonld='primary']";
+
+  if (!data) {
+    document.head.querySelector(selector)?.remove();
+    return;
+  }
+
+  let tag = document.head.querySelector<HTMLScriptElement>(selector);
+
+  if (!tag) {
+    tag = document.createElement("script");
+    tag.type = "application/ld+json";
+    tag.setAttribute("data-seo-jsonld", "primary");
+    document.head.appendChild(tag);
+  }
+
+  tag.textContent = JSON.stringify(data);
 };
 
 const upsertCanonical = (href: string) => {
@@ -59,6 +80,7 @@ const SeoHead = ({
   robots = DEFAULT_ROBOTS,
   type = "website",
   imageUrl = OG_IMAGE_URL,
+  structuredData = null,
 }: SeoHeadProps) => {
   useEffect(() => {
     const copy = getSeoCopy(lang);
@@ -91,6 +113,7 @@ const SeoHead = ({
     upsertMeta("meta[name='twitter:url']", { name: "twitter:url" }, canonicalUrl);
     upsertMeta("meta[name='twitter:site']", { name: "twitter:site" }, "@dara__es_");
     upsertCanonical(canonicalUrl);
+    upsertStructuredData(structuredData);
 
     if (imageUrl) {
       upsertMeta("meta[property='og:image']", { property: "og:image" }, imageUrl);
@@ -123,7 +146,7 @@ const SeoHead = ({
       removeMeta("meta[name='twitter:image:alt']");
       upsertMeta("meta[name='twitter:card']", { name: "twitter:card" }, "summary");
     }
-  }, [description, imageUrl, lang, pathname, robots, title, type]);
+  }, [description, imageUrl, lang, pathname, robots, structuredData, title, type]);
 
   return null;
 };
