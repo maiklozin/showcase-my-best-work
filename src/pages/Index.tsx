@@ -1,7 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import PortfolioSection from "@/components/PortfolioSection";
-import BookingSection from "@/components/BookingSection";
 import ContactSection from "@/components/ContactSection";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SeoHead from "@/components/SeoHead";
@@ -21,7 +20,6 @@ const Index = () => {
       <SeoIntroSection />
       <PortfolioSection />
       <AboutSection />
-      <BookingSection />
       <ContactSection />
     </main>
   );

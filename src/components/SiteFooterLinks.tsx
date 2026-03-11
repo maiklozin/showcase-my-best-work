@@ -1,9 +1,9 @@
 import { NavLink } from "@/components/NavLink";
 
 const links = [
-  { to: "/about", label: "About Dara Model" },
-  { to: "/portfolio", label: "Fashion Model Portfolio" },
-  { to: "/contact", label: "Contact for Bookings" },
+  { to: "/about", label: "About" },
+  { to: "/portfolio", label: "Portfolio" },
+  { to: "/contact", label: "Contact" },
 ];
 
 const SiteFooterLinks = () => {

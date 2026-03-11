@@ -31,8 +31,8 @@ const PortfolioPage = () => {
         description="A curated portfolio from Mallorca and Palma de Mallorca, featuring fashion editorials, commercial productions, beauty imagery, bridal work, and couture looks."
         imageAlt="Dara Model portfolio page hero portrait."
         links={[
-          { to: "/about", label: "Read about Dara" },
-          { to: "/contact", label: "Book a shoot" },
+          { to: "/about", label: "About" },
+          { to: "/contact", label: "Contact" },
         ]}
       />
 

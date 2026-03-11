@@ -201,7 +201,7 @@ const BookingSection = () => {
           <label className="mb-2 block font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
             {t("bookingDate")}
           </label>
-          <div className="flex gap-3">
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_110px_110px]">
             <Popover open={calOpen} onOpenChange={setCalOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -229,7 +229,7 @@ const BookingSection = () => {
             </Popover>
 
             <Select value={timeFrom} onValueChange={(v) => { setTimeFrom(v); if (timeTo && v >= timeTo) setTimeTo(""); }}>
-              <SelectTrigger className={cn("w-[110px] font-body transition-all duration-300", step === 1 && glowClass)}>
+              <SelectTrigger className={cn("w-full font-body transition-all duration-300 sm:w-[110px]", step === 1 && glowClass)}>
                 <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
                 <SelectValue placeholder="—" />
               </SelectTrigger>
@@ -241,7 +241,7 @@ const BookingSection = () => {
             </Select>
 
             <Select value={timeTo} onValueChange={setTimeTo} disabled={!timeFrom}>
-              <SelectTrigger className={cn("w-[110px] font-body transition-all duration-300", step === 1 && timeFrom && glowClass)}>
+              <SelectTrigger className={cn("w-full font-body transition-all duration-300 sm:w-[110px]", step === 1 && timeFrom && glowClass)}>
                 <Clock className="mr-1 h-3 w-3 text-muted-foreground" />
                 <SelectValue placeholder="—" />
               </SelectTrigger>

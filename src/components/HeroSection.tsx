@@ -26,36 +26,30 @@ const HeroSection = () => {
         <p className="mt-6 max-w-md font-body text-sm font-light leading-relaxed text-secondary-foreground opacity-0 animate-fade-up" style={{ animationDelay: "0.6s" }}>
           {t("heroCategories")}
         </p>
-        <a
-          href="#portfolio"
-          className="mt-12 font-body text-xs uppercase tracking-[0.3em] text-primary opacity-0 animate-fade-up transition-opacity hover:opacity-70"
+        <div
+          className="mt-12 flex flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-up"
           style={{ animationDelay: "0.8s" }}
         >
-          {t("viewPortfolio")}
-        </a>
-        <div
-          className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.95s" }}
-        >
-          <NavLink
-            to="/about"
-            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
-          >
-            About Dara Model
-          </NavLink>
           <NavLink
             to="/portfolio"
-            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+            className="border border-primary bg-primary/10 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-primary backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Fashion Model Portfolio
+            View Portfolio
           </NavLink>
           <NavLink
             to="/contact"
-            className="border border-border bg-background/70 px-4 py-2 font-body text-[10px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
+            className="border border-border bg-background/70 px-5 py-3 font-body text-[11px] uppercase tracking-[0.24em] text-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
           >
-            Contact for Bookings
+            Contact
           </NavLink>
         </div>
+        <NavLink
+          to="/about"
+          className="mt-5 font-body text-[11px] uppercase tracking-[0.28em] text-muted-foreground opacity-0 animate-fade-up transition-colors hover:text-primary"
+          style={{ animationDelay: "0.95s" }}
+        >
+          About
+        </NavLink>
       </div>
     </section>
   );
