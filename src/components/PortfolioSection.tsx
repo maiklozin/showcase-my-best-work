@@ -40,6 +40,8 @@ type PortfolioWork = {
   category: string;
 };
 
+type ScrollSyncSource = "initial" | "layout" | "auto" | "manual";
+
 type WindowWithWebkitAudio = Window &
   typeof globalThis & {
     webkitAudioContext?: typeof AudioContext;
@@ -216,7 +218,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     }
   }, [singleWidth]);
 
-  const updateCenter = useCallback(() => {
+  const updateCenter = useCallback((source: ScrollSyncSource) => {
     const viewport = viewportRef.current;
 
     if (!viewport) {
@@ -247,10 +249,12 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
         }
       }
 
-      const crossedSteps = Math.max(1, Math.min(MAX_BURST_TICKS, Math.round(Math.abs(movement) / STEP) || 1));
+      if (source === "manual") {
+        const crossedSteps = Math.max(1, Math.min(MAX_BURST_TICKS, Math.round(Math.abs(movement) / STEP) || 1));
 
-      for (let tickIndex = 0; tickIndex < crossedSteps; tickIndex += 1) {
-        playTick(tickIndex * 0.018);
+        for (let tickIndex = 0; tickIndex < crossedSteps; tickIndex += 1) {
+          playTick(tickIndex * 0.018);
+        }
       }
 
       lastCenterIndex.current = normalizedIdx;
@@ -292,7 +296,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     }
   }, [renderedCount]);
 
-  const syncLayout = useCallback(() => {
+  const syncLayout = useCallback((source: ScrollSyncSource = "layout") => {
     const track = trackRef.current;
 
     if (!track) {
@@ -301,7 +305,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
     normalizePosition();
     track.style.transform = `translate3d(${-positionRef.current}px, 0, 0)`;
-    updateCenter();
+    updateCenter(source);
     updateCardTransforms();
   }, [normalizePosition, updateCardTransforms, updateCenter]);
 
@@ -319,30 +323,9 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
     }, delay);
   }, []);
 
-  const beginInteraction = useCallback(() => {
-    unlockTickAudio();
-    pauseAutoScroll();
-  }, [pauseAutoScroll]);
-
-  useEffect(() => {
-    const unlockOnFirstGesture = () => {
-      unlockTickAudio();
-    };
-
-    window.addEventListener("pointerdown", unlockOnFirstGesture, { passive: true });
-    window.addEventListener("touchstart", unlockOnFirstGesture, { passive: true });
-    window.addEventListener("keydown", unlockOnFirstGesture);
-
-    return () => {
-      window.removeEventListener("pointerdown", unlockOnFirstGesture);
-      window.removeEventListener("touchstart", unlockOnFirstGesture);
-      window.removeEventListener("keydown", unlockOnFirstGesture);
-    };
-  }, []);
-
   useEffect(() => {
     positionRef.current = singleWidth;
-    syncLayout();
+    syncLayout("initial");
 
     let raf = 0;
 
@@ -353,7 +336,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
       if (!document.hidden && !isPaused.current && !isDragging.current) {
         positionRef.current += AUTO_SCROLL_PX_PER_SECOND * (deltaMs / 1000);
-        syncLayout();
+        syncLayout("auto");
       }
 
       raf = requestAnimationFrame(animate);
@@ -370,14 +353,14 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
   useEffect(() => {
     const handleResize = () => {
-      syncLayout();
+      syncLayout("layout");
     };
 
     const handleVisibilityChange = () => {
       lastAnimationFrameAt.current = 0;
 
       if (!document.hidden) {
-        syncLayout();
+        syncLayout("layout");
         resumeAutoScroll(120);
       }
     };
@@ -407,7 +390,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
         return;
       }
 
-      beginInteraction();
+      pauseAutoScroll();
       isPointerDown.current = true;
       isDragging.current = false;
       hasDragged.current = false;
@@ -415,7 +398,7 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
       dragStartY.current = e.clientY;
       dragStartOffset.current = positionRef.current;
     },
-    [beginInteraction]
+    [pauseAutoScroll]
   );
 
   const onPointerMove = useCallback(
@@ -438,10 +421,11 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
 
         isDragging.current = true;
         hasDragged.current = true;
+        unlockTickAudio();
       }
 
       positionRef.current = dragStartOffset.current - dx;
-      syncLayout();
+      syncLayout("manual");
     },
     [syncLayout]
   );
@@ -455,13 +439,14 @@ function useCoverflowScroll(itemCount: number, renderedCount: number, onCenterCh
   const onWheel = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
       e.preventDefault();
-      beginInteraction();
+      unlockTickAudio();
+      pauseAutoScroll();
       positionRef.current += e.deltaY + e.deltaX;
       hasDragged.current = true;
-      syncLayout();
+      syncLayout("manual");
       resumeAutoScroll(500);
     },
-    [beginInteraction, resumeAutoScroll, syncLayout]
+    [pauseAutoScroll, resumeAutoScroll, syncLayout]
   );
 
   return {
