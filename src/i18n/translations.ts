@@ -46,6 +46,7 @@ type TranslationKeys = {
   workCloseUp: string;
   workRunwayRed: string;
   workRunwayFloral: string;
+  workSunsetMarina: string;
   aboutLabel: string;
   aboutTitle: string;
   aboutLocation: string;
@@ -144,6 +145,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Night Elegance",
     workRunwayRed: "Runway Red",
     workRunwayFloral: "Floral Couture",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "Booking",
     bookingTitle: "Request Dates",
     bookingDescription: "Select your preferred dates and leave your contact info. I'll get back to you via Instagram DM.",
@@ -224,6 +226,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Elegancia Nocturna",
     workRunwayRed: "Pasarela Rojo",
     workRunwayFloral: "Costura Floral",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "Reserva",
     bookingTitle: "Solicitar Fechas",
     bookingDescription: "Selecciona tus fechas preferidas y deja tu información de contacto. Te responderé por Instagram DM.",
@@ -304,6 +307,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Nächtliche Eleganz",
     workRunwayRed: "Laufsteg Rot",
     workRunwayFloral: "Blumen-Couture",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "Buchung",
     bookingTitle: "Termine anfragen",
     bookingDescription: "Wähle deine bevorzugten Termine und hinterlasse deine Kontaktdaten. Ich melde mich per Instagram DM.",
@@ -384,6 +388,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Élégance Nocturne",
     workRunwayRed: "Défilé Rouge",
     workRunwayFloral: "Couture Florale",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "Réservation",
     bookingTitle: "Demander des Dates",
     bookingDescription: "Sélectionnez vos dates préférées et laissez vos coordonnées. Je vous répondrai par Instagram DM.",
@@ -464,6 +469,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "Ночная элегантность",
     workRunwayRed: "Подиум в красном",
     workRunwayFloral: "Цветочная кутюр",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "Бронирование",
     bookingTitle: "Запросить даты",
     bookingDescription: "Выберите нужные даты и оставьте контакт. Я отвечу вам в Instagram DM.",
@@ -544,6 +550,7 @@ export const translations: Record<Language, TranslationKeys> = {
     workNight: "夜之优雅",
     workRunwayRed: "红色走秀",
     workRunwayFloral: "花卉高定",
+    workSunsetMarina: "Sunset Marina",
     bookingLabel: "预约",
     bookingTitle: "请求档期",
     bookingDescription: "选择您偏好的日期并留下联系方式。我会通过 Instagram DM 回复您。",

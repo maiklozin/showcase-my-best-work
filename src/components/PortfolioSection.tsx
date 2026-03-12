@@ -18,6 +18,7 @@ import portfolio17 from "@/assets/portfolio-17.jpg";
 import portfolio18 from "@/assets/portfolio-18.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
+import portfolio22 from "@/assets/portfolio-22.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 import { formatPortfolioImageAlt } from "@/lib/siteCopy";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -538,6 +539,7 @@ const PortfolioSection = () => {
     { src: portfolio18, title: t("workRedBridge"), category: t("catLifestyle") },
     { src: portfolio19, title: t("workCloseUp"), category: t("catBeauty") },
     { src: portfolio21, title: t("workRunwayFloral"), category: t("catHauteCouture") },
+    { src: portfolio22, title: t("workSunsetMarina"), category: t("catEditorial") },
   ];
 
   const tripled = [...works, ...works, ...works];

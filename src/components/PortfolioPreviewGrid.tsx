@@ -4,6 +4,7 @@ import portfolio7 from "@/assets/portfolio-7.jpg";
 import portfolio13 from "@/assets/portfolio-13.jpg";
 import portfolio19 from "@/assets/portfolio-19.jpg";
 import portfolio21 from "@/assets/portfolio-21.jpg";
+import portfolio22 from "@/assets/portfolio-22.jpg";
 import { useI18n } from "@/i18n/I18nProvider";
 import { formatPortfolioImageAlt, getSiteCopy } from "@/lib/siteCopy";
 
@@ -17,6 +18,7 @@ const PortfolioPreviewGrid = () => {
     { src: portfolio13, title: t("workWhiteDress"), category: t("catHauteCouture") },
     { src: portfolio19, title: t("workCloseUp"), category: t("catBeauty") },
     { src: portfolio21, title: t("workRunwayFloral"), category: t("catRunway") },
+    { src: portfolio22, title: t("workSunsetMarina"), category: t("catEditorial") },
   ];
 
   return (
