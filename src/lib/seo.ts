@@ -1,4 +1,5 @@
 import { Language } from "@/i18n/translations";
+import { getSiteCopy } from "@/lib/siteCopy";
 
 export const SITE_URL = "https://daramodel.com";
 export const DEFAULT_ROBOTS =
@@ -44,77 +45,77 @@ export const seoByLanguage: Record<Language, SeoCopy> = {
   },
   es: {
     locale: "es_ES",
-    title: "Dara Model | Modelo de moda en Mallorca, Espana",
+    title: "Dara Model | Modelo de moda en Mallorca, España",
     description:
-      "Modelo de moda con base en Mallorca, Espana. Disponible para editoriales, campanas comerciales, pasarela, sesiones de boda y colaboraciones con marcas en Espana y Europa.",
+      "Modelo de moda con base en Mallorca, España. Disponible para editoriales, campañas comerciales, pasarela, sesiones de boda y colaboraciones con marcas en España y Europa.",
     introEyebrow: "Portafolio de modelo en Mallorca",
-    introTitle: "Modelo de moda para editoriales, campanas, pasarela y sesiones de boda",
+    introTitle: "Modelo de moda para editoriales, campañas, pasarela y sesiones de boda",
     introBody:
-      "Dara es una modelo profesional con base en Mallorca, Espana, con experiencia en fashion weeks, campanas publicitarias, contenido para redes sociales y producciones fotograficas en Espana y Europa.",
+      "Dara es una modelo profesional con base en Mallorca, España, con experiencia en semanas de la moda, campañas publicitarias, contenido para redes sociales y producciones fotográficas en España y Europa.",
     facts: [
-      { label: "Servicios", value: "Editorial, comercial, pasarela, bridal y campanas de marca" },
-      { label: "Ubicacion", value: "Mallorca, Espana, con desplazamiento por Espana y Europa" },
+      { label: "Servicios", value: "Editorial, comercial, pasarela, bodas y campañas de marca" },
+      { label: "Ubicación", value: "Mallorca, España, con desplazamiento por España y Europa" },
       { label: "Contacto", value: "Reservas y colaboraciones por Instagram @dara__es_" },
     ],
   },
   de: {
     locale: "de_DE",
-    title: "Dara Model | Fashion Model auf Mallorca, Spanien",
+    title: "Dara Model | Mode-Model auf Mallorca, Spanien",
     description:
-      "Fashion Model mit Basis auf Mallorca, Spanien. Verfugbar fur Editorials, Kampagnen, Laufsteg, Bridal-Shootings und Markenkooperationen in Spanien und Europa.",
+      "Mode-Model mit Basis auf Mallorca, Spanien. Verfügbar für Editorials, Kampagnen, Laufsteg, Hochzeits-Shootings und Markenkooperationen in Spanien und Europa.",
     introEyebrow: "Model-Portfolio auf Mallorca",
-    introTitle: "Fashion Model fur Editorial, Kampagnen, Laufsteg und Bridal-Projekte",
+    introTitle: "Mode-Model für Editorial, Kampagnen, Laufsteg und Hochzeitsprojekte",
     introBody:
-      "Dara ist ein professionelles Fashion Model mit Basis auf Mallorca, Spanien, mit Erfahrung in Fashion Weeks, Werbekampagnen, Social-Media-Content und Fotoproduktionen in Spanien und Europa.",
+      "Dara ist ein professionelles Mode-Model mit Basis auf Mallorca, Spanien, mit Erfahrung in Modewochen, Werbekampagnen, Social-Media-Content und Fotoproduktionen in Spanien und Europa.",
     facts: [
-      { label: "Leistungen", value: "Editorial, kommerziell, Laufsteg, Bridal und Brand-Kampagnen" },
+      { label: "Leistungen", value: "Editorial, kommerziell, Laufsteg, Hochzeiten und Brand-Kampagnen" },
       { label: "Standort", value: "Mallorca, Spanien, mit Reisen in Spanien und Europa" },
-      { label: "Kontakt", value: "Bookings und Kooperationen uber Instagram @dara__es_" },
+      { label: "Kontakt", value: "Bookings und Kooperationen über Instagram @dara__es_" },
     ],
   },
   fr: {
     locale: "fr_FR",
-    title: "Dara Model | Mannequin mode a Majorque, Espagne",
+    title: "Dara Model | Mannequin mode à Majorque, Espagne",
     description:
-      "Mannequin mode basee a Majorque, Espagne. Disponible pour editoriaux, campagnes commerciales, defiles, shootings mariage et collaborations de marque en Espagne et en Europe.",
-    introEyebrow: "Portfolio mannequin a Majorque",
-    introTitle: "Mannequin mode pour editorial, campagnes, defiles et projets mariage",
+      "Mannequin mode basée à Majorque, Espagne. Disponible pour éditoriaux, campagnes commerciales, défilés, shootings mariage et collaborations de marque en Espagne et en Europe.",
+    introEyebrow: "Portfolio mannequin à Majorque",
+    introTitle: "Mannequin mode pour l'éditorial, les campagnes, les défilés et les projets mariage",
     introBody:
-      "Dara est un mannequin professionnel base a Majorque, Espagne, avec de l'experience dans les fashion weeks, les campagnes publicitaires, le contenu social media et les productions photo en Espagne et en Europe.",
+      "Dara est un mannequin professionnel basé à Majorque, Espagne, avec de l'expérience dans les semaines de la mode, les campagnes publicitaires, le contenu pour les réseaux sociaux et les productions photo en Espagne et en Europe.",
     facts: [
-      { label: "Services", value: "Editorial, commercial, defiles, bridal et campagnes de marque" },
-      { label: "Localisation", value: "Majorque, Espagne, avec deplacements en Espagne et en Europe" },
-      { label: "Contact", value: "Reservations et collaborations via Instagram @dara__es_" },
+      { label: "Prestations", value: "Éditorial, commercial, défilé, mariage et campagnes de marque" },
+      { label: "Localisation", value: "Majorque, Espagne, avec déplacements en Espagne et en Europe" },
+      { label: "Contact", value: "Réservations et collaborations via Instagram @dara__es_" },
     ],
   },
   ru: {
     locale: "ru_RU",
-    title: "Dara Model | Fashion model in Mallorca, Spain",
+    title: "Dara Model | Фэшн-модель на Майорке, Испания",
     description:
-      "Fashion model based in Mallorca, Spain. Available for editorials, commercial campaigns, runway shows, bridal shoots, and brand collaborations across Spain and Europe.",
-    introEyebrow: "Model portfolio in Mallorca",
-    introTitle: "Fashion model for editorial, commercial, runway, and bridal projects",
+      "Фэшн-модель с базой на Майорке, Испания. Доступна для эдиториалов, коммерческих кампаний, показов, свадебных съёмок и бренд-коллабораций по всей Испании и Европе.",
+    introEyebrow: "Портфолио модели на Майорке",
+    introTitle: "Фэшн-модель для эдиториала, коммерческих проектов, подиума и свадебных съёмок",
     introBody:
-      "Dara is a professional fashion model based in Mallorca, Spain, with experience in fashion weeks, advertising campaigns, social media content, and photo productions across Spain and Europe.",
+      "Dara — профессиональная фэшн-модель с базой на Майорке, Испания, с опытом недель моды, рекламных кампаний, контента для соцсетей и фотопродакшена по всей Испании и Европе.",
     facts: [
-      { label: "Services", value: "Editorial, commercial, runway, bridal, and brand campaigns" },
-      { label: "Location", value: "Mallorca, Spain, with travel across Spain and Europe" },
-      { label: "Contact", value: "Bookings and collaborations via Instagram @dara__es_" },
+      { label: "Услуги", value: "Эдиториал, коммерция, подиум, свадебные съёмки и бренд-кампании" },
+      { label: "Локация", value: "Майорка, Пальма-де-Майорка и выезды по Испании и Европе" },
+      { label: "Контакт", value: "Бронирования и коллаборации через Instagram @dara__es_" },
     ],
   },
   zh: {
     locale: "zh_CN",
-    title: "Dara Model | Fashion Model in Mallorca, Spain",
+    title: "Dara Model | 西班牙马略卡岛时尚模特",
     description:
-      "Fashion model based in Mallorca, Spain. Available for editorials, commercial campaigns, runway shows, bridal shoots, and brand collaborations across Spain and Europe.",
-    introEyebrow: "Model portfolio in Mallorca",
-    introTitle: "Fashion model for editorial, commercial, runway, and bridal projects",
+      "常驻西班牙马略卡岛的时尚模特，可承接编辑拍摄、商业广告、走秀、婚纱拍摄以及品牌合作，服务范围覆盖西班牙与欧洲。",
+    introEyebrow: "马略卡岛模特作品集",
+    introTitle: "适用于编辑拍摄、商业广告、走秀与婚纱项目的时尚模特",
     introBody:
-      "Dara is a professional fashion model based in Mallorca, Spain, with experience in fashion weeks, advertising campaigns, social media content, and photo productions across Spain and Europe.",
+      "Dara 是常驻西班牙马略卡岛的专业时尚模特，拥有时装周、广告活动、社交媒体内容和摄影制作经验，工作范围覆盖西班牙与欧洲。",
     facts: [
-      { label: "Services", value: "Editorial, commercial, runway, bridal, and brand campaigns" },
-      { label: "Location", value: "Mallorca, Spain, with travel across Spain and Europe" },
-      { label: "Contact", value: "Bookings and collaborations via Instagram @dara__es_" },
+      { label: "服务", value: "编辑拍摄、商业广告、走秀、婚纱项目与品牌合作" },
+      { label: "地点", value: "马略卡岛、帕尔马以及西班牙与欧洲其他地区" },
+      { label: "联系", value: "预约与合作请通过 Instagram @dara__es_" },
     ],
   },
 };
@@ -171,18 +172,17 @@ const baseWebsiteNode = (description: string) => ({
   description,
 });
 
-const basePersonNode = {
+const getBasePersonNode = (lang: Language) => ({
   "@type": "Person",
   "@id": `${SITE_URL}/#person`,
   name: "Dara Model",
   url: `${SITE_URL}/`,
   jobTitle: "Fashion Model",
   image: OG_IMAGE_URL,
-  description:
-    "Professional fashion model based in Mallorca, Spain, working on editorial, runway, commercial, bridal, and social media projects.",
+  description: seoByLanguage[lang].description,
   homeLocation: {
     "@type": "Place",
-    name: "Mallorca, Spain",
+    name: getSiteCopy(lang).aboutSection.locationValue,
   },
   knowsLanguage: ["English", "Spanish", "Russian", "German"],
   sameAs: ["https://instagram.com/dara__es_"],
@@ -190,7 +190,7 @@ const basePersonNode = {
     "@type": "Organization",
     name: "Independent model",
   },
-};
+});
 
 const primaryImageNode = {
   "@type": "ImageObject",
@@ -207,6 +207,8 @@ const buildStructuredData = (
   title: string,
   description: string,
   pathname: string,
+  siteDescription: string,
+  lang: Language,
 ): Record<string, unknown> | null => {
   if (page === "notFound") {
     return null;
@@ -216,8 +218,8 @@ const buildStructuredData = (
     return {
       "@context": "https://schema.org",
       "@graph": [
-        baseWebsiteNode(description),
-        basePersonNode,
+        baseWebsiteNode(siteDescription),
+        getBasePersonNode(lang),
         primaryImageNode,
         {
           "@type": "WebPage",
@@ -239,8 +241,8 @@ const buildStructuredData = (
   return {
     "@context": "https://schema.org",
     "@graph": [
-      baseWebsiteNode(seoByLanguage.en.description),
-      basePersonNode,
+      baseWebsiteNode(siteDescription),
+      getBasePersonNode(lang),
       primaryImageNode,
       {
         "@type": pageType,
@@ -258,6 +260,7 @@ const buildStructuredData = (
 
 export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => {
   const copy = getSeoCopy(lang);
+  const siteCopy = getSiteCopy(lang);
 
   if (page === "home") {
     return {
@@ -268,14 +271,13 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("home", copy.title, copy.description, "/"),
+      structuredData: buildStructuredData("home", copy.title, copy.description, "/", copy.description, lang),
     };
   }
 
   if (page === "about") {
-    const title = "About Dara Model | Fashion Model in Mallorca, Spain";
-    const description =
-      "Learn about Dara, a fashion model based in Mallorca and available in Palma de Mallorca for editorials, commercial campaigns, runway shows, and bridal shoots across Spain and Europe.";
+    const title = `${siteCopy.aboutPage.title} | Dara Model`;
+    const description = siteCopy.aboutPage.description;
     return {
       pathname: "/about",
       title,
@@ -284,14 +286,13 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
       type: "profile",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("about", title, description, "/about"),
+      structuredData: buildStructuredData("about", title, description, "/about", copy.description, lang),
     };
   }
 
   if (page === "portfolio") {
-    const title = "Portfolio | Dara Model Fashion Model Portfolio";
-    const description =
-      "Explore Dara Model's fashion portfolio with editorial, commercial, beauty, runway, and haute couture work in Mallorca, Palma de Mallorca, and across Spain.";
+    const title = `${siteCopy.portfolioPage.title} | Dara Model`;
+    const description = siteCopy.portfolioPage.description;
     return {
       pathname: "/portfolio",
       title,
@@ -300,14 +301,13 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("portfolio", title, description, "/portfolio"),
+      structuredData: buildStructuredData("portfolio", title, description, "/portfolio", copy.description, lang),
     };
   }
 
   if (page === "contact") {
-    const title = "Contact Dara Model | Bookings in Mallorca and Spain";
-    const description =
-      "Contact Dara Model for editorials, commercial campaigns, bridal shoots, runway bookings, and brand collaborations in Mallorca, Palma de Mallorca, and across Spain.";
+    const title = `${siteCopy.contactPage.title} | Dara Model`;
+    const description = siteCopy.contactPage.description;
     return {
       pathname: "/contact",
       title,
@@ -316,12 +316,12 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("contact", title, description, "/contact"),
+      structuredData: buildStructuredData("contact", title, description, "/contact", copy.description, lang),
     };
   }
 
-  const title = "Page Not Found | Dara Model";
-  const description = "The page you requested does not exist on daramodel.com.";
+  const title = siteCopy.notFound.title;
+  const description = siteCopy.notFound.description;
   return {
     pathname: "/404",
     title,

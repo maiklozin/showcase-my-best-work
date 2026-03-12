@@ -17,14 +17,23 @@ type SiteCopy = {
     errorTitle: string;
     errorDescription: string;
     sending: string;
+    messageIntro: string;
+    messageContactLine: string;
+    honeypotLabel: string;
   };
   notFound: {
     message: string;
     returnHome: string;
+    title: string;
+    description: string;
   };
   home: {
     aboutLink: string;
     contactLink: string;
+    heroImageAlt: string;
+  };
+  aboutSection: {
+    locationValue: string;
   };
   aboutPage: {
     eyebrow: string;
@@ -94,14 +103,23 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "Error",
       errorDescription: "Could not save booking. Please try via Instagram.",
       sending: "Sending...",
+      messageIntro: "Hi! I'd like to book: {date}, {time}.",
+      messageContactLine: "My contact: {contact}",
+      honeypotLabel: "Website",
     },
     notFound: {
       message: "Oops! Page not found",
       returnHome: "Return to Home",
+      title: "Page Not Found | Dara Model",
+      description: "The page you requested does not exist on daramodel.com.",
     },
     home: {
       aboutLink: "About",
       contactLink: "Contact",
+      heroImageAlt: "Dara Model fashion portrait introducing editorial and commercial work in Mallorca.",
+    },
+    aboutSection: {
+      locationValue: "Mallorca, Spain",
     },
     aboutPage: {
       eyebrow: "About Dara Model",
@@ -180,14 +198,23 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "Error",
       errorDescription: "No se pudo guardar la solicitud. Prueba por Instagram.",
       sending: "Enviando...",
+      messageIntro: "Hola, me gustaría reservar: {date}, {time}.",
+      messageContactLine: "Mi contacto: {contact}",
+      honeypotLabel: "Sitio web",
     },
     notFound: {
       message: "Ups, la página no existe",
       returnHome: "Volver al inicio",
+      title: "Página no encontrada | Dara Model",
+      description: "La página solicitada no existe en daramodel.com.",
     },
     home: {
       aboutLink: "Sobre mí",
       contactLink: "Contacto",
+      heroImageAlt: "Retrato de moda de Dara Model que presenta su trabajo editorial y comercial en Mallorca.",
+    },
+    aboutSection: {
+      locationValue: "Mallorca, España",
     },
     aboutPage: {
       eyebrow: "Sobre Dara Model",
@@ -266,14 +293,23 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "Fehler",
       errorDescription: "Die Anfrage konnte nicht gespeichert werden. Bitte versuche es über Instagram.",
       sending: "Wird gesendet...",
+      messageIntro: "Hallo, ich möchte buchen: {date}, {time}.",
+      messageContactLine: "Mein Kontakt: {contact}",
+      honeypotLabel: "Website",
     },
     notFound: {
       message: "Ups, diese Seite wurde nicht gefunden",
       returnHome: "Zur Startseite",
+      title: "Seite nicht gefunden | Dara Model",
+      description: "Die angeforderte Seite existiert auf daramodel.com nicht.",
     },
     home: {
       aboutLink: "Über mich",
       contactLink: "Kontakt",
+      heroImageAlt: "Modeporträt von Dara Model, das ihre Editorial- und Commercial-Arbeit auf Mallorca zeigt.",
+    },
+    aboutSection: {
+      locationValue: "Mallorca, Spanien",
     },
     aboutPage: {
       eyebrow: "Über Dara Model",
@@ -352,14 +388,23 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "Erreur",
       errorDescription: "Impossible d'enregistrer la demande. Essayez via Instagram.",
       sending: "Envoi en cours...",
+      messageIntro: "Bonjour, je souhaite réserver : {date}, {time}.",
+      messageContactLine: "Mon contact : {contact}",
+      honeypotLabel: "Site web",
     },
     notFound: {
       message: "Oups, cette page est introuvable",
       returnHome: "Retour à l'accueil",
+      title: "Page introuvable | Dara Model",
+      description: "La page demandée n'existe pas sur daramodel.com.",
     },
     home: {
       aboutLink: "À propos",
       contactLink: "Contact",
+      heroImageAlt: "Portrait mode de Dara Model présentant son travail éditorial et commercial à Majorque.",
+    },
+    aboutSection: {
+      locationValue: "Majorque, Espagne",
     },
     aboutPage: {
       eyebrow: "À propos de Dara Model",
@@ -427,7 +472,7 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       about: "Обо мне",
       portfolio: "Портфолио",
       contact: "Контакты",
-      booking: "Бронь",
+      booking: "Бронирование",
     },
     cta: {
       viewPortfolio: "Смотреть портфолио",
@@ -438,73 +483,82 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "Ошибка",
       errorDescription: "Не удалось сохранить запрос. Попробуйте написать через Instagram.",
       sending: "Отправка...",
+      messageIntro: "Здравствуйте! Я хочу забронировать: {date}, {time}.",
+      messageContactLine: "Мой контакт: {contact}",
+      honeypotLabel: "Сайт",
     },
     notFound: {
       message: "Упс, страница не найдена",
       returnHome: "Вернуться на главную",
+      title: "Страница не найдена | Dara Model",
+      description: "Запрошенная страница отсутствует на daramodel.com.",
     },
     home: {
       aboutLink: "Обо мне",
       contactLink: "Контакты",
+      heroImageAlt: "Портрет Dara Model, представляющий её эдиториальные и коммерческие проекты на Майорке.",
+    },
+    aboutSection: {
+      locationValue: "Майорка, Испания",
     },
     aboutPage: {
       eyebrow: "О Dara Model",
-      title: "Фэшн-модель на Майорке, доступна в Пальма-де-Майорка",
+      title: "Фэшн-модель на Майорке, доступна в Пальме-де-Майорке",
       description:
-        "Dara работает с эдиториалами, коммерческими кампаниями, bridal-съёмками, booking-проектами для подиума и branded content для клиентов на Майорке, в Пальма-де-Майорка, по Испании и Европе.",
+        "Dara работает в модных эдиториалах, коммерческих кампаниях, свадебных съёмках, подиумных проектах и бренд-контенте для клиентов на Майорке, в Пальме-де-Майорке, по всей Испании и Европе.",
       imageAlt: "Портрет Dara Model для страницы «Обо мне».",
       sectionTitle: "Эдиториал и коммерческая модель в Испании",
       body1:
-        "Dara сочетает fashion-портфолио с опытом в editorial-съёмках, коммерческих продакшенах, показах и bridal-проектах. Её работа подходит брендам, фотографам, агентствам и креативным командам, которым нужна аккуратная визуальная подача с luxury-настроением.",
+        "Dara сочетает сильное модное портфолио с опытом в эдиториал-съёмках, коммерческих продакшенах, подиумных показах и свадебных проектах. Её работа подходит брендам, фотографам, агентствам и креативным командам, которым нужна аккуратная визуальная подача с премиальным настроением.",
       body2:
-        "Базируется на Майорке и доступна в Пальма-де-Майорка для сотрудничества по всей Испании и Европе: кампании, showroom-контент, съёмки для соцсетей и destination-проекты.",
+        "Базируется на Майорке и доступна в Пальме-де-Майорке для сотрудничества по всей Испании и Европе: кампании, шоурум-контент, съёмки для соцсетей и выездные проекты.",
       basedTitle: "База на Майорке",
-      basedBody: "Доступна в Пальма-де-Майорка и для проектов по Испании и Европе.",
+      basedBody: "Доступна в Пальме-де-Майорке и для проектов по Испании и Европе.",
       workTitle: "Типичные проекты",
-      workBody: "Fashion editorials, коммерческие кампании, beauty-съёмки, bridal и показы.",
+      workBody: "Модные эдиториалы, коммерческие кампании, бьюти-съёмки, свадебные съёмки и подиумные проекты.",
       nextTitle: "Следующий шаг",
       nextBody: "Посмотрите портфолио или свяжитесь, чтобы обсудить доступность, ставки и детали продакшена.",
       footerHeading: "Смотреть дальше",
     },
     portfolioPage: {
       eyebrow: "Портфолио Dara Model",
-      title: "Портфолио фэшн-модели для editorial, commercial, beauty и runway",
+      title: "Портфолио фэшн-модели для эдиториала, коммерческих проектов, бьюти и подиума",
       description:
-        "Кураторская подборка с Майорки и из Пальма-де-Майорка: fashion editorials, commercial productions, beauty, bridal и couture-образы.",
+        "Кураторская подборка с Майорки и из Пальмы-де-Майорки: модные эдиториалы, коммерческие съёмки, бьюти-образы, свадебные проекты и кутюрные луки.",
       imageAlt: "Портрет Dara Model для страницы портфолио.",
-      introTitle: "Избранное из editorial и commercial портфолио",
+      introTitle: "Избранное из эдиториального и коммерческого портфолио",
       introBody:
-        "Сфокусированная подборка editorial, commercial, beauty и haute couture кадров из портфолио Dara Model на Майорке, в Пальма-де-Майорка и по всей Испании.",
+        "Сфокусированная подборка эдиториальных, коммерческих, бьюти и кутюрных кадров из портфолио Dara Model на Майорке, в Пальме-де-Майорке и по всей Испании.",
       editorialTitle: "Эдиториал",
       editorialBody:
-        "Fashion editorials с luxury-настроением, сильным портретным присутствием и визуальным сторителлингом для журналов, фотографов и креативных команд.",
+        "Модные эдиториалы с премиальным настроением, сильным портретным присутствием и визуальным сторителлингом для журналов, фотографов и креативных команд.",
       commercialTitle: "Коммерция",
       commercialBody:
-        "Коммерческая модельная работа для брендов, которым нужны аккуратные campaign-кадры, контент для соцсетей и гибкая визуальная подача на Майорке и по Испании.",
+        "Коммерческая модельная работа для брендов, которым нужны аккуратные кадры для кампаний, контент для соцсетей и гибкая визуальная подача на Майорке и по всей Испании.",
       runwayTitle: "Подиум",
       runwayBody:
-        "Подиум, showroom и couture-презентации с опытом работы на fashion week, в event production и в клиентских презентациях.",
+        "Подиум, шоурум и кутюрные презентации с опытом работы на неделях моды, в ивент-продакшене и в клиентских презентациях.",
       footerHeading: "Продолжить просмотр",
     },
     contactPage: {
       eyebrow: "Контакты Dara Model",
-      title: "Booking и коллаборации на Майорке, в Пальма-де-Майорка и по Испании",
+      title: "Бронирования и коллаборации на Майорке, в Пальме-де-Майорке и по всей Испании",
       description:
-        "Для booking, коллабораций и уточнения доступности Instagram — самый быстрый способ связаться с Dara. Отправьте туда даты, локацию и детали проекта или используйте форму ниже.",
+        "Для бронирований, коллабораций и уточнения доступности Instagram — самый быстрый способ связаться с Dara. Отправьте даты, локацию и детали проекта туда или воспользуйтесь формой ниже.",
       imageAlt: "Портрет Dara Model для страницы контактов.",
-      sectionTitle: "Свяжитесь с Dara для fashion, commercial и bridal booking",
+      sectionTitle: "Свяжитесь с Dara по вопросам модных, коммерческих и свадебных съёмок",
       sectionBody:
-        "Быстрее всего обсудить доступность через форму ниже или Instagram. Укажите даты, локацию, концепт и детали продакшена, чтобы сразу собрать ясный запрос.",
+        "Быстрее всего обсудить доступность через форму ниже или Instagram. Укажите даты, локацию, концепцию и детали продакшена, чтобы сразу сформировать ясный запрос.",
       enquiriesTitle: "Частые запросы",
       enquiriesBody:
-        "Editorial-съёмки, коммерческие кампании, bridal, brand content, showroom, runway booking и destination-проекты.",
+        "Эдиториал-съёмки, коммерческие кампании, свадебные кадры, бренд-контент, шоурумы, подиумные проекты и выездные продакшены.",
       baseLocationTitle: "Базовая локация",
       baseLocationBody: "Майорка и Пальма-де-Майорка, с выездом по Испании и Европе.",
       planningTitle: "Для удобного планирования",
-      planningBody: "Добавьте даты, время, локацию, usage и moodboard-референсы, чтобы ускорить обсуждение.",
+      planningBody: "Добавьте даты, время, локацию, формат использования и референсы, чтобы ускорить обсуждение.",
     },
     contactSection: {
-      exploreHeading: "Исследовать Dara Model",
+      exploreHeading: "Изучить Dara Model",
     },
   },
   zh: {
@@ -524,52 +578,61 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       errorTitle: "错误",
       errorDescription: "无法保存预约请求，请尝试通过 Instagram 联系。",
       sending: "发送中...",
+      messageIntro: "你好，我想预约：{date}，{time}。",
+      messageContactLine: "我的联系方式：{contact}",
+      honeypotLabel: "网站",
     },
     notFound: {
       message: "抱歉，页面不存在",
       returnHome: "返回首页",
+      title: "页面未找到 | Dara Model",
+      description: "你请求的页面不存在于 daramodel.com。",
     },
     home: {
       aboutLink: "简介",
       contactLink: "联系",
+      heroImageAlt: "Dara Model 的时尚肖像，展示她在马略卡岛的编辑与商业拍摄工作。",
+    },
+    aboutSection: {
+      locationValue: "马略卡岛，西班牙",
     },
     aboutPage: {
       eyebrow: "关于 Dara Model",
       title: "常驻马略卡岛、可在帕尔马工作的时尚模特",
       description:
-        "Dara 为马略卡岛、帕尔马、全西班牙及欧洲的客户提供时尚 editorial、商业 campaign、bridal 拍摄、runway booking 与品牌内容合作。",
+        "Dara 为马略卡岛、帕尔马、西班牙及欧洲的客户提供时尚编辑拍摄、商业广告、婚纱拍摄、秀场项目与品牌内容合作。",
       imageAlt: "Dara Model 的关于页面肖像。",
-      sectionTitle: "西班牙的 editorial 与商业模特",
+      sectionTitle: "西班牙的编辑与商业模特",
       body1:
-        "Dara 拥有鲜明的时尚作品集，并具备 editorial 拍摄、商业制作、runway 展示和 bridal 项目的经验。她适合需要高级质感与精致视觉表达的品牌、摄影师、经纪公司和创意团队。",
+        "Dara 拥有鲜明的时尚作品集，并具备编辑拍摄、商业制作、走秀展示和婚纱项目经验。她适合需要高级质感与精致视觉表达的品牌、摄影师、经纪公司和创意团队。",
       body2:
-        "Dara 常驻马略卡岛，也可在帕尔马工作，并接受西班牙及欧洲范围内的 campaign、showroom 内容、社交媒体制作与目的地拍摄合作。",
+        "Dara 常驻马略卡岛，也可在帕尔马工作，并接受西班牙及欧洲范围内的品牌活动、展示内容、社交媒体制作与目的地拍摄合作。",
       basedTitle: "常驻马略卡岛",
       basedBody: "可在帕尔马工作，也可前往西班牙和欧洲其他地区。",
       workTitle: "常见合作类型",
-      workBody: "时尚 editorial、商业 campaign、beauty 影像、bridal 拍摄与 runway booking。",
+      workBody: "时尚编辑拍摄、商业广告项目、美妆影像、婚纱拍摄与秀场合作。",
       nextTitle: "下一步",
       nextBody: "查看作品集，或联系 Dara 了解档期、报价与制作细节。",
       footerHeading: "继续浏览",
     },
     portfolioPage: {
       eyebrow: "Dara Model 作品集",
-      title: "适用于 editorial、commercial、beauty 与 runway 的时尚模特作品集",
+      title: "适用于编辑拍摄、商业广告、美妆与走秀的时尚模特作品集",
       description:
-        "来自马略卡岛与帕尔马的精选作品，涵盖时尚 editorial、商业制作、beauty 影像、bridal 拍摄与 couture 造型。",
+        "来自马略卡岛与帕尔马的精选作品，涵盖时尚编辑拍摄、商业制作、美妆影像、婚纱拍摄与高级定制造型。",
       imageAlt: "Dara Model 的作品集页面肖像。",
-      introTitle: "精选 editorial 与 commercial 作品",
+      introTitle: "精选编辑与商业作品",
       introBody:
-        "这是一组来自 Dara Model 作品集的精选影像，聚焦 editorial、commercial、beauty 与 haute couture，拍摄于马略卡岛、帕尔马及西班牙其他地区。",
-      editorialTitle: "Editorial",
+        "这是一组来自 Dara Model 作品集的精选影像，聚焦编辑拍摄、商业广告、美妆与高级定制，拍摄于马略卡岛、帕尔马及西班牙其他地区。",
+      editorialTitle: "编辑拍摄",
       editorialBody:
-        "带有高级氛围的时尚 editorial，强调肖像表现力与视觉叙事，适合杂志、摄影师与创意团队。",
-      commercialTitle: "Commercial",
+        "带有高级氛围的时尚编辑拍摄，强调肖像表现力与视觉叙事，适合杂志、摄影师与创意团队。",
+      commercialTitle: "商业",
       commercialBody:
-        "适合品牌 campaign、社交媒体内容与灵活视觉方向的商业模特合作，可在马略卡岛及西班牙范围内完成。",
-      runwayTitle: "Runway",
+        "适合品牌广告、社交媒体内容与灵活视觉方向的商业模特合作，可在马略卡岛及西班牙范围内完成。",
+      runwayTitle: "走秀",
       runwayBody:
-        "runway、showroom 与 couture 展示经验，涵盖 fashion week、活动制作与面向客户的展示场景。",
+        "走秀、品牌展示与高级定制展示经验，涵盖时装周、活动制作与面向客户的展示场景。",
       footerHeading: "继续查看",
     },
     contactPage: {
@@ -578,16 +641,16 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
       description:
         "如需预约、合作或确认档期，Instagram 是联系 Dara 最快的方式。你可以直接发送日期、地点和项目细节，或继续使用下方表单。",
       imageAlt: "Dara Model 的联系页面肖像。",
-      sectionTitle: "联系 Dara 进行时尚、商业与 bridal booking",
+      sectionTitle: "联系 Dara 预约时尚、商业与婚纱拍摄",
       sectionBody:
-        "讨论档期最快的方式是使用下方 booking 表单或 Instagram。请提供拍摄日期、地点、概念与制作细节，以便快速明确项目需求。",
+        "讨论档期最快的方式是使用下方预约表单或 Instagram。请提供拍摄日期、地点、概念与制作细节，以便快速明确项目需求。",
       enquiriesTitle: "常见咨询",
       enquiriesBody:
-        "Editorial 拍摄、商业 campaign、bridal 影像、品牌内容、showroom、runway booking 与目的地制作。",
+        "编辑拍摄、商业广告、婚纱影像、品牌内容、展示项目、走秀预约与目的地制作。",
       baseLocationTitle: "常驻地点",
       baseLocationBody: "马略卡岛与帕尔马，可前往西班牙和欧洲其他地区工作。",
-      planningTitle: "方便快速沟通",
-      planningBody: "请尽量提供日期、时间、地点、使用范围与 moodboard 参考，以便更快推进沟通。",
+      planningTitle: "便于高效沟通",
+      planningBody: "请尽量提供日期、时间、地点、使用范围与情绪板参考，以便更快推进沟通。",
     },
     contactSection: {
       exploreHeading: "了解 Dara Model",

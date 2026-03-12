@@ -16,10 +16,10 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <SeoHead
-        lang="en"
+        lang={lang}
         pathname={location.pathname}
-        title="Page Not Found | Dara Model"
-        description="The page you requested does not exist on daramodel.com."
+        title={copy.notFound.title}
+        description={copy.notFound.description}
         robots="noindex, nofollow"
       />
       <div className="text-center">

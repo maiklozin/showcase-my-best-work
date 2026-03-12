@@ -101,8 +101,10 @@ const BookingSection = () => {
     if (!date) return "";
     const dateStr = format(date, "dd.MM.yyyy");
     const timeStr = `${timeFrom}–${timeTo}`;
-    let message = `Hi! I'd like to book: ${dateStr}, ${timeStr}.`;
-    message += `\n\nMy contact: ${contact.trim()}`;
+    let message = copy.booking.messageIntro
+      .replace("{date}", dateStr)
+      .replace("{time}", timeStr);
+    message += `\n\n${copy.booking.messageContactLine.replace("{contact}", contact.trim())}`;
     message += `\n\n${userMessage.trim()}`;
     return message;
   };
@@ -296,7 +298,7 @@ const BookingSection = () => {
 
         {/* Honeypot — invisible to users, bots will fill it */}
         <div className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" aria-hidden="true">
-          <label htmlFor="website">Website</label>
+          <label htmlFor="website">{copy.booking.honeypotLabel}</label>
           <input
             id="website"
             name="website"

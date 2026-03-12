@@ -2,9 +2,11 @@ import InstagramIcon from "@/components/InstagramIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 import { quietSocialChipClass, quietSocialHandleClass } from "@/lib/ctaStyles";
 import { INSTAGRAM_HANDLE, INSTAGRAM_PROFILE_URL } from "@/lib/social";
+import { getSiteCopy } from "@/lib/siteCopy";
 
 const AboutSection = () => {
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
+  const copy = getSiteCopy(lang);
 
   const services = [
     t("aboutService1"),
@@ -30,7 +32,7 @@ const AboutSection = () => {
           <div className="space-y-6">
             <div>
               <p className="font-body text-xs uppercase tracking-[0.3em] text-primary">{t("aboutLocation")}</p>
-              <p className="mt-1 font-display text-lg italic text-foreground">Mallorca, Spain</p>
+              <p className="mt-1 font-display text-lg italic text-foreground">{copy.aboutSection.locationValue}</p>
             </div>
             <div>
               <p className="font-body text-xs uppercase tracking-[0.3em] text-primary">{t("aboutHeight")}</p>

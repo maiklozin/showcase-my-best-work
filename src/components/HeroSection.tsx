@@ -13,7 +13,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Dara Model fashion portrait introducing editorial and commercial work in Mallorca."
+          alt={copy.home.heroImageAlt}
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-background/60" />

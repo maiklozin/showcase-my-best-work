@@ -87,6 +87,7 @@ type TranslationKeys = {
   bookingSentDesc: string;
   bookingAlsoIG: string;
   bookingClose: string;
+  closeLabel: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -168,6 +169,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "Your booking request has been sent. Want to also message via Instagram?",
     bookingAlsoIG: "Also send via Instagram",
     bookingClose: "Close",
+    closeLabel: "Close",
   },
   es: {
     heroSubtitle: "Modelo de Moda",
@@ -247,6 +249,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "Tu solicitud ha sido enviada. ¿Quieres también escribir por Instagram?",
     bookingAlsoIG: "También enviar por Instagram",
     bookingClose: "Cerrar",
+    closeLabel: "Cerrar",
   },
   de: {
     heroSubtitle: "Fashion Model",
@@ -326,6 +329,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "Ihre Buchungsanfrage wurde gesendet. Möchten Sie auch über Instagram schreiben?",
     bookingAlsoIG: "Auch über Instagram senden",
     bookingClose: "Schließen",
+    closeLabel: "Schließen",
   },
   fr: {
     heroSubtitle: "Mannequin",
@@ -405,6 +409,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "Votre demande a été envoyée. Voulez-vous aussi écrire via Instagram ?",
     bookingAlsoIG: "Envoyer aussi via Instagram",
     bookingClose: "Fermer",
+    closeLabel: "Fermer",
   },
   ru: {
     heroSubtitle: "Фэшн-модель",
@@ -484,6 +489,7 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "Ваш запрос отправлен. Хотите также написать в Instagram?",
     bookingAlsoIG: "Также отправить в Instagram",
     bookingClose: "Закрыть",
+    closeLabel: "Закрыть",
   },
   zh: {
     heroSubtitle: "时尚模特",
@@ -563,5 +569,6 @@ export const translations: Record<Language, TranslationKeys> = {
     bookingSentDesc: "您的预约请求已发送。还想通过 Instagram 联系吗？",
     bookingAlsoIG: "也通过 Instagram 发送",
     bookingClose: "关闭",
+    closeLabel: "关闭",
   },
 };
