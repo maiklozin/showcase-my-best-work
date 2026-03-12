@@ -1,4 +1,5 @@
 import { Language } from "@/i18n/translations";
+import { SITE_PATHS, normalizeSitePath } from "@/lib/routes";
 import { getSiteCopy } from "@/lib/siteCopy";
 
 export const SITE_URL = "https://daramodel.com";
@@ -140,23 +141,23 @@ type PrerenderRoute = {
 };
 
 export const PRERENDER_ROUTES: PrerenderRoute[] = [
-  { page: "home", pathname: "/", outputPath: "index.html" },
-  { page: "about", pathname: "/about", outputPath: "about/index.html" },
-  { page: "portfolio", pathname: "/portfolio", outputPath: "portfolio/index.html" },
-  { page: "contact", pathname: "/contact", outputPath: "contact/index.html" },
+  { page: "home", pathname: SITE_PATHS.home, outputPath: "index.html" },
+  { page: "about", pathname: SITE_PATHS.about, outputPath: "about/index.html" },
+  { page: "portfolio", pathname: SITE_PATHS.portfolio, outputPath: "portfolio/index.html" },
+  { page: "contact", pathname: SITE_PATHS.contact, outputPath: "contact/index.html" },
 ];
 
 export const getSeoPageFromPath = (pathname: string): SeoPageKey => {
-  const normalizedPath = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
+  const normalizedPath = normalizeSitePath(pathname);
 
   switch (normalizedPath) {
-    case "/":
+    case SITE_PATHS.home:
       return "home";
-    case "/about":
+    case normalizeSitePath(SITE_PATHS.about):
       return "about";
-    case "/portfolio":
+    case normalizeSitePath(SITE_PATHS.portfolio):
       return "portfolio";
-    case "/contact":
+    case normalizeSitePath(SITE_PATHS.contact):
       return "contact";
     default:
       return "notFound";
@@ -264,14 +265,21 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
 
   if (page === "home") {
     return {
-      pathname: "/",
+      pathname: SITE_PATHS.home,
       title: copy.title,
       description: copy.description,
       robots: DEFAULT_ROBOTS,
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("home", copy.title, copy.description, "/", copy.description, lang),
+      structuredData: buildStructuredData(
+        "home",
+        copy.title,
+        copy.description,
+        SITE_PATHS.home,
+        copy.description,
+        lang,
+      ),
     };
   }
 
@@ -279,14 +287,21 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
     const title = `${siteCopy.aboutPage.title} | Dara Model`;
     const description = siteCopy.aboutPage.description;
     return {
-      pathname: "/about",
+      pathname: SITE_PATHS.about,
       title,
       description,
       robots: DEFAULT_ROBOTS,
       type: "profile",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("about", title, description, "/about", copy.description, lang),
+      structuredData: buildStructuredData(
+        "about",
+        title,
+        description,
+        SITE_PATHS.about,
+        copy.description,
+        lang,
+      ),
     };
   }
 
@@ -294,14 +309,21 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
     const title = `${siteCopy.portfolioPage.title} | Dara Model`;
     const description = siteCopy.portfolioPage.description;
     return {
-      pathname: "/portfolio",
+      pathname: SITE_PATHS.portfolio,
       title,
       description,
       robots: DEFAULT_ROBOTS,
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("portfolio", title, description, "/portfolio", copy.description, lang),
+      structuredData: buildStructuredData(
+        "portfolio",
+        title,
+        description,
+        SITE_PATHS.portfolio,
+        copy.description,
+        lang,
+      ),
     };
   }
 
@@ -309,14 +331,21 @@ export const getPageSeo = (page: SeoPageKey, lang: Language = "en"): PageSeo => 
     const title = `${siteCopy.contactPage.title} | Dara Model`;
     const description = siteCopy.contactPage.description;
     return {
-      pathname: "/contact",
+      pathname: SITE_PATHS.contact,
       title,
       description,
       robots: DEFAULT_ROBOTS,
       type: "website",
       imageUrl: OG_IMAGE_URL,
       locale: copy.locale,
-      structuredData: buildStructuredData("contact", title, description, "/contact", copy.description, lang),
+      structuredData: buildStructuredData(
+        "contact",
+        title,
+        description,
+        SITE_PATHS.contact,
+        copy.description,
+        lang,
+      ),
     };
   }
 

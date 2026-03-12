@@ -42,7 +42,7 @@ const ContactPage = () => {
             external: true,
             icon: <InstagramIcon size={16} className="opacity-95" />,
           },
-          { href: "/contact#booking", label: copy.nav.booking },
+          { href: "#booking", label: copy.nav.booking },
           { href: "/#portfolio", label: copy.cta.viewPortfolio },
         ]}
       />

@@ -5,6 +5,7 @@ import SeoHead from "@/components/SeoHead";
 import SiteFooterLinks from "@/components/SiteFooterLinks";
 import SiteHeaderNav from "@/components/SiteHeaderNav";
 import { useI18n } from "@/i18n/I18nProvider";
+import { CONTACT_BOOKING_HREF, SITE_PATHS } from "@/lib/routes";
 import { getPageSeo } from "@/lib/seo";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -33,8 +34,8 @@ const PortfolioPage = () => {
         description={copy.portfolioPage.description}
         imageAlt={copy.portfolioPage.imageAlt}
         links={[
-          { to: "/about", label: copy.nav.about },
-          { href: "/contact#booking", label: copy.nav.booking, variant: "primary" },
+          { to: SITE_PATHS.about, label: copy.nav.about },
+          { href: CONTACT_BOOKING_HREF, label: copy.nav.booking, variant: "primary" },
         ]}
       />
 

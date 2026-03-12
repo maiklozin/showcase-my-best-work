@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Language, languageNames } from "@/i18n/translations";
 import { quietCtaSecondaryClass } from "@/lib/ctaStyles";
+import { CONTACT_BOOKING_HREF, SITE_PATHS } from "@/lib/routes";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { Globe } from "lucide-react";
 import { useLocation } from "react-router-dom";
@@ -12,14 +13,14 @@ const LanguageSwitcher = () => {
   const { lang, setLang } = useI18n();
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const showBookingCta = location.pathname === "/";
+  const showBookingCta = location.pathname === SITE_PATHS.home;
   const copy = getSiteCopy(lang);
 
   return (
     <div className="fixed right-4 top-4 z-50 flex items-center gap-1.5 md:right-6 md:top-6 md:gap-2">
       {showBookingCta ? (
         <a
-          href="/contact#booking"
+          href={CONTACT_BOOKING_HREF}
           className={`${quietCtaSecondaryClass} bg-background/12 backdrop-blur-md`}
         >
           {copy.nav.booking}

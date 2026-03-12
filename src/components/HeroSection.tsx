@@ -2,6 +2,7 @@ import heroImage from "@/assets/hero.jpg";
 import { NavLink } from "@/components/NavLink";
 import { useI18n } from "@/i18n/I18nProvider";
 import { quietCtaPrimaryClass, quietCtaSecondaryClass, quietCtaTertiaryClass } from "@/lib/ctaStyles";
+import { SITE_PATHS } from "@/lib/routes";
 import { getSiteCopy } from "@/lib/siteCopy";
 
 const HeroSection = () => {
@@ -40,14 +41,14 @@ const HeroSection = () => {
             {copy.cta.viewPortfolio}
           </a>
           <NavLink
-            to="/contact"
+            to={SITE_PATHS.contact}
             className={quietCtaSecondaryClass}
           >
             {copy.home.contactLink}
           </NavLink>
         </div>
         <NavLink
-          to="/about"
+          to={SITE_PATHS.about}
           className={`mt-3.5 opacity-0 animate-fade-up ${quietCtaTertiaryClass}`}
           style={{ animationDelay: "0.95s" }}
         >
