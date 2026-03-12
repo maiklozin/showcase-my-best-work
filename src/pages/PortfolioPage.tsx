@@ -1,3 +1,4 @@
+import FloatingBackHomeButton from "@/components/FloatingBackHomeButton";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import PageHero from "@/components/PageHero";
 import PortfolioPreviewGrid from "@/components/PortfolioPreviewGrid";
@@ -26,6 +27,7 @@ const PortfolioPage = () => {
         imageUrl={seo.imageUrl}
         structuredData={seo.structuredData}
       />
+      <FloatingBackHomeButton />
       <SiteHeaderNav />
       <LanguageSwitcher />
       <PageHero

@@ -1,4 +1,5 @@
 import AboutSection from "@/components/AboutSection";
+import FloatingBackHomeButton from "@/components/FloatingBackHomeButton";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import PageHero from "@/components/PageHero";
 import SeoHead from "@/components/SeoHead";
@@ -26,6 +27,7 @@ const AboutPage = () => {
         imageUrl={seo.imageUrl}
         structuredData={seo.structuredData}
       />
+      <FloatingBackHomeButton />
       <SiteHeaderNav />
       <LanguageSwitcher />
       <PageHero
