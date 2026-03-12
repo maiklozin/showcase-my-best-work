@@ -33,15 +33,24 @@ export const seoByLanguage: Record<Language, SeoCopy> = {
     locale: "en_US",
     title: "Dara Model | Fashion Model in Mallorca, Spain",
     description:
-      "Fashion model based in Mallorca and available in Palma de Mallorca, Spain. Open for editorials, commercial campaigns, runway shows, bridal shoots, and brand collaborations across Spain and Europe.",
-    introEyebrow: "Fashion Model in Mallorca",
-    introTitle: "Fashion model portfolio for editorial, commercial, and runway work in Mallorca",
+      "Fashion model based in Mallorca and available in Palma de Mallorca, Spain, for editorial shoots, commercial campaigns, runway, bridal bookings, and branded content across Spain and Europe.",
+    introEyebrow: "Model in Mallorca, Spain",
+    introTitle: "Fashion model in Mallorca for editorial, commercial, and runway bookings",
     introBody:
-      "Dara is a professional fashion model based in Mallorca and available in Palma de Mallorca for editorials, commercial productions, brand campaigns, bridal shoots, and runway work across Spain and Europe.",
+      "Dara is a fashion model based in Mallorca and available in Palma de Mallorca for editorial shoots, commercial productions, brand campaigns, bridal work, runway bookings, and branded content across Spain and Europe.",
     facts: [
-      { label: "Services", value: "Editorial, commercial, runway, bridal, and brand campaigns" },
-      { label: "Location", value: "Mallorca, Palma de Mallorca, and travel across Spain and Europe" },
-      { label: "Portfolio", value: "Fashion model portfolio with beauty, editorial, commercial, and haute couture work" },
+      {
+        label: "Services",
+        value: "Editorial shoots, commercial campaigns, runway, bridal, beauty, and branded content",
+      },
+      {
+        label: "Location",
+        value: "Based in Mallorca, available in Palma de Mallorca, across Spain, and for travel in Europe",
+      },
+      {
+        label: "Portfolio",
+        value: "Fashion model portfolio with editorial, commercial, beauty, and couture work",
+      },
     ],
   },
   es: {
@@ -164,13 +173,14 @@ export const getSeoPageFromPath = (pathname: string): SeoPageKey => {
   }
 };
 
-const baseWebsiteNode = (description: string) => ({
+const baseWebsiteNode = (description: string, lang: Language) => ({
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
   url: `${SITE_URL}/`,
   name: "Dara Model",
   image: OG_IMAGE_URL,
   description,
+  inLanguage: lang,
 });
 
 const getBasePersonNode = (lang: Language) => ({
@@ -219,7 +229,7 @@ const buildStructuredData = (
     return {
       "@context": "https://schema.org",
       "@graph": [
-        baseWebsiteNode(siteDescription),
+        baseWebsiteNode(siteDescription, lang),
         getBasePersonNode(lang),
         primaryImageNode,
         {
@@ -228,8 +238,10 @@ const buildStructuredData = (
           url: `${SITE_URL}/`,
           name: title,
           description,
+          inLanguage: lang,
           isPartOf: { "@id": `${SITE_URL}/#website` },
           about: { "@id": `${SITE_URL}/#person` },
+          mainEntity: { "@id": `${SITE_URL}/#person` },
           primaryImageOfPage: { "@id": `${SITE_URL}/#primaryimage` },
         },
       ],
@@ -242,7 +254,7 @@ const buildStructuredData = (
   return {
     "@context": "https://schema.org",
     "@graph": [
-      baseWebsiteNode(siteDescription),
+      baseWebsiteNode(siteDescription, lang),
       getBasePersonNode(lang),
       primaryImageNode,
       {
@@ -251,8 +263,10 @@ const buildStructuredData = (
         url: `${SITE_URL}${pathname}`,
         name: title,
         description,
+        inLanguage: lang,
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#person` },
+        mainEntity: { "@id": `${SITE_URL}/#person` },
         primaryImageOfPage: { "@id": `${SITE_URL}/#primaryimage` },
       },
     ],

@@ -116,7 +116,7 @@ const siteCopyByLanguage: Record<Language, SiteCopy> = {
     home: {
       aboutLink: "About",
       contactLink: "Contact",
-      heroImageAlt: "Dara Model fashion portrait introducing editorial and commercial work in Mallorca.",
+      heroImageAlt: "Dara Model portrait for editorial and commercial model bookings in Mallorca and Palma de Mallorca.",
     },
     aboutSection: {
       locationValue: "Mallorca, Spain",
